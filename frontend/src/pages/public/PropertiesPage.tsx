@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Search, MapPin, Home, Filter, SlidersHorizontal, Grid3X3, List, Loader2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { propertyApi } from '../../services/endpoints';
 import { Property } from '../../types';
 import { Skeleton } from '../../components/ui/Skeleton';
