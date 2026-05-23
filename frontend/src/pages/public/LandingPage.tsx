@@ -236,7 +236,7 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.6 }}
-                className="text-lg text-blue-100/70 mb-10 max-w-lg leading-relaxed"
+                className="text-lg text-blue-100/90 mb-10 max-w-lg leading-relaxed"
               >
                 The all-in-one platform for property owners to manage rentals, track payments, and grow their portfolio. 
                 Tenants get a seamless experience with easy payments and real-time updates.
@@ -277,7 +277,7 @@ export default function LandingPage() {
                       <Star key={s} className="w-3.5 h-3.5 text-yellow-400" fill="currentColor" />
                     ))}
                   </div>
-                  <p className="text-xs text-blue-100/60 mt-0.5">Trusted by 2,000+ tenants & owners</p>
+                  <p className="text-xs text-blue-100/80 mt-0.5">Trusted by 2,000+ tenants & owners</p>
                 </div>
               </motion.div>
             </motion.div>
@@ -388,7 +388,7 @@ export default function LandingPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search by location, property name, or city..."
-                    className="flex-1 bg-transparent border-none outline-none text-white placeholder-blue-200/40 text-sm py-3"
+                    className="flex-1 bg-transparent border-none outline-none text-white placeholder-blue-200/60 text-sm py-3"
                   />
                 </div>
                 <button type="submit" className="px-8 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium text-sm hover:shadow-xl hover:shadow-blue-500/25 transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 whitespace-nowrap">
@@ -397,12 +397,12 @@ export default function LandingPage() {
               </div>
             </form>
             <div className="flex items-center gap-4 mt-4 justify-center">
-              <span className="text-xs text-blue-200/50">Popular:</span>
+              <span className="text-xs text-blue-200/70">Popular:</span>
               {['Mumbai', 'Bangalore', 'Pune', 'Delhi', 'Hyderabad'].map((city) => (
                 <button
                   key={city}
                   onClick={() => { setSearchQuery(city); navigate(`/properties?search=${city}`); }}
-                  className="text-xs text-blue-200/60 hover:text-white transition-colors px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/10"
+                  className="text-xs text-blue-200/80 hover:text-white transition-colors px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/10"
                 >
                   {city}
                 </button>
@@ -675,7 +675,7 @@ export default function LandingPage() {
                 Ready to transform your{' '}
                 <span className="bg-gradient-to-r from-blue-300 via-cyan-200 to-teal-200 bg-clip-text text-transparent">rental management</span>?
               </h2>
-              <p className="text-blue-100/70 mb-10 max-w-xl mx-auto text-lg">
+              <p className="text-blue-100/90 mb-10 max-w-xl mx-auto text-lg">
                 Join thousands of property owners and tenants already using Domicilo. Get started free, no credit card required.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
@@ -687,7 +687,7 @@ export default function LandingPage() {
                   <Phone className="w-4 h-4" /> Talk to Sales
                 </a>
               </div>
-              <div className="flex items-center justify-center gap-8 mt-10 text-blue-200/50 text-sm">
+              <div className="flex items-center justify-center gap-8 mt-10 text-blue-200/70 text-sm">
                 <div className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-400" /> No credit card
                 </div>
