@@ -20,13 +20,13 @@ app.use(morgan('dev'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/auth', authRoutes);
-app.use('/api/properties', propertyRoutes);
-app.use('/api/owner', ownerRoutes);
-app.use('/api/tenant', tenantRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/auth', authRoutes);
+app.use('/properties', propertyRoutes);
+app.use('/owner', ownerRoutes);
+app.use('/tenant', tenantRoutes);
+app.use('/admin', adminRoutes);
 
-app.get('/api/health', (_, res) => {
+app.get('/health', (_, res) => {
   res.json({ success: true, message: 'Domicilo API is running', timestamp: new Date().toISOString() });
 });
 
