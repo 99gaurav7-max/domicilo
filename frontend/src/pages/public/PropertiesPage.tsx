@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { propertyApi } from '../../services/endpoints';
 import { Property } from '../../types';
 import { Skeleton } from '../../components/ui/Skeleton';
+import { Pagination } from '../../components/ui/Pagination';
 
 const roomTypes = ['1RK', '1BHK', '2BHK', '3BHK', '4BHK', '5BHK', '6BHK', '7BHK', '8BHK', '9BHK', '10BHK'];
 const amenities = ['WiFi', 'Parking', 'Gym', 'Security', 'Power Backup', 'Lift', 'Swimming Pool', 'Garden'];
@@ -25,10 +26,12 @@ export default function PropertiesPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [properties, setProperties] = useState<Property[]>([]);
+  const [pagination, setPagination] = useState({ page: 1, limit: 12, total: 0, totalPages: 0 });
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
 
+  const [page, setPage] = useState(1);
   const [filters, setFilters] = useState({
     search: searchParams.get('search') || '',
     state: searchParams.get('state') || '',
@@ -45,10 +48,10 @@ export default function PropertiesPage() {
 
   const availableCities = filters.state ? statesWithCities[filters.state] || [] : [];
 
-  const fetchProperties = useCallback(async () => {
+  const fetchProperties = useCallback(async (p?: number) => {
     setLoading(true);
     try {
-      const params: Record<string, any> = { page: 1, limit: 12 };
+      const params: Record<string, any> = { page: p || page, limit: 12 };
       if (filters.search) params.search = filters.search;
       if (filters.city) params.city = filters.city;
       if (filters.roomType) params.roomType = filters.roomType;
@@ -59,6 +62,7 @@ export default function PropertiesPage() {
       const res = await propertyApi.getAll(params);
       if (res.data.success) {
         setProperties(res.data.data || []);
+        setPagination(res.data.pagination || { page: 1, limit: 12, total: 0, totalPages: 0 });
       }
     } catch (err) {
       console.error(err);
@@ -72,7 +76,13 @@ export default function PropertiesPage() {
     fetchProperties();
   }, []);
 
+  const resetAndFetch = (p?: number) => {
+    setPage(p || 1);
+    fetchProperties(p);
+  };
+
   const handleSearch = () => {
+    setPage(1);
     const params = new URLSearchParams();
     if (filters.search) params.set('search', filters.search);
     if (filters.state) params.set('state', filters.state);
@@ -88,6 +98,7 @@ export default function PropertiesPage() {
   const resetFilters = () => {
     setFilters({ search: '', state: '', city: '', roomType: '', minRent: '', maxRent: '', amenities: '' });
     setSelectedAmenities([]);
+    setPage(1);
     setSearchParams(new URLSearchParams());
     toast.success('Filters reset');
   };
@@ -259,6 +270,18 @@ export default function PropertiesPage() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {pagination.totalPages > 1 && (
+          <div className="mt-8">
+            <Pagination
+              page={page}
+              totalPages={pagination.totalPages}
+              total={pagination.total}
+              limit={pagination.limit}
+              onPageChange={(p) => resetAndFetch(p)}
+            />
           </div>
         )}
       </div>

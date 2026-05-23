@@ -9,7 +9,7 @@ router.use(authenticate, authorize('tenant'));
 
 router.get('/dashboard', getTenantDashboard);
 router.get('/notifications', getNotifications);
-router.put('/notifications/:id/read', markNotificationRead);
 router.put('/notifications/read-all', markAllNotificationsRead);
+router.put('/notifications/:id/read', markNotificationRead);
 
 export default router;

@@ -26,6 +26,8 @@ export default function PropertyDetailPage() {
     if (id) {
       propertyApi.getById(id).then((res) => {
         if (res.data.success) setProperty(res.data.data!);
+      }).catch(() => {
+        toast.error('Failed to load property details');
       }).finally(() => setLoading(false));
     }
   }, [id]);
@@ -180,9 +182,11 @@ export default function PropertyDetailPage() {
                   <a href={`tel:${property.owner_phone}`} className="text-xs text-primary-600 hover:underline">{property.owner_phone}</a>
                 </div>
               </div>
-              <a href={`tel:${property.owner_phone}`} className="btn-primary w-full text-sm flex items-center justify-center gap-2 mb-2">
-                <Phone className="w-4 h-4" /> Call Owner
-              </a>
+              {property.owner_phone && (
+                <a href={`tel:${property.owner_phone}`} className="btn-primary w-full text-sm flex items-center justify-center gap-2 mb-2">
+                  <Phone className="w-4 h-4" /> Call Owner
+                </a>
+              )}
             </motion.div>
 
             {/* Enquiry Form */}

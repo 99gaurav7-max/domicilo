@@ -71,7 +71,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50'
                 }`}
               >
-                <Icon className={`w-4.5 h-4.5 ${isActive ? 'text-primary-600 dark:text-primary-400' : ''}`} />
+                <Icon className={`w-4 h-4 ${isActive ? 'text-primary-600 dark:text-primary-400' : ''}`} />
                 {item.label}
               </Link>
             );
@@ -83,14 +83,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               onClick={onClose}
               className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all"
             >
-              <Bell className="w-4.5 h-4.5" /> Notifications
+              <Bell className="w-4 h-4" /> Notifications
             </Link>
             <Link
               to="/settings"
               onClick={onClose}
               className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all"
             >
-              <Settings className="w-4.5 h-4.5" /> Settings
+              <Settings className="w-4 h-4" /> Settings
             </Link>
           </div>
         </nav>

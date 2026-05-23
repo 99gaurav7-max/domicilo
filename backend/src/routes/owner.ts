@@ -7,8 +7,8 @@ import { authenticate, authorize } from '../middleware/auth';
 
 const router = Router();
 
-// All owner routes require authentication and owner role
-router.use(authenticate, authorize('owner'));
+// All owner routes require authentication and owner role (admins can also access)
+router.use(authenticate, authorize('owner', 'admin'));
 
 // Dashboard
 router.get('/dashboard', getOwnerDashboard);
@@ -40,7 +40,7 @@ router.put('/leads/:id/status', updateLeadStatus);
 
 // Notifications
 router.get('/notifications', getNotifications);
-router.put('/notifications/:id/read', markNotificationRead);
 router.put('/notifications/read-all', markAllNotificationsRead);
+router.put('/notifications/:id/read', markNotificationRead);
 
 export default router;

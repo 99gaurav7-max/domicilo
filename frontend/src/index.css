@@ -146,6 +146,13 @@ body {
   animation: gradient 4s ease infinite;
 }
 
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

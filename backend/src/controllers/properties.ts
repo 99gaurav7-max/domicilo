@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { pool } from '../config/database';
 import { AuthRequest } from '../types';
-import bcrypt from 'bcryptjs';
 import { generateTempPassword, sendTenantOnboarding } from '../utils';
 
 export const getProperties = async (req: Request, res: Response) => {
@@ -141,7 +140,7 @@ export const createProperty = async (req: AuthRequest, res: Response) => {
         await pool.query(
           `INSERT INTO rooms (id, property_id, room_number, room_type, rent, security_deposit, status, floor_number, square_feet, description) 
            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
-          [roomId, propertyId, room.roomNumber, room.roomType, room.rent, room.securityDeposit || 0, room.status || 'vacant', room.floorNumber || null, room.squareFeet || null, room.description || null]
+          [roomId, propertyId, room.roomNumber, room.roomType, room.rent, room.securityDeposit ?? 0, room.status || 'vacant', room.floorNumber ?? null, room.squareFeet ?? null, room.description || null]
         );
       }
     }

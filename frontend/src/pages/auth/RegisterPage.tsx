@@ -26,7 +26,8 @@ export default function RegisterPage() {
     }
     setLoading(true);
     try {
-      await authApi.register({ ...form, role: 'owner' });
+      const { confirmPassword, ...registerData } = form;
+      await authApi.register(registerData);
       toast.success('Registration successful! Please sign in.');
       navigate('/login');
     } catch (err: any) {

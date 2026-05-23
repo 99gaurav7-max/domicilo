@@ -14,8 +14,22 @@ function getAutoTheme(): Theme {
   return hour >= 6 && hour < 18 ? 'light' : 'dark';
 }
 
+function getStoredTheme(): Theme {
+  const stored = localStorage.getItem('domicilo_theme');
+  if (stored === 'auto' || !stored) {
+    const hour = new Date().getHours();
+    return hour >= 6 && hour < 18 ? 'light' : 'dark';
+  }
+  return stored as Theme;
+}
+
+const initialTheme = getStoredTheme();
+if (initialTheme === 'dark') {
+  document.documentElement.classList.add('dark');
+}
+
 export const useThemeStore = create<ThemeState>((set) => ({
-  theme: 'light',
+  theme: initialTheme,
 
   toggleTheme: () => {
     set((state) => {

@@ -24,8 +24,8 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const result = await pool.query(
-      `SELECT id, email, phone, full_name, password_hash, role, is_active FROM users WHERE email = $1 OR phone = $1`,
-      [email]
+      `SELECT id, email, phone, full_name, password_hash, role, is_active FROM users WHERE email = $1 OR phone = $2`,
+      [email, email]
     );
 
     if (result.rows.length === 0) {

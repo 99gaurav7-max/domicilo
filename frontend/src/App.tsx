@@ -89,9 +89,13 @@ function AppContent() {
           <Route path="/reset-password" element={<SuspenseWrapper><ResetPasswordPage /></SuspenseWrapper>} />
         </Route>
 
-        {/* Standalone Pages */}
-        <Route path="/settings" element={<ProtectedRoute><SuspenseWrapper><SettingsPage /></SuspenseWrapper></ProtectedRoute>} />
-        <Route path="/notifications" element={<ProtectedRoute><SuspenseWrapper><NotificationsPage /></SuspenseWrapper></ProtectedRoute>} />
+        {/* Standalone Pages with Dashboard Layout */}
+        <Route path="/settings" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+          <Route index element={<SuspenseWrapper><SettingsPage /></SuspenseWrapper>} />
+        </Route>
+        <Route path="/notifications" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+          <Route index element={<SuspenseWrapper><NotificationsPage /></SuspenseWrapper>} />
+        </Route>
 
         {/* Owner Routes */}
         <Route path="/owner" element={
@@ -144,7 +148,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster position="top-right" toastOptions={{
-        className: 'glass-card text-sm',
+        className: 'glass-card text-sm text-gray-900 dark:text-gray-100',
         duration: 3000,
       }} />
       <AppContent />

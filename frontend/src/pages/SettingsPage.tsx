@@ -72,11 +72,11 @@ export default function SettingsPage() {
         </h3>
         <div className="flex items-center gap-3">
           <button onClick={toggleTheme}
-            className={`flex-1 p-3 rounded-xl border-2 transition-all text-center ${theme === 'light' ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+            className={`flex-1 p-3 rounded-xl border-2 transition-all text-center text-gray-700 dark:text-gray-300 ${theme === 'light' ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
             <Sun className="w-5 h-5 mx-auto mb-1" /> Light
           </button>
           <button onClick={() => setTheme('dark')}
-            className={`flex-1 p-3 rounded-xl border-2 transition-all text-center ${theme === 'dark' ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+            className={`flex-1 p-3 rounded-xl border-2 transition-all text-center text-gray-700 dark:text-gray-300 ${theme === 'dark' ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
             <Moon className="w-5 h-5 mx-auto mb-1" /> Dark
           </button>
         </div>
@@ -90,11 +90,11 @@ export default function SettingsPage() {
         </h3>
         <form onSubmit={handleChangePassword} className="space-y-3">
           <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} placeholder="Current Password"
-            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30" />
+            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30" />
           <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="New Password"
-            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30" />
+            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30" />
           <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm New Password"
-            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30" />
+            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30" />
           <button type="submit" disabled={changingPassword} className="btn-primary text-sm flex items-center gap-2">
             {changingPassword && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
             {changingPassword ? 'Changing...' : 'Update Password'}
