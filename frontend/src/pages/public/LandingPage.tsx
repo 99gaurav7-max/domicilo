@@ -710,7 +710,7 @@ export default function LandingPage() {
             <p className="text-sm text-gray-400">&copy; {new Date().getFullYear()} Domicilo. All rights reserved.</p>
             <div className="flex items-center gap-6 text-xs text-gray-400">
               <Link to="/privacy" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Privacy Policy</Link>
-              <a href="#!" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Terms of Service</a>
+              <Link to="/terms" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Terms of Service</Link>
             </div>
           </div>
         </div>

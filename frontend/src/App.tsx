@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { Loader2 } from 'lucide-react';
@@ -12,6 +12,7 @@ import { PublicLayout, DashboardLayout } from './components/layout/Layout';
 const LandingPage = lazy(() => import('./pages/public/LandingPage'));
 const AboutPage = lazy(() => import('./pages/public/AboutPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/public/PrivacyPolicyPage'));
+const TermsServicePage = lazy(() => import('./pages/public/TermsServicePage'));
 const PropertiesPage = lazy(() => import('./pages/public/PropertiesPage'));
 const PropertyDetailPage = lazy(() => import('./pages/public/PropertyDetailPage'));
 const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
@@ -51,6 +52,12 @@ const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
 });
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
+
 function AppContent() {
   const { initTheme } = useThemeStore();
   const { loadUser } = useAuthStore();
@@ -62,12 +69,14 @@ function AppContent() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         {/* Public Routes */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<SuspenseWrapper><LandingPage /></SuspenseWrapper>} />
           <Route path="/about" element={<SuspenseWrapper><AboutPage /></SuspenseWrapper>} />
           <Route path="/privacy" element={<SuspenseWrapper><PrivacyPolicyPage /></SuspenseWrapper>} />
+          <Route path="/terms" element={<SuspenseWrapper><TermsServicePage /></SuspenseWrapper>} />
           <Route path="/properties" element={<SuspenseWrapper><PropertiesPage /></SuspenseWrapper>} />
           <Route path="/properties/:id" element={<SuspenseWrapper><PropertyDetailPage /></SuspenseWrapper>} />
         </Route>
