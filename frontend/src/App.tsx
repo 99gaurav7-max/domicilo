@@ -10,6 +10,8 @@ import { PublicLayout, DashboardLayout } from './components/layout/Layout';
 
 // Lazy-loaded pages for code splitting
 const LandingPage = lazy(() => import('./pages/public/LandingPage'));
+const AboutPage = lazy(() => import('./pages/public/AboutPage'));
+const PrivacyPolicyPage = lazy(() => import('./pages/public/PrivacyPolicyPage'));
 const PropertiesPage = lazy(() => import('./pages/public/PropertiesPage'));
 const PropertyDetailPage = lazy(() => import('./pages/public/PropertyDetailPage'));
 const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
@@ -64,6 +66,8 @@ function AppContent() {
         {/* Public Routes */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<SuspenseWrapper><LandingPage /></SuspenseWrapper>} />
+          <Route path="/about" element={<SuspenseWrapper><AboutPage /></SuspenseWrapper>} />
+          <Route path="/privacy" element={<SuspenseWrapper><PrivacyPolicyPage /></SuspenseWrapper>} />
           <Route path="/properties" element={<SuspenseWrapper><PropertiesPage /></SuspenseWrapper>} />
           <Route path="/properties/:id" element={<SuspenseWrapper><PropertyDetailPage /></SuspenseWrapper>} />
         </Route>

@@ -1,14 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, MapPin, Home, Filter, SlidersHorizontal, Grid3X3, List, Loader2 } from 'lucide-react';
+import { Search, MapPin, Home, Filter, SlidersHorizontal, Grid3X3, List, Loader2, RotateCcw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { propertyApi } from '../../services/endpoints';
 import { Property } from '../../types';
 import { Skeleton } from '../../components/ui/Skeleton';
 
-const roomTypes = ['1RK', '1BHK', '2BHK', '3BHK', '4BHK'];
+const roomTypes = ['1RK', '1BHK', '2BHK', '3BHK', '4BHK', '5BHK', '6BHK', '7BHK', '8BHK', '9BHK', '10BHK'];
 const amenities = ['WiFi', 'Parking', 'Gym', 'Security', 'Power Backup', 'Lift', 'Swimming Pool', 'Garden'];
+
+const statesWithCities: Record<string, string[]> = {
+  Maharashtra: ['Mumbai', 'Pune', 'Nagpur', 'Thane', 'Nashik', 'Aurangabad'],
+  Karnataka: ['Bangalore', 'Mysore', 'Hubli', 'Mangalore', 'Belgaum'],
+  Delhi: ['New Delhi', 'Dwarka', 'Rohini', 'Saket', 'Karol Bagh'],
+  'Tamil Nadu': ['Chennai', 'Coimbatore', 'Madurai', 'Trichy', 'Salem'],
+  'Uttar Pradesh': ['Lucknow', 'Noida', 'Ghaziabad', 'Agra', 'Varanasi'],
+  Gujarat: ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Jamnagar'],
+  Rajasthan: ['Jaipur', 'Jodhpur', 'Udaipur', 'Kota', 'Ajmer'],
+  Hyderabad: ['Hyderabad', 'Secunderabad'],
+};
 
 export default function PropertiesPage() {
   const navigate = useNavigate();
@@ -20,6 +31,7 @@ export default function PropertiesPage() {
 
   const [filters, setFilters] = useState({
     search: searchParams.get('search') || '',
+    state: searchParams.get('state') || '',
     city: searchParams.get('city') || '',
     roomType: searchParams.get('roomType') || '',
     minRent: searchParams.get('minRent') || '',
@@ -27,7 +39,13 @@ export default function PropertiesPage() {
     amenities: searchParams.get('amenities') || '',
   });
 
-  const fetchProperties = async () => {
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>(
+    searchParams.get('amenities') ? searchParams.get('amenities')!.split(',') : []
+  );
+
+  const availableCities = filters.state ? statesWithCities[filters.state] || [] : [];
+
+  const fetchProperties = useCallback(async () => {
     setLoading(true);
     try {
       const params: Record<string, any> = { page: 1, limit: 12 };
@@ -36,7 +54,7 @@ export default function PropertiesPage() {
       if (filters.roomType) params.roomType = filters.roomType;
       if (filters.minRent) params.minRent = filters.minRent;
       if (filters.maxRent) params.maxRent = filters.maxRent;
-      if (filters.amenities) params.amenities = filters.amenities;
+      if (selectedAmenities.length) params.amenities = selectedAmenities.join(',');
 
       const res = await propertyApi.getAll(params);
       if (res.data.success) {
@@ -48,7 +66,7 @@ export default function PropertiesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters, selectedAmenities]);
 
   useEffect(() => {
     fetchProperties();
@@ -56,14 +74,32 @@ export default function PropertiesPage() {
 
   const handleSearch = () => {
     const params = new URLSearchParams();
-    Object.entries(filters).forEach(([k, v]) => { if (v) params.set(k, v); });
+    if (filters.search) params.set('search', filters.search);
+    if (filters.state) params.set('state', filters.state);
+    if (filters.city) params.set('city', filters.city);
+    if (filters.roomType) params.set('roomType', filters.roomType);
+    if (filters.minRent) params.set('minRent', filters.minRent);
+    if (filters.maxRent) params.set('maxRent', filters.maxRent);
+    if (selectedAmenities.length) params.set('amenities', selectedAmenities.join(','));
     setSearchParams(params);
     fetchProperties();
   };
 
+  const resetFilters = () => {
+    setFilters({ search: '', state: '', city: '', roomType: '', minRent: '', maxRent: '', amenities: '' });
+    setSelectedAmenities([]);
+    setSearchParams(new URLSearchParams());
+    toast.success('Filters reset');
+  };
+
+  const toggleAmenity = (amenity: string) => {
+    setSelectedAmenities((prev) =>
+      prev.includes(amenity) ? prev.filter((a) => a !== amenity) : [...prev, amenity]
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Header */}
       <div className="gradient-bg relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-10" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -78,7 +114,6 @@ export default function PropertiesPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20">
-        {/* Search & Filter Bar */}
         <div className="glass-card rounded-2xl p-4 mb-8">
           <div className="flex flex-col lg:flex-row gap-3">
             <div className="flex-1 relative">
@@ -88,25 +123,28 @@ export default function PropertiesPage() {
                 value={filters.search}
                 onChange={(e) => setFilters({ ...filters, search: e.target.value })}
                 placeholder="Search by location or property name..."
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <select value={filters.roomType} onChange={(e) => setFilters({ ...filters, roomType: e.target.value })}
-                className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30">
-                <option value="">All Types</option>
-                {roomTypes.map((t) => <option key={t} value={t}>{t}</option>)}
+                className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">
+                <option value="" className="text-gray-900 dark:text-gray-100">All Types</option>
+                {roomTypes.map((t) => <option key={t} value={t} className="text-gray-900 dark:text-gray-100">{t}</option>)}
+              </select>
+              <select value={filters.state} onChange={(e) => { setFilters({ ...filters, state: e.target.value, city: '' }); }}
+                className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">
+                <option value="" className="text-gray-900 dark:text-gray-100">All States</option>
+                {Object.keys(statesWithCities).map((s) => <option key={s} value={s} className="text-gray-900 dark:text-gray-100">{s}</option>)}
               </select>
               <select value={filters.city} onChange={(e) => setFilters({ ...filters, city: e.target.value })}
-                className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30">
-                <option value="">All Cities</option>
-                <option value="Mumbai">Mumbai</option>
-                <option value="Bangalore">Bangalore</option>
-                <option value="Pune">Pune</option>
-                <option value="Delhi">Delhi</option>
+                className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                disabled={!filters.state}>
+                <option value="" className="text-gray-900 dark:text-gray-100">All Cities</option>
+                {availableCities.map((c) => <option key={c} value={c} className="text-gray-900 dark:text-gray-100">{c}</option>)}
               </select>
-              <button onClick={() => setShowFilters(!showFilters)} className={`px-3 py-2.5 rounded-xl border text-sm transition-all ${showFilters ? 'bg-primary-50 dark:bg-primary-900/30 border-primary-300 text-primary-700' : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400'}`}>
+              <button onClick={() => setShowFilters(!showFilters)} className={`px-3 py-2.5 rounded-xl border text-sm transition-all ${showFilters ? 'bg-primary-50 dark:bg-primary-900/30 border-primary-300 text-primary-700 dark:text-primary-300' : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400'}`}>
                 <SlidersHorizontal className="w-4 h-4" />
               </button>
               <button onClick={handleSearch} className="btn-primary px-6 text-sm">Search</button>
@@ -117,44 +155,50 @@ export default function PropertiesPage() {
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Min Rent</label>
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Min Rent</label>
                   <input type="number" value={filters.minRent} onChange={(e) => setFilters({ ...filters, minRent: e.target.value })} placeholder="₹0"
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500" />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Max Rent</label>
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Max Rent</label>
                   <input type="number" value={filters.maxRent} onChange={(e) => setFilters({ ...filters, maxRent: e.target.value })} placeholder="₹1,00,000"
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500" />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Amenities</label>
-                  <select value={filters.amenities} onChange={(e) => setFilters({ ...filters, amenities: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
-                    <option value="">All Amenities</option>
-                    {amenities.map((a) => <option key={a} value={a}>{a}</option>)}
-                  </select>
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Amenities</label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {amenities.map((a) => (
+                      <button key={a} onClick={() => toggleAmenity(a)}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all ${selectedAmenities.includes(a) ? 'bg-primary-50 dark:bg-primary-900/40 border-primary-300 dark:border-primary-700 text-primary-700 dark:text-primary-300' : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600'}`}>
+                        {a}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex items-end">
+                  <button onClick={resetFilters} className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">
+                    <RotateCcw className="w-3.5 h-3.5" /> Reset Filters
+                  </button>
                 </div>
               </div>
             </motion.div>
           )}
         </div>
 
-        {/* View Toggle */}
         <div className="flex items-center justify-between mb-6">
           <p className="text-sm text-gray-500 dark:text-gray-400">
             {loading ? 'Searching...' : `${properties.length} properties found`}
           </p>
           <div className="flex items-center gap-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-1">
-            <button onClick={() => setViewMode('grid')} className={`p-1.5 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600' : 'text-gray-400'}`}>
+            <button onClick={() => setViewMode('grid')} className={`p-1.5 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400' : 'text-gray-400 dark:text-gray-500'}`}>
               <Grid3X3 className="w-4 h-4" />
             </button>
-            <button onClick={() => setViewMode('list')} className={`p-1.5 rounded-md transition-colors ${viewMode === 'list' ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600' : 'text-gray-400'}`}>
+            <button onClick={() => setViewMode('list')} className={`p-1.5 rounded-md transition-colors ${viewMode === 'list' ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400' : 'text-gray-400 dark:text-gray-500'}`}>
               <List className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        {/* Property Grid / List */}
         {loading ? (
           <div className={viewMode === 'grid' ? 'grid sm:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-4'}>
             {Array.from({ length: 6 }).map((_, i) => (
@@ -166,6 +210,7 @@ export default function PropertiesPage() {
             <Home className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">No properties found</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">Try adjusting your search filters.</p>
+            <button onClick={resetFilters} className="mt-4 btn-secondary text-sm">Reset Filters</button>
           </div>
         ) : viewMode === 'grid' ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

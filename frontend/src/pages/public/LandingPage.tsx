@@ -35,8 +35,6 @@ const testimonials = [
   { name: 'Sneha Patel', role: 'Tenant, Pune', quote: 'Paying rent is finally hassle-free. Automatic reminders, multiple payment options, and I can track my payment history. The maintenance request feature is a game-changer.', rating: 5, initials: 'SP' },
 ];
 
-const partners = ['TechCrunch', 'Forbes India', 'YourStory', 'Economic Times', 'Business Insider', 'Inc. India'];
-
 function Counter({ value, suffix, duration = 2000 }: { value: string; suffix: string; duration?: number }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -162,16 +160,30 @@ export default function LandingPage() {
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden"
+            />
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+              className="fixed top-20 left-0 right-0 z-50 md:hidden border-t border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl shadow-2xl"
             >
               <div className="px-4 py-6 space-y-4">
-                <Link to="/properties" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-medium text-gray-700 dark:text-gray-300 py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">Browse Properties</Link>
-                <a href="#features" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-medium text-gray-700 dark:text-gray-300 py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">Features</a>
-                <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-medium text-gray-700 dark:text-gray-300 py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">How It Works</a>
-                <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-medium text-gray-700 dark:text-gray-300 py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">Contact</a>
+                <Link to="/properties" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-medium text-gray-700 dark:text-gray-300 py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Browse Properties</Link>
+                <a href="#features" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-medium text-gray-700 dark:text-gray-300 py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Features</a>
+                <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-medium text-gray-700 dark:text-gray-300 py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">How It Works</a>
+                <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block text-sm font-medium text-gray-700 dark:text-gray-300 py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Contact</a>
                 <div className="flex items-center gap-2 px-3">
                   <button onClick={toggleTheme} className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
                     {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -371,44 +383,7 @@ export default function LandingPage() {
             </motion.div>
           </div>
 
-          {/* Search Bar */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
-            className="mt-16 max-w-3xl mx-auto"
-          >
-            <form onSubmit={handleSearch} className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500 rounded-2xl blur opacity-30 group-hover:opacity-50 transition-opacity duration-500" />
-              <div className="relative flex items-center gap-2 bg-white/10 backdrop-blur-xl rounded-2xl p-2 border border-white/10">
-                <div className="flex-1 flex items-center gap-3 px-4">
-                  <Search className="w-5 h-5 text-blue-300/70" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search by location, property name, or city..."
-                    className="flex-1 bg-transparent border-none outline-none text-white placeholder-blue-200/60 text-sm py-3"
-                  />
-                </div>
-                <button type="submit" className="px-8 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium text-sm hover:shadow-xl hover:shadow-blue-500/25 transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 whitespace-nowrap">
-                  Search <Search className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </form>
-            <div className="flex items-center gap-4 mt-4 justify-center">
-              <span className="text-xs text-blue-200/70">Popular:</span>
-              {['Mumbai', 'Bangalore', 'Pune', 'Delhi', 'Hyderabad'].map((city) => (
-                <button
-                  key={city}
-                  onClick={() => { setSearchQuery(city); navigate(`/properties?search=${city}`); }}
-                  className="text-xs text-blue-200/80 hover:text-white transition-colors px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/10"
-                >
-                  {city}
-                </button>
-              ))}
-            </div>
-          </motion.div>
+
         </div>
       </motion.section>
 
@@ -626,32 +601,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Trusted By */}
-      <section className="py-16 md:py-20 border-y border-gray-100 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center text-xs uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-10 font-medium"
-          >
-            Featured & Trusted By
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6"
-          >
-            {partners.map((partner) => (
-              <div key={partner} className="text-gray-300 dark:text-gray-600 text-lg font-bold tracking-tight hover:text-gray-400 dark:hover:text-gray-500 transition-colors">
-                {partner}
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section id="contact" className="py-28 md:py-36 px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -732,16 +681,15 @@ export default function LandingPage() {
               <div className="space-y-3">
                 <Link to="/properties" className="block text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Browse Properties</Link>
                 <Link to="/register" className="block text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">List Property</Link>
-                <Link to="/register" className="block text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Pricing</Link>
               </div>
             </div>
 
             <div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-5 text-sm uppercase tracking-wider">Company</h4>
               <div className="space-y-3">
-                <a href="#features" className="block text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">About Us</a>
+                <Link to="/about" className="block text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">About Us</Link>
                 <a href="#contact" className="block text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Contact</a>
-                <a href="#!" className="block text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Privacy Policy</a>
+                <Link to="/privacy" className="block text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Privacy Policy</Link>
               </div>
             </div>
 
@@ -761,7 +709,7 @@ export default function LandingPage() {
           <div className="mt-12 pt-8 border-t border-gray-100 dark:border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-gray-400">&copy; {new Date().getFullYear()} Domicilo. All rights reserved.</p>
             <div className="flex items-center gap-6 text-xs text-gray-400">
-              <a href="#!" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Privacy Policy</a>
+              <Link to="/privacy" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Privacy Policy</Link>
               <a href="#!" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Terms of Service</a>
             </div>
           </div>
