@@ -24,7 +24,7 @@ export default function LoginPage() {
       await login(email, password);
       toast.success('Welcome back!');
       const user = useAuthStore.getState().user;
-      if (user) navigate(`/${user.role}/dashboard`);
+      if (user) navigate(user.role === 'other' ? '/properties' : `/${user.role}/dashboard`);
     } catch (err: any) {
       toast.error(err.response?.data?.error || 'Login failed');
     } finally {
@@ -110,14 +110,6 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 p-4 rounded-xl bg-gray-50 dark:bg-gray-900/50">
-            <p className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-2">Demo Accounts:</p>
-            <div className="space-y-1 text-xs text-gray-400 dark:text-gray-500">
-              <p>Admin: admin@domicilo.com / Domicilo@123</p>
-              <p>Owner: rahul@example.com / Domicilo@123</p>
-              <p>Tenant: vikram@example.com / Domicilo@123</p>
-            </div>
-          </div>
         </motion.div>
       </div>
     </div>

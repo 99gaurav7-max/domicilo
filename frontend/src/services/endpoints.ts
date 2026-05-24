@@ -18,6 +18,7 @@ export const authApi = {
     api.post<ApiResponse>('/auth/forgot-password', { email }),
   resetPassword: (token: string, newPassword: string) =>
     api.post<ApiResponse>('/auth/reset-password', { token, newPassword }),
+  checkAdminExists: () => api.get<{ success: boolean; exists: boolean }>('/auth/admin-exists'),
 };
 
 // Properties

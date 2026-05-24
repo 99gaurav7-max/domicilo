@@ -9,6 +9,7 @@ import { TableContainer, Card, StatusBadge, EmptyState, SearchInput } from '../.
 import { Pagination } from '../../components/ui/Pagination';
 import { Modal, ConfirmDialog } from '../../components/ui/Modal';
 import { TableSkeleton } from '../../components/ui/Skeleton';
+import { indianStatesCities } from '../../data/indianStatesCities';
 
 export default function OwnerProperties() {
   const navigate = useNavigate();
@@ -37,6 +38,8 @@ export default function OwnerProperties() {
     name: '', description: '', location: '', city: '', state: '', pincode: '',
     amenities: [] as string[], images: [] as string[],
   });
+
+  const formCities = form.state ? indianStatesCities[form.state] || [] : [];
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -161,14 +164,21 @@ export default function OwnerProperties() {
                 className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">City *</label>
-              <input type="text" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">State *</label>
+              <select value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value, city: '' })}
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
+                <option value="">Select State</option>
+                {Object.keys(indianStatesCities).map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">State *</label>
-              <input type="text" value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">City *</label>
+              <select value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })}
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm"
+                disabled={!form.state}>
+                <option value="">Select City</option>
+                {formCities.map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Pincode</label>

@@ -11,16 +11,7 @@ import { Pagination } from '../../components/ui/Pagination';
 const roomTypes = ['1RK', '1BHK', '2BHK', '3BHK', '4BHK', '5BHK', '6BHK', '7BHK', '8BHK', '9BHK', '10BHK'];
 const amenities = ['WiFi', 'Parking', 'Gym', 'Security', 'Power Backup', 'Lift', 'Swimming Pool', 'Garden'];
 
-const statesWithCities: Record<string, string[]> = {
-  Maharashtra: ['Mumbai', 'Pune', 'Nagpur', 'Thane', 'Nashik', 'Aurangabad'],
-  Karnataka: ['Bangalore', 'Mysore', 'Hubli', 'Mangalore', 'Belgaum'],
-  Delhi: ['New Delhi', 'Dwarka', 'Rohini', 'Saket', 'Karol Bagh'],
-  'Tamil Nadu': ['Chennai', 'Coimbatore', 'Madurai', 'Trichy', 'Salem'],
-  'Uttar Pradesh': ['Lucknow', 'Noida', 'Ghaziabad', 'Agra', 'Varanasi'],
-  Gujarat: ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Jamnagar'],
-  Rajasthan: ['Jaipur', 'Jodhpur', 'Udaipur', 'Kota', 'Ajmer'],
-  Hyderabad: ['Hyderabad', 'Secunderabad'],
-};
+import { indianStatesCities } from '../../data/indianStatesCities';
 
 export default function PropertiesPage() {
   const navigate = useNavigate();
@@ -46,7 +37,7 @@ export default function PropertiesPage() {
     searchParams.get('amenities') ? searchParams.get('amenities')!.split(',') : []
   );
 
-  const availableCities = filters.state ? statesWithCities[filters.state] || [] : [];
+  const availableCities = filters.state ? indianStatesCities[filters.state] || [] : [];
 
   const fetchProperties = useCallback(async (p?: number) => {
     setLoading(true);
@@ -147,7 +138,7 @@ export default function PropertiesPage() {
               <select value={filters.state} onChange={(e) => { setFilters({ ...filters, state: e.target.value, city: '' }); }}
                 className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">
                 <option value="" className="text-gray-900 dark:text-gray-100">All States</option>
-                {Object.keys(statesWithCities).map((s) => <option key={s} value={s} className="text-gray-900 dark:text-gray-100">{s}</option>)}
+                {Object.keys(indianStatesCities).map((s) => <option key={s} value={s} className="text-gray-900 dark:text-gray-100">{s}</option>)}
               </select>
               <select value={filters.city} onChange={(e) => setFilters({ ...filters, city: e.target.value })}
                 className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30"

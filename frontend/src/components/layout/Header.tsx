@@ -17,11 +17,11 @@ export function Header({ onMenuToggle, isSidebarOpen }: HeaderProps) {
 
   return (
     <header className="sticky-header glass border-b border-gray-200/50 dark:border-gray-800/50 z-40">
-      <div className="flex items-center justify-between h-16 px-4 lg:px-6">
-        <div className="flex items-center gap-3">
-          <button onClick={onMenuToggle} className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700 active:scale-95 transition-all duration-150">
-            {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+        <div className="flex items-center justify-between h-16 px-4 lg:px-6 text-gray-600 dark:text-gray-200">
+          <div className="flex items-center gap-3">
+            <button onClick={onMenuToggle} className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700 active:scale-95 transition-all duration-150">
+              {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           <Link to="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
               <Building2 className="w-4 h-4 text-white" />
@@ -67,8 +67,8 @@ export function Header({ onMenuToggle, isSidebarOpen }: HeaderProps) {
                       <p className="text-sm font-medium text-gray-900 dark:text-white">{user.fullName}</p>
                       <p className="text-xs text-gray-500 capitalize">{user.role}</p>
                     </div>
-                    <Link to={`/${user.role}/dashboard`} className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={() => setShowUserMenu(false)}>
-                      <User className="w-4 h-4" /> Dashboard
+                    <Link to={user.role === 'other' ? '/properties' : `/${user.role}/dashboard`} className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={() => setShowUserMenu(false)}>
+                      <User className="w-4 h-4" /> {user.role === 'other' ? 'Browse Properties' : 'Dashboard'}
                     </Link>
                     <Link to="/settings" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={() => setShowUserMenu(false)}>
                       <Settings className="w-4 h-4" /> Settings

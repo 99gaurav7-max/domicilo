@@ -4,7 +4,7 @@ export interface UserPayload {
   id: string;
   email: string;
   phone: string;
-  role: 'admin' | 'owner' | 'tenant';
+  role: 'admin' | 'owner' | 'tenant' | 'other';
 }
 
 export interface AuthRequest extends Request {

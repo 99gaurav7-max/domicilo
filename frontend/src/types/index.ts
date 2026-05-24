@@ -3,7 +3,7 @@ export interface User {
   email: string;
   phone: string;
   fullName: string;
-  role: 'admin' | 'owner' | 'tenant';
+  role: 'admin' | 'owner' | 'tenant' | 'other';
   isActive?: boolean;
   avatarUrl?: string;
   createdAt?: string;

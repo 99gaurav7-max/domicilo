@@ -147,8 +147,8 @@ function AppContent() {
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Toaster position="top-right" toastOptions={{
-        className: 'glass-card text-sm text-gray-900 dark:text-gray-100',
+      <Toaster position="top-center" toastOptions={{
+        className: 'glass-card text-sm text-gray-900 dark:text-gray-100 text-center',
         duration: 3000,
       }} />
       <AppContent />

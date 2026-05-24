@@ -68,8 +68,15 @@ export const register = async (req: Request, res: Response) => {
   try {
     const { email, phone, fullName, password, role } = req.body;
 
-    const allowedRoles = ['owner', 'tenant'];
-    const userRole = allowedRoles.includes(role) ? role : 'tenant';
+    const allowedRoles = ['admin', 'owner', 'other'];
+    const userRole = allowedRoles.includes(role) ? role : 'other';
+
+    if (userRole === 'admin') {
+      const adminCount = await pool.query(`SELECT COUNT(*) FROM users WHERE role = 'admin'`);
+      if (parseInt(adminCount.rows[0].count, 10) > 0) {
+        return res.status(400).json({ success: false, error: 'An admin account already exists. Only one admin is permitted per platform.' });
+      }
+    }
 
     const existing = await pool.query(
       `SELECT id FROM users WHERE email = $1 OR phone = $2`,
@@ -202,6 +209,15 @@ export const deleteAccount = async (req: AuthRequest, res: Response) => {
     await pool.query(`DELETE FROM users WHERE id = $1`, [userId]);
     return res.json({ success: true, message: 'Account deleted successfully.' });
   } catch (err) {
+    return res.status(500).json({ success: false, error: 'Internal server error.' });
+  }
+};
+
+export const checkAdminExists = async (_req: Request, res: Response) => {
+  try {
+    const result = await pool.query(`SELECT COUNT(*) FROM users WHERE role = 'admin'`);
+    return res.json({ success: true, exists: parseInt(result.rows[0].count, 10) > 0 });
+  } catch {
     return res.status(500).json({ success: false, error: 'Internal server error.' });
   }
 };

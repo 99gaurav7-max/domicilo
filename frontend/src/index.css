@@ -41,6 +41,11 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-wrap: pretty;
+}
+
+h1, h2, h3 {
+  text-wrap: balance;
 }
 
 /* Touch optimization: remove 300ms tap delay + grey highlight */
@@ -62,7 +67,29 @@ button:active:not(:disabled), a:active:not(:disabled),
 
 /* iOS input fixes */
 input, select, textarea {
-  font-size: 16px; /* prevents iOS zoom on focus */
+  font-size: 16px;
+}
+
+/* Premium typography */
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.02em;
+}
+
+.text-premium {
+  letter-spacing: 0.01em;
+}
+
+/* Ensure dark mode labels have sufficient contrast */
+.dark label, .dark .text-gray-700 {
+  color: #d1d5db !important;
+}
+
+.dark .text-gray-500, .dark .text-gray-400 {
+  color: #9ca3af !important;
+}
+
+.dark .text-gray-600 {
+  color: #adb5bd !important;
 }
 
 /* Respect user motion preferences */
@@ -150,11 +177,11 @@ input, select, textarea {
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.5s ease-out;
+  animation: fadeIn 0.01s ease-out both;
 }
 
 .animate-slide-up {
-  animation: slideUp 0.5s ease-out;
+  animation: slideUp 0.01s ease-out both;
 }
 
 @keyframes fadeIn {

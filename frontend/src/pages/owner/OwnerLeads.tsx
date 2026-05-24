@@ -16,6 +16,7 @@ export default function OwnerLeads() {
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 0 });
   const [selectedLead, setSelectedLead] = useState<Enquiry | null>(null);
+  const [confirmAction, setConfirmAction] = useState<{ id: string; status: string } | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
 
   const fetchLeads = () => {
@@ -106,18 +107,18 @@ export default function OwnerLeads() {
                             className="px-2 py-1 text-xs rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400">
                             Contact
                           </button>
-                          <button onClick={() => handleStatusUpdate(lead.id, 'approved')}
+                          <button onClick={() => setConfirmAction({ id: lead.id, status: 'approved' })}
                             className="px-2 py-1 text-xs rounded-lg bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400">
                             Approve
                           </button>
-                          <button onClick={() => handleStatusUpdate(lead.id, 'rejected')}
+                          <button onClick={() => setConfirmAction({ id: lead.id, status: 'rejected' })}
                             className="px-2 py-1 text-xs rounded-lg bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400">
                             Reject
                           </button>
                         </>
                       )}
                       {lead.status === 'approved' && (
-                        <button onClick={() => handleStatusUpdate(lead.id, 'converted')}
+                        <button onClick={() => setConfirmAction({ id: lead.id, status: 'converted' })}
                           className="px-2 py-1 text-xs rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400">
                           Convert to Tenant
                         </button>
@@ -180,16 +181,33 @@ export default function OwnerLeads() {
               {selectedLead.status === 'new' && (
                 <>
                   <button onClick={() => { handleStatusUpdate(selectedLead.id, 'contacted'); }} className="btn-secondary text-sm">Mark Contacted</button>
-                  <button onClick={() => { handleStatusUpdate(selectedLead.id, 'approved'); }} className="btn-primary text-sm">Approve & Convert</button>
+                  <button onClick={() => setConfirmAction({ id: selectedLead.id, status: 'approved' })} className="btn-primary text-sm">Approve & Convert</button>
                 </>
               )}
               {selectedLead.status === 'approved' && (
-                <button onClick={() => { handleStatusUpdate(selectedLead.id, 'converted'); }} className="btn-primary text-sm">Convert to Tenant</button>
+                <button onClick={() => setConfirmAction({ id: selectedLead.id, status: 'converted' })} className="btn-primary text-sm">Convert to Tenant</button>
               )}
             </div>
           </div>
         )}
       </Modal>
+
+      <ConfirmDialog
+        isOpen={!!confirmAction}
+        onClose={() => setConfirmAction(null)}
+        onConfirm={() => {
+          if (confirmAction) handleStatusUpdate(confirmAction.id, confirmAction.status);
+          setConfirmAction(null);
+        }}
+        title={confirmAction?.status === 'approved' ? 'Approve Lead' : confirmAction?.status === 'rejected' ? 'Reject Lead' : 'Convert to Tenant'}
+        message={confirmAction?.status === 'approved'
+          ? 'This will approve the enquiry. The lead will be marked as approved and can be converted to a tenant later.'
+          : confirmAction?.status === 'rejected'
+          ? 'This will reject the enquiry. The lead will be marked as rejected and the applicant will be notified.'
+          : 'This will convert this lead into a full tenant. They will be onboarded into the property system.'}
+        confirmText={confirmAction?.status === 'approved' ? 'Approve' : confirmAction?.status === 'rejected' ? 'Reject' : 'Convert'}
+        variant={confirmAction?.status === 'rejected' ? 'danger' : 'info'}
+      />
     </div>
   );
 }
