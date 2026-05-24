@@ -136,12 +136,30 @@ export const forgotPassword = async (req: Request, res: Response) => {
       const resetToken = jwt.sign({ id: user.id, type: 'reset' }, config.jwt.secret, { expiresIn: '1h' });
       const resetLink = `${config.frontendUrl}/reset-password?token=${resetToken}`;
 
-      const { sendEmail } = require('../utils');
-      await sendEmail(
-        email,
-        'Password Reset - Domicilo',
-        `<p>Hi ${user.full_name},</p><p>Click <a href="${resetLink}">here</a> to reset your password. This link expires in 1 hour.</p>`
-      );
+      try {
+        const { sendEmail } = require('../utils');
+        await sendEmail(
+          email,
+          'Password Reset - Domicilo',
+          `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
+            <div style="background:linear-gradient(135deg,#1e3a5f,#1d4ed8);padding:32px;border-radius:12px 12px 0 0;text-align:center;">
+              <h1 style="color:#fff;margin:0;font-size:24px;">Password Reset</h1>
+            </div>
+            <div style="background:#fff;padding:32px;border-radius:0 0 12px 12px;border:1px solid #e5e7eb;">
+              <p style="color:#374151;font-size:16px;line-height:1.6;">Hi ${user.full_name},</p>
+              <p style="color:#374151;font-size:16px;line-height:1.6;">We received a request to reset your Domicilo account password. Click the button below to set a new password:</p>
+              <div style="text-align:center;margin:24px 0;">
+                <a href="${resetLink}" style="display:inline-block;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:14px 36px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:16px;">Reset Password</a>
+              </div>
+              <p style="color:#6b7280;font-size:14px;">This link expires in <strong>1 hour</strong>.</p>
+              <p style="color:#9ca3af;font-size:12px;margin-top:24px;">If you didn't request this, please ignore this email.</p>
+            </div>
+          </div>`
+        );
+      } catch (emailErr) {
+        console.error('Failed to send reset email:', emailErr);
+        return res.status(500).json({ success: false, error: 'Failed to send email. Please configure SMTP in environment variables.' });
+      }
     }
 
     return res.json({ success: true, message: 'If the email exists, a reset link has been sent.' });

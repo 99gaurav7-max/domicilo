@@ -1,16 +1,42 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, Loader2, Shield, Building2, User, Check, Crown } from 'lucide-react';
+import { Home, Loader2, Shield, Building2, User, Check, Crown, Eye, EyeOff, X, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { authApi } from '../../services/endpoints';
+
+function validateEmail(v: string) {
+  if (!v) return '';
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? '' : 'Enter a valid email address';
+}
+
+function validatePassword(v: string) {
+  if (!v) return '';
+  if (v.length < 8) return 'At least 8 characters';
+  return '';
+}
+
+function validatePhone(v: string) {
+  if (!v) return '';
+  if (!/^[6-9]\d{9}$/.test(v)) return 'Must be a valid 10-digit Indian number starting with 6-9';
+  return '';
+}
+
+function validateFullName(v: string) {
+  if (!v) return '';
+  if (v.trim().length < 2) return 'Enter your full name';
+  return '';
+}
 
 export default function RegisterPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ fullName: '', email: '', phone: '', password: '', confirmPassword: '', role: 'owner' });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [checkingAdmin, setCheckingAdmin] = useState(true);
   const [adminExists, setAdminExists] = useState(false);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     (async () => {
@@ -22,23 +48,24 @@ export default function RegisterPage() {
     })();
   }, []);
 
+  const errors = useMemo(() => ({
+    fullName: touched.fullName ? validateFullName(form.fullName) : '',
+    email: touched.email ? validateEmail(form.email) : '',
+    phone: touched.phone ? validatePhone(form.phone) : '',
+    password: touched.password ? validatePassword(form.password) : '',
+    confirmPassword: touched.confirmPassword && form.confirmPassword && form.password !== form.confirmPassword ? 'Passwords do not match' : '',
+  }), [form, touched]);
+
+  const isFormValid = !validateFullName(form.fullName) && !validateEmail(form.email) && !validatePhone(form.phone) && !validatePassword(form.password) && form.password === form.confirmPassword && form.phone.length === 10;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.fullName || !form.email || !form.phone || !form.password) {
-      toast.error('Please fill in all required fields');
-      return;
-    }
-    if (form.password !== form.confirmPassword) {
-      toast.error('Passwords do not match');
-      return;
-    }
-    if (form.password.length < 8) {
-      toast.error('Password must be at least 8 characters');
-      return;
-    }
+    setTouched({ fullName: true, email: true, phone: true, password: true, confirmPassword: true });
+    if (!isFormValid) { toast.error('Please fix all errors before submitting'); return; }
     setLoading(true);
     try {
       const { confirmPassword, ...registerData } = form;
+      registerData.phone = '+91' + form.phone;
       await authApi.register(registerData);
       toast.success('Registration successful! Please sign in.');
       navigate('/login');
@@ -54,6 +81,13 @@ export default function RegisterPage() {
     { value: 'other', label: 'Other', icon: User, desc: 'Browse properties and enquire — upgrade to tenant later', premium: false },
     { value: 'admin', label: 'Admin', icon: Shield, desc: 'Platform administration (Master account)', premium: true },
   ];
+
+  const inputClass = (hasError: boolean) =>
+    `w-full px-4 py-2.5 rounded-xl border text-sm transition-all outline-none ${
+      hasError
+        ? 'border-red-400 dark:border-red-500 bg-red-50 dark:bg-red-900/10 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-red-500/30'
+        : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500'
+    }`;
 
   return (
     <div className="min-h-screen flex">
@@ -83,31 +117,64 @@ export default function RegisterPage() {
             <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">Sign in</Link>
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Full Name *</label>
-              <input type="text" value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} placeholder="John Doe"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 transition-all" />
+              <input type="text" value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} onBlur={() => setTouched({ ...touched, fullName: true })}
+                placeholder="John Doe" className={inputClass(!!errors.fullName)} autoComplete="name" />
+              {errors.fullName && <p className="mt-1 text-xs text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.fullName}</p>}
             </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email *</label>
-              <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="you@example.com"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 transition-all" />
+              <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} onBlur={() => setTouched({ ...touched, email: true })}
+                placeholder="you@example.com" className={inputClass(!!errors.email)} autoComplete="email" />
+              {errors.email && <p className="mt-1 text-xs text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.email}</p>}
             </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Phone *</label>
-              <input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+91 9876543210"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 transition-all" />
+              <div className="relative">
+                <div className="flex items-stretch">
+                  <span className={`inline-flex items-center px-3 rounded-l-xl border border-r-0 text-sm font-mono select-none ${errors.phone ? 'border-red-400 dark:border-red-500 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400' : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}`}>
+                    +91
+                  </span>
+                  <input type="tel" value={form.phone} onChange={(e) => { const v = e.target.value.replace(/\D/g, '').slice(0, 10); setForm({ ...form, phone: v }); }}
+                    onBlur={() => setTouched({ ...touched, phone: true })}
+                    placeholder="9876543210" maxLength={10}
+                    className={`flex-1 min-w-0 rounded-r-xl text-sm transition-all outline-none px-4 py-2.5 ${errors.phone ? 'border-red-400 dark:border-red-500 bg-red-50 dark:bg-red-900/10 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-red-500/30 border' : 'border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500'}`} />
+                </div>
+              </div>
+              {errors.phone && <p className="mt-1 text-xs text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.phone}</p>}
+              {form.phone && !errors.phone && touched.phone && <p className="mt-1 text-xs text-green-500 flex items-center gap-1"><Check className="w-3 h-3" />Valid number</p>}
             </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Password *</label>
-              <input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="Min. 8 characters"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 transition-all" />
+              <div className="relative">
+                <input type={showPassword ? 'text' : 'password'} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  onBlur={() => setTouched({ ...touched, password: true })}
+                  placeholder="Min. 8 characters" className={`w-full px-4 py-2.5 rounded-xl border text-sm pr-10 transition-all outline-none ${errors.password ? 'border-red-400 dark:border-red-500 bg-red-50 dark:bg-red-900/10 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-red-500/30' : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500'}`} autoComplete="new-password" />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              {errors.password && <p className="mt-1 text-xs text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.password}</p>}
+              {form.password && !errors.password && <p className="mt-1 text-xs text-green-500 flex items-center gap-1"><Check className="w-3 h-3" />Strong enough</p>}
             </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Confirm Password *</label>
-              <input type="password" value={form.confirmPassword} onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })} placeholder="Re-enter password"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 transition-all" />
+              <div className="relative">
+                <input type={showConfirm ? 'text' : 'password'} value={form.confirmPassword} onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+                  onBlur={() => setTouched({ ...touched, confirmPassword: true })}
+                  placeholder="Re-enter password" className={`w-full px-4 py-2.5 rounded-xl border text-sm pr-10 transition-all outline-none ${errors.confirmPassword ? 'border-red-400 dark:border-red-500 bg-red-50 dark:bg-red-900/10 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-red-500/30' : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500'}`} autoComplete="new-password" />
+                <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                  {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              {errors.confirmPassword && <p className="mt-1 text-xs text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.confirmPassword}</p>}
+              {form.confirmPassword && !errors.confirmPassword && <p className="mt-1 text-xs text-green-500 flex items-center gap-1"><Check className="w-3 h-3" />Passwords match</p>}
             </div>
 
             <div>

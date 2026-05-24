@@ -150,8 +150,10 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster position="top-center" toastOptions={{
-        className: 'glass-card text-sm text-gray-900 dark:text-gray-100 text-center',
+        className: 'toast-default',
         duration: 3000,
+        success: { className: 'toast-success', iconTheme: { primary: '#10b981', secondary: '#fff' } },
+        error: { className: 'toast-error', iconTheme: { primary: '#ef4444', secondary: '#fff' } },
       }} />
       <AppContent />
     </QueryClientProvider>

@@ -37,7 +37,8 @@ export default function PropertiesPage() {
     searchParams.get('amenities') ? searchParams.get('amenities')!.split(',') : []
   );
 
-  const availableCities = filters.state ? indianStatesCities[filters.state] || [] : [];
+  const sortedStates = Object.keys(indianStatesCities).sort((a, b) => a.localeCompare(b));
+  const availableCities = filters.state ? [...(indianStatesCities[filters.state] || [])].sort((a, b) => a.localeCompare(b)) : [];
 
   const fetchProperties = useCallback(async (p?: number) => {
     setLoading(true);
@@ -138,12 +139,12 @@ export default function PropertiesPage() {
               <select value={filters.state} onChange={(e) => { setFilters({ ...filters, state: e.target.value, city: '' }); }}
                 className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">
                 <option value="" className="text-gray-900 dark:text-gray-100">All States</option>
-                {Object.keys(indianStatesCities).map((s) => <option key={s} value={s} className="text-gray-900 dark:text-gray-100">{s}</option>)}
+                {sortedStates.map((s) => <option key={s} value={s} className="text-gray-900 dark:text-gray-100">{s}</option>)}
               </select>
               <select value={filters.city} onChange={(e) => setFilters({ ...filters, city: e.target.value })}
-                className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30 disabled:opacity-50"
                 disabled={!filters.state}>
-                <option value="" className="text-gray-900 dark:text-gray-100">All Cities</option>
+                <option value="" className="text-gray-900 dark:text-gray-100">{filters.state ? 'All Cities' : 'Select state first'}</option>
                 {availableCities.map((c) => <option key={c} value={c} className="text-gray-900 dark:text-gray-100">{c}</option>)}
               </select>
               <button onClick={() => setShowFilters(!showFilters)} className={`px-3 py-2.5 rounded-xl border text-sm transition-all ${showFilters ? 'bg-primary-50 dark:bg-primary-900/30 border-primary-300 text-primary-700 dark:text-primary-300' : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400'}`}>
