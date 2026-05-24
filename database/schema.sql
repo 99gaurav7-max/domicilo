@@ -1,20 +1,47 @@
 -- Domicilo Database Schema
--- PostgreSQL
+-- PostgreSQL (idempotent — safe to run repeatedly)
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- Enum types
-CREATE TYPE user_role AS ENUM ('admin', 'owner', 'tenant', 'other');
-CREATE TYPE room_type AS ENUM ('1RK', '1BHK', '2BHK', '3BHK', '4BHK', '5BHK', '6BHK', '7BHK', '8BHK', '9BHK', '10BHK');
-CREATE TYPE occupancy_status AS ENUM ('vacant', 'occupied', 'maintenance');
-CREATE TYPE payment_status AS ENUM ('pending', 'completed', 'failed', 'refunded');
-CREATE TYPE payment_type AS ENUM ('rent', 'water', 'electricity', 'maintenance', 'other');
-CREATE TYPE enquiry_status AS ENUM ('new', 'contacted', 'approved', 'rejected', 'converted');
-CREATE TYPE notification_channel AS ENUM ('onboarding', 'payment_success', 'payment_failure', 'due_reminder', 'overdue_alert', 'enquiry_submission', 'lead_update');
+-- Enum types (idempotent via DO blocks)
+DO $$ BEGIN
+  CREATE TYPE user_role AS ENUM ('admin', 'owner', 'tenant', 'other');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
--- Users table (admin, owner, tenant)
-CREATE TABLE users (
+DO $$ BEGIN
+  CREATE TYPE room_type AS ENUM ('1RK', '1BHK', '2BHK', '3BHK', '4BHK', '5BHK', '6BHK', '7BHK', '8BHK', '9BHK', '10BHK');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE occupancy_status AS ENUM ('vacant', 'occupied', 'maintenance');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE payment_status AS ENUM ('pending', 'completed', 'failed', 'refunded');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE payment_type AS ENUM ('rent', 'water', 'electricity', 'maintenance', 'other');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE enquiry_status AS ENUM ('new', 'contacted', 'approved', 'rejected', 'converted');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE notification_channel AS ENUM ('onboarding', 'payment_success', 'payment_failure', 'due_reminder', 'overdue_alert', 'enquiry_submission', 'lead_update');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- Users table (admin, owner, tenant, other)
+CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   email VARCHAR(255) UNIQUE,
   phone VARCHAR(20) UNIQUE NOT NULL,
@@ -29,7 +56,7 @@ CREATE TABLE users (
 );
 
 -- Properties table
-CREATE TABLE properties (
+CREATE TABLE IF NOT EXISTS properties (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   owner_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   name VARCHAR(255) NOT NULL,
@@ -48,7 +75,7 @@ CREATE TABLE properties (
 );
 
 -- Rooms table
-CREATE TABLE rooms (
+CREATE TABLE IF NOT EXISTS rooms (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   property_id UUID NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
   room_number VARCHAR(50) NOT NULL,
@@ -65,7 +92,7 @@ CREATE TABLE rooms (
 );
 
 -- Tenants (linked to users)
-CREATE TABLE tenants (
+CREATE TABLE IF NOT EXISTS tenants (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   owner_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -81,7 +108,7 @@ CREATE TABLE tenants (
 );
 
 -- Enquiries / Leads
-CREATE TABLE enquiries (
+CREATE TABLE IF NOT EXISTS enquiries (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   property_id UUID NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
   room_type room_type NOT NULL,
@@ -98,7 +125,7 @@ CREATE TABLE enquiries (
 );
 
 -- Payments
-CREATE TABLE payments (
+CREATE TABLE IF NOT EXISTS payments (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   property_id UUID NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
@@ -116,7 +143,7 @@ CREATE TABLE payments (
 );
 
 -- Fines
-CREATE TABLE fines (
+CREATE TABLE IF NOT EXISTS fines (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   payment_id UUID REFERENCES payments(id) ON DELETE SET NULL,
@@ -127,7 +154,7 @@ CREATE TABLE fines (
 );
 
 -- Notifications
-CREATE TABLE notifications (
+CREATE TABLE IF NOT EXISTS notifications (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   title VARCHAR(255) NOT NULL,
@@ -138,7 +165,7 @@ CREATE TABLE notifications (
 );
 
 -- Refresh tokens for JWT
-CREATE TABLE refresh_tokens (
+CREATE TABLE IF NOT EXISTS refresh_tokens (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   token VARCHAR(500) NOT NULL,
@@ -146,33 +173,33 @@ CREATE TABLE refresh_tokens (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Indexes
-CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_users_phone ON users(phone);
-CREATE INDEX idx_users_role ON users(role);
-CREATE INDEX idx_properties_owner ON properties(owner_id);
-CREATE INDEX idx_properties_city ON properties(city);
-CREATE INDEX idx_properties_active ON properties(is_active);
-CREATE INDEX idx_rooms_property ON rooms(property_id);
-CREATE INDEX idx_rooms_status ON rooms(status);
-CREATE INDEX idx_rooms_type ON rooms(room_type);
-CREATE INDEX idx_tenants_user ON tenants(user_id);
-CREATE INDEX idx_tenants_owner ON tenants(owner_id);
-CREATE INDEX idx_tenants_property ON tenants(property_id);
-CREATE INDEX idx_tenants_active ON tenants(is_active);
-CREATE INDEX idx_enquiries_property ON enquiries(property_id);
-CREATE INDEX idx_enquiries_owner ON enquiries(owner_id);
-CREATE INDEX idx_enquiries_status ON enquiries(status);
-CREATE INDEX idx_payments_tenant ON payments(tenant_id);
-CREATE INDEX idx_payments_owner ON payments(owner_id);
-CREATE INDEX idx_payments_status ON payments(status);
-CREATE INDEX idx_payments_due ON payments(due_date);
-CREATE INDEX idx_notifications_user ON notifications(user_id);
-CREATE INDEX idx_notifications_read ON notifications(is_read);
-CREATE INDEX idx_fines_tenant ON fines(tenant_id);
-CREATE INDEX idx_payments_type ON payments(payment_type);
-CREATE INDEX idx_payments_created ON payments(created_at);
-CREATE INDEX idx_fines_tenant_paid ON fines(tenant_id, is_paid);
-CREATE INDEX idx_rooms_property_status ON rooms(property_id, status);
-CREATE INDEX idx_enquiries_created ON enquiries(created_at);
-CREATE INDEX idx_tenants_created ON tenants(created_at);
+-- Indexes (IF NOT EXISTS supported since PostgreSQL 9.5)
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone);
+CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
+CREATE INDEX IF NOT EXISTS idx_properties_owner ON properties(owner_id);
+CREATE INDEX IF NOT EXISTS idx_properties_city ON properties(city);
+CREATE INDEX IF NOT EXISTS idx_properties_active ON properties(is_active);
+CREATE INDEX IF NOT EXISTS idx_rooms_property ON rooms(property_id);
+CREATE INDEX IF NOT EXISTS idx_rooms_status ON rooms(status);
+CREATE INDEX IF NOT EXISTS idx_rooms_type ON rooms(room_type);
+CREATE INDEX IF NOT EXISTS idx_tenants_user ON tenants(user_id);
+CREATE INDEX IF NOT EXISTS idx_tenants_owner ON tenants(owner_id);
+CREATE INDEX IF NOT EXISTS idx_tenants_property ON tenants(property_id);
+CREATE INDEX IF NOT EXISTS idx_tenants_active ON tenants(is_active);
+CREATE INDEX IF NOT EXISTS idx_enquiries_property ON enquiries(property_id);
+CREATE INDEX IF NOT EXISTS idx_enquiries_owner ON enquiries(owner_id);
+CREATE INDEX IF NOT EXISTS idx_enquiries_status ON enquiries(status);
+CREATE INDEX IF NOT EXISTS idx_payments_tenant ON payments(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_payments_owner ON payments(owner_id);
+CREATE INDEX IF NOT EXISTS idx_payments_status ON payments(status);
+CREATE INDEX IF NOT EXISTS idx_payments_due ON payments(due_date);
+CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_read ON notifications(is_read);
+CREATE INDEX IF NOT EXISTS idx_fines_tenant ON fines(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_payments_type ON payments(payment_type);
+CREATE INDEX IF NOT EXISTS idx_payments_created ON payments(created_at);
+CREATE INDEX IF NOT EXISTS idx_fines_tenant_paid ON fines(tenant_id, is_paid);
+CREATE INDEX IF NOT EXISTS idx_rooms_property_status ON rooms(property_id, status);
+CREATE INDEX IF NOT EXISTS idx_enquiries_created ON enquiries(created_at);
+CREATE INDEX IF NOT EXISTS idx_tenants_created ON tenants(created_at);
