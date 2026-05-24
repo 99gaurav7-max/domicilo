@@ -194,8 +194,9 @@ export const deleteProperty = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const createEnquiry = async (req: Request, res: Response) => {
+export const createEnquiry = async (req: AuthRequest, res: Response) => {
   try {
+    const authUser = req.user!;
     const { propertyId, roomType, name, phone, email, preferredMoveIn, message } = req.body;
     const id = uuidv4();
 
@@ -204,28 +205,33 @@ export const createEnquiry = async (req: Request, res: Response) => {
       return res.status(404).json({ success: false, error: 'Property not found.' });
     }
 
+    // Use authenticated user info as fallback
+    const enquiryName = name || authUser.email;
+    const enquiryPhone = phone || authUser.phone;
+    const enquiryEmail = email || authUser.email;
+
     await pool.query(
       `INSERT INTO enquiries (id, property_id, room_type, name, phone, email, preferred_move_in, message, owner_id) 
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-      [id, propertyId, roomType, name, phone, email, preferredMoveIn, message, property.rows[0].owner_id]
+      [id, propertyId, roomType, enquiryName, enquiryPhone, enquiryEmail, preferredMoveIn, message, property.rows[0].owner_id]
     );
 
     const { sendEmail, sendSMS, createNotification } = require('../utils');
 
-    if (email) {
+    if (enquiryEmail) {
       await sendEmail(
-        email,
+        enquiryEmail,
         'Enquiry Received - Domicilo',
-        `<p>Dear ${name},</p><p>Thank you for your interest in <strong>${property.rows[0].name}</strong>. We have received your enquiry and the property owner will contact you shortly.</p>`
+        `<p>Dear ${enquiryName},</p><p>Thank you for your interest in <strong>${property.rows[0].name}</strong>. We have received your enquiry and the property owner will contact you shortly.</p>`
       );
     }
 
-    await sendSMS(phone, `Hi ${name}, thank you for your enquiry about ${property.rows[0].name} on Domicilo. The owner will get in touch with you soon.`);
+    await sendSMS(enquiryPhone, `Hi ${enquiryName}, thank you for your enquiry about ${property.rows[0].name} on Domicilo. The owner will get in touch with you soon.`);
 
     // Notify the owner
     await pool.query(
       `INSERT INTO notifications (user_id, title, message, channel) VALUES ($1, $2, $3, $4)`,
-      [property.rows[0].owner_id, 'New Enquiry Received', `${name} is interested in your property "${property.rows[0].name}".`, 'enquiry_submission']
+      [property.rows[0].owner_id, 'New Enquiry Received', `${enquiryName} is interested in your property "${property.rows[0].name}".`, 'enquiry_submission']
     );
 
     return res.status(201).json({ success: true, data: { id }, message: 'Enquiry submitted successfully.' });

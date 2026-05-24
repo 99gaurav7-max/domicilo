@@ -13,6 +13,7 @@ export const authApi = {
   getProfile: () => api.get<ApiResponse<User>>('/auth/profile'),
   changePassword: (currentPassword: string, newPassword: string) =>
     api.post<ApiResponse>('/auth/change-password', { currentPassword, newPassword }),
+  deleteAccount: () => api.delete<ApiResponse>('/auth/account'),
   forgotPassword: (email: string) =>
     api.post<ApiResponse>('/auth/forgot-password', { email }),
   resetPassword: (token: string, newPassword: string) =>

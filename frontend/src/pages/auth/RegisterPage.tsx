@@ -7,7 +7,7 @@ import { authApi } from '../../services/endpoints';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ fullName: '', email: '', phone: '', password: '', confirmPassword: '' });
+  const [form, setForm] = useState({ fullName: '', email: '', phone: '', password: '', confirmPassword: '', role: 'owner' });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -85,6 +85,24 @@ export default function RegisterPage() {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Password *</label>
               <input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="Min. 8 characters"
                 className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 transition-all" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">I am a *</label>
+              <div className="grid grid-cols-2 gap-2">
+                {['owner', 'tenant'].map((r) => (
+                  <button key={r} type="button" onClick={() => setForm({ ...form, role: r })}
+                    className={`px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${
+                      form.role === r
+                        ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
+                        : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600'
+                    }`}>
+                    {r === 'owner' ? 'Owner' : 'Other'}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-gray-400 mt-1.5">
+                {form.role === 'owner' ? 'List and manage your properties' : 'Browse and rent properties'}
+              </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Confirm Password *</label>

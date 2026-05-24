@@ -1,14 +1,15 @@
 -- Domicilo Seed Data
--- Password for all seeded users: Domicilo@123 (bcrypt hash)
+-- Password for all seeded users: Domicilo@123
+-- Hash generated with bcryptjs (cost 10)
 
--- Admin account
+-- Admin account (exactly 1, hardcoded)
 INSERT INTO users (id, email, phone, full_name, password_hash, role) VALUES
-  ('a0000000-0000-0000-0000-000000000001', 'admin@domicilo.com', '+919999999999', 'Admin User', '$2b$10$8K1p/a0dL1LXMIgoEDFrwOfMQkfAjkMBcGmGGm7F5mO5o5C5F5C5e', 'admin');
+  ('a0000000-0000-0000-0000-000000000001', 'admin@domicilo.com', '+919999999999', 'Admin User', '$2a$10$lVhFtt3gZhcSSDIkR4u1/e96qfqqRSjc7F1l5/voSdyhF.c2F4cdy', 'admin');
 
 -- Owner accounts
 INSERT INTO users (id, email, phone, full_name, password_hash, role) VALUES
-  ('b0000000-0000-0000-0000-000000000001', 'rahul@example.com', '+919876543201', 'Rahul Sharma', '$2b$10$8K1p/a0dL1LXMIgoEDFrwOfMQkfAjkMBcGmGGm7F5mO5o5C5F5C5e', 'owner'),
-  ('b0000000-0000-0000-0000-000000000002', 'priya@example.com', '+919876543202', 'Priya Patel', '$2b$10$8K1p/a0dL1LXMIgoEDFrwOfMQkfAjkMBcGmGGm7F5mO5o5C5F5C5e', 'owner');
+  ('b0000000-0000-0000-0000-000000000001', 'rahul@example.com', '+919876543201', 'Rahul Sharma', '$2a$10$lVhFtt3gZhcSSDIkR4u1/e96qfqqRSjc7F1l5/voSdyhF.c2F4cdy', 'owner'),
+  ('b0000000-0000-0000-0000-000000000002', 'priya@example.com', '+919876543202', 'Priya Patel', '$2a$10$lVhFtt3gZhcSSDIkR4u1/e96qfqqRSjc7F1l5/voSdyhF.c2F4cdy', 'owner');
 
 -- Properties
 INSERT INTO properties (id, owner_id, name, description, location, city, state, pincode, images, amenities) VALUES
@@ -30,7 +31,7 @@ INSERT INTO rooms (id, property_id, room_number, room_type, rent, security_depos
 
 -- Tenant account
 INSERT INTO users (id, email, phone, full_name, password_hash, role) VALUES
-  ('e0000000-0000-0000-0000-000000000001', 'vikram@example.com', '+919876543210', 'Vikram Singh', '$2b$10$8K1p/a0dL1LXMIgoEDFrwOfMQkfAjkMBcGmGGm7F5mO5o5C5F5C5e', 'tenant');
+  ('e0000000-0000-0000-0000-000000000001', 'vikram@example.com', '+919876543210', 'Vikram Singh', '$2a$10$lVhFtt3gZhcSSDIkR4u1/e96qfqqRSjc7F1l5/voSdyhF.c2F4cdy', 'tenant');
 
 INSERT INTO tenants (id, user_id, owner_id, room_id, property_id, lease_start, rent_amount, security_deposit) VALUES
   ('f0000000-0000-0000-0000-000000000001', 'e0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001', 'd0000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000001', '2025-01-01', 15000.00, 30000.00);

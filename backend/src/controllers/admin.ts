@@ -97,9 +97,20 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     const { fullName, email, phone, isActive, role } = req.body;
 
+    // Prevent admins from being modified by another admin
+    const target = await pool.query(`SELECT role FROM users WHERE id = $1`, [id]);
+    if (target.rows.length === 0) {
+      return res.status(404).json({ success: false, error: 'User not found.' });
+    }
+
+    // Block role changes entirely — users cannot change their role after signup
+    if (role && role !== target.rows[0].role) {
+      return res.status(400).json({ success: false, error: 'Role cannot be changed after signup.' });
+    }
+
     await pool.query(
-      `UPDATE users SET full_name = COALESCE($1, full_name), email = COALESCE($2, email), phone = COALESCE($3, phone), is_active = COALESCE($4, is_active), role = COALESCE($5, role), updated_at = NOW() WHERE id = $6`,
-      [fullName, email, phone, isActive, role, id]
+      `UPDATE users SET full_name = COALESCE($1, full_name), email = COALESCE($2, email), phone = COALESCE($3, phone), is_active = COALESCE($4, is_active), updated_at = NOW() WHERE id = $5`,
+      [fullName, email, phone, isActive, id]
     );
 
     return res.json({ success: true, message: 'User updated successfully.' });
@@ -111,6 +122,19 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
 export const deleteUser = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
+
+    // Prevent deleting the last admin
+    const target = await pool.query(`SELECT role FROM users WHERE id = $1`, [id]);
+    if (target.rows.length === 0) {
+      return res.status(404).json({ success: false, error: 'User not found.' });
+    }
+    if (target.rows[0].role === 'admin') {
+      const adminCount = await pool.query(`SELECT COUNT(*) FROM users WHERE role = 'admin'`);
+      if (parseInt(adminCount.rows[0].count, 10) <= 1) {
+        return res.status(400).json({ success: false, error: 'Cannot delete the last admin account.' });
+      }
+    }
+
     await pool.query(`DELETE FROM users WHERE id = $1`, [id]);
     return res.json({ success: true, message: 'User deleted successfully.' });
   } catch (err) {

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { MapPin, Home, Users, Wifi, Car, Dumbbell, Shield, Zap, Waves, TreePine, ChevronLeft, Phone, Mail, Calendar, MessageSquare, Loader2 } from 'lucide-react';
+import { MapPin, Home, Users, Wifi, Car, Dumbbell, Shield, Zap, Waves, TreePine, ChevronLeft, Phone, Mail, Calendar, MessageSquare, Loader2, LogIn } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { propertyApi } from '../../services/endpoints';
 import { Property } from '../../types';
 import { Skeleton } from '../../components/ui/Skeleton';
+import { useAuthStore } from '../../store/authStore';
 
 const amenityIcons: Record<string, any> = {
   WiFi: Wifi, Parking: Car, Gym: Dumbbell, Security: Shield, 'Power Backup': Zap, Lift: Home, 'Swimming Pool': Waves, Garden: TreePine,
@@ -14,12 +15,19 @@ const amenityIcons: Record<string, any> = {
 export default function PropertyDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuthStore();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [showEnquiry, setShowEnquiry] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState('');
-  const [enquiryForm, setEnquiryForm] = useState({ name: '', phone: '', email: '', preferredMoveIn: '', message: '' });
+  const [enquiryForm, setEnquiryForm] = useState({
+    name: user?.fullName || '',
+    phone: user?.phone || '',
+    email: user?.email || '',
+    preferredMoveIn: '',
+    message: '',
+  });
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -192,7 +200,11 @@ export default function PropertyDetailPage() {
             {/* Enquiry Form */}
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} className="glass-card rounded-2xl p-6">
               <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Interested? Enquire Now</h3>
-              {!showEnquiry ? (
+              {!isAuthenticated ? (
+                <Link to="/login" className="btn-primary w-full text-sm flex items-center justify-center gap-2">
+                  <LogIn className="w-4 h-4" /> Sign in to Contact Owner
+                </Link>
+              ) : !showEnquiry ? (
                 <button onClick={() => setShowEnquiry(true)} className="btn-primary w-full text-sm">
                   Send Enquiry
                 </button>

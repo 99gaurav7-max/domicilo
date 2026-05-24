@@ -6,12 +6,11 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Enum types
 CREATE TYPE user_role AS ENUM ('admin', 'owner', 'tenant');
-CREATE TYPE room_type AS ENUM ('1RK', '1BHK', '2BHK', '3BHK', '4BHK');
+CREATE TYPE room_type AS ENUM ('1RK', '1BHK', '2BHK', '3BHK', '4BHK', '5BHK', '6BHK', '7BHK', '8BHK', '9BHK', '10BHK');
 CREATE TYPE occupancy_status AS ENUM ('vacant', 'occupied', 'maintenance');
 CREATE TYPE payment_status AS ENUM ('pending', 'completed', 'failed', 'refunded');
 CREATE TYPE payment_type AS ENUM ('rent', 'water', 'electricity', 'maintenance', 'other');
 CREATE TYPE enquiry_status AS ENUM ('new', 'contacted', 'approved', 'rejected', 'converted');
-CREATE TYPE notification_type AS ENUM ('email', 'sms', 'in_app');
 CREATE TYPE notification_channel AS ENUM ('onboarding', 'payment_success', 'payment_failure', 'due_reminder', 'overdue_alert', 'enquiry_submission', 'lead_update');
 
 -- Users table (admin, owner, tenant)
@@ -170,3 +169,10 @@ CREATE INDEX idx_payments_status ON payments(status);
 CREATE INDEX idx_payments_due ON payments(due_date);
 CREATE INDEX idx_notifications_user ON notifications(user_id);
 CREATE INDEX idx_notifications_read ON notifications(is_read);
+CREATE INDEX idx_fines_tenant ON fines(tenant_id);
+CREATE INDEX idx_payments_type ON payments(payment_type);
+CREATE INDEX idx_payments_created ON payments(created_at);
+CREATE INDEX idx_fines_tenant_paid ON fines(tenant_id, is_paid);
+CREATE INDEX idx_rooms_property_status ON rooms(property_id, status);
+CREATE INDEX idx_enquiries_created ON enquiries(created_at);
+CREATE INDEX idx_tenants_created ON tenants(created_at);

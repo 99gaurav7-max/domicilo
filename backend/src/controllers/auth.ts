@@ -68,6 +68,9 @@ export const register = async (req: Request, res: Response) => {
   try {
     const { email, phone, fullName, password, role } = req.body;
 
+    const allowedRoles = ['owner', 'tenant'];
+    const userRole = allowedRoles.includes(role) ? role : 'tenant';
+
     const existing = await pool.query(
       `SELECT id FROM users WHERE email = $1 OR phone = $2`,
       [email, phone]
@@ -78,7 +81,6 @@ export const register = async (req: Request, res: Response) => {
 
     const passwordHash = await bcrypt.hash(password, 10);
     const id = uuidv4();
-    const userRole = role || 'tenant';
 
     await pool.query(
       `INSERT INTO users (id, email, phone, full_name, password_hash, role) VALUES ($1, $2, $3, $4, $5, $6)`,
@@ -178,6 +180,29 @@ export const refreshToken = async (req: Request, res: Response) => {
     return res.json({ success: true, ...tokens });
   } catch (err) {
     return res.status(401).json({ success: false, error: 'Invalid refresh token.' });
+  }
+};
+
+export const deleteAccount = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user!.id;
+
+    // Prevent deleting the last admin
+    const target = await pool.query(`SELECT role FROM users WHERE id = $1`, [userId]);
+    if (target.rows.length === 0) {
+      return res.status(404).json({ success: false, error: 'User not found.' });
+    }
+    if (target.rows[0].role === 'admin') {
+      const adminCount = await pool.query(`SELECT COUNT(*) FROM users WHERE role = 'admin'`);
+      if (parseInt(adminCount.rows[0].count, 10) <= 1) {
+        return res.status(400).json({ success: false, error: 'Cannot delete the last admin account.' });
+      }
+    }
+
+    await pool.query(`DELETE FROM users WHERE id = $1`, [userId]);
+    return res.json({ success: true, message: 'Account deleted successfully.' });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: 'Internal server error.' });
   }
 };
 
