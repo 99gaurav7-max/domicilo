@@ -1,27 +1,43 @@
 import { useState, useEffect } from 'react';
-import { Edit3, Trash2, Shield } from 'lucide-react';
+import { Edit3, Trash2, Shield, Download, CheckSquare, Square, UserCheck, UserX } from 'lucide-react';
 import toast from 'react-hot-toast';
+import Papa from 'papaparse';
 import { adminApi } from '../../services/endpoints';
 import { User } from '../../types';
-import { TableContainer, Card, StatusBadge, SearchInput } from '../../components/ui/Table';
+import { TableContainer, Card, StatusBadge, SearchInput, Select, EmptyState } from '../../components/ui/Table';
 import { Pagination } from '../../components/ui/Pagination';
 import { Modal, ConfirmDialog } from '../../components/ui/Modal';
 import { TableSkeleton } from '../../components/ui/Skeleton';
+
+const roleOptions = [
+  { value: 'admin', label: 'Admin' },
+  { value: 'owner', label: 'Owner' },
+  { value: 'tenant', label: 'Tenant' },
+  { value: 'other', label: 'Other' },
+];
 
 export default function AdminUsers() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [role, setRole] = useState('');
+  const [isActive, setIsActive] = useState('');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 0 });
   const [editUser, setEditUser] = useState<User | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const fetchUsers = () => {
     setLoading(true);
-    adminApi.getUsers({ page, limit: 10, search, role }).then((res) => {
+    const params: any = { page, limit: 10, search, role };
+    if (isActive) params.isActive = isActive;
+    if (dateFrom) params.dateFrom = dateFrom;
+    if (dateTo) params.dateTo = dateTo;
+    adminApi.getUsers(params).then((res) => {
       if (res.data.success) {
         setUsers(res.data.data!);
         setPagination(res.data.pagination!);
@@ -29,7 +45,7 @@ export default function AdminUsers() {
     }).finally(() => setLoading(false));
   };
 
-  useEffect(() => { fetchUsers(); }, [page, search, role]);
+  useEffect(() => { fetchUsers(); }, [page, search, role, isActive, dateFrom, dateTo]);
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,32 +73,113 @@ export default function AdminUsers() {
     } catch { toast.error('Delete failed'); }
   };
 
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === users.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(users.map((u) => u.id)));
+    }
+  };
+
+  const bulkActivate = async (active: boolean) => {
+    if (selectedIds.size === 0) { toast.error('No users selected'); return; }
+    try {
+      await adminApi.bulkUpdateUsers(Array.from(selectedIds), { isActive: active });
+      toast.success(`${selectedIds.size} user(s) ${active ? 'activated' : 'deactivated'}`);
+      setSelectedIds(new Set());
+      fetchUsers();
+    } catch { toast.error('Bulk update failed'); }
+  };
+
+  const handleExport = async () => {
+    try {
+      const res = await adminApi.getUsers({ limit: 10000 });
+      if (res.data.data) {
+        const csv = Papa.unparse(res.data.data.map((u: any) => ({
+          Name: u.full_name,
+          Email: u.email,
+          Phone: u.phone,
+          Role: u.role,
+          Status: u.is_active ? 'Active' : 'Inactive',
+          Joined: u.created_at ? new Date(u.created_at).toLocaleDateString() : '',
+          LastLogin: u.last_login ? new Date(u.last_login).toLocaleDateString() : '',
+        })));
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'all-users.csv'; a.click();
+        toast.success('Users exported');
+      }
+    } catch {
+      toast.error('Export failed');
+    }
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">User Management</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Manage all platform users</p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">User Management</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Manage all platform users</p>
+        </div>
+        <div className="flex items-center gap-2">
+          {selectedIds.size > 0 && (
+            <>
+              <button onClick={() => bulkActivate(true)} className="btn-secondary text-xs flex items-center gap-1.5 px-3 py-1.5">
+                <UserCheck className="w-3.5 h-3.5" /> Activate ({selectedIds.size})
+              </button>
+              <button onClick={() => bulkActivate(false)} className="btn-secondary text-xs flex items-center gap-1.5 px-3 py-1.5 text-red-600 border-red-200 hover:bg-red-50">
+                <UserX className="w-3.5 h-3.5" /> Deactivate ({selectedIds.size})
+              </button>
+            </>
+          )}
+          <button onClick={handleExport} className="btn-secondary text-sm flex items-center gap-2">
+            <Download className="w-4 h-4" /> Export CSV
+          </button>
+        </div>
       </div>
 
       <TableContainer
         searchable searchPlaceholder="Search users..."
         onSearch={(q) => { setSearch(q); setPage(1); }}
         filters={
-          <select value={role} onChange={(e) => { setRole(e.target.value); setPage(1); }}
-            className="px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
-            <option value="">All Roles</option>
-            <option value="admin">Admin</option>
-            <option value="owner">Owner</option>
-            <option value="tenant">Tenant</option>
-          </select>
+          <div className="flex flex-wrap items-center gap-3">
+            <Select value={role} onChange={(v) => { setRole(v); setPage(1); }}
+              options={roleOptions} placeholder="All Roles" />
+            <Select value={isActive} onChange={(v) => { setIsActive(v); setPage(1); }}
+              options={[
+                { value: 'true', label: 'Active' },
+                { value: 'false', label: 'Inactive' },
+              ]}
+              placeholder="All Status" />
+            <input type="date" value={dateFrom} onChange={(e) => { setDateFrom(e.target.value); setPage(1); }}
+              className="px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" title="From date" />
+            <input type="date" value={dateTo} onChange={(e) => { setDateTo(e.target.value); setPage(1); }}
+              className="px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" title="To date" />
+          </div>
         }
       >
         {loading ? (
-          <TableSkeleton rows={5} cols={5} />
+          <TableSkeleton rows={5} cols={6} />
+        ) : users.length === 0 ? (
+          <EmptyState icon={<Shield className="w-8 h-8" />} title="No users found" description="No users match your current filters." />
         ) : (
           <>
             <thead>
               <tr className="sticky-table-header">
+                <th className="w-10">
+                  <button onClick={toggleSelectAll} className="p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+                    {selectedIds.size === users.length ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4" />}
+                  </button>
+                </th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
@@ -94,7 +191,12 @@ export default function AdminUsers() {
             </thead>
             <tbody>
               {users.map((u) => (
-                <tr key={u.id}>
+                <tr key={u.id} className={selectedIds.has(u.id) ? 'bg-primary-50/50 dark:bg-primary-900/10' : ''}>
+                  <td>
+                    <button onClick={() => toggleSelect(u.id)} className="p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+                      {selectedIds.has(u.id) ? <CheckSquare className="w-4 h-4 text-primary-500" /> : <Square className="w-4 h-4 text-gray-400" />}
+                    </button>
+                  </td>
                   <td className="font-medium text-gray-900 dark:text-white">{u.fullName}</td>
                   <td className="text-sm text-gray-500">{u.email}</td>
                   <td className="text-sm text-gray-500">{u.phone}</td>
@@ -102,7 +204,8 @@ export default function AdminUsers() {
                     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
                       u.role === 'admin' ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400' :
                       u.role === 'owner' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400' :
-                      'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400'
+                      u.role === 'tenant' ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400' :
+                      'bg-gray-50 dark:bg-gray-900/20 text-gray-700 dark:text-gray-400'
                     }`}>
                       <Shield className="w-3 h-3" /> {u.role}
                     </span>

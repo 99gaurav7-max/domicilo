@@ -56,7 +56,7 @@ export const getAdminDashboard = async (req: AuthRequest, res: Response) => {
 
 export const getAdminUsers = async (req: AuthRequest, res: Response) => {
   try {
-    const { page = 1, limit = 10, role, search } = req.query;
+    const { page = 1, limit = 10, role, search, isActive, dateFrom, dateTo } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
     const params: any[] = [];
     let paramIndex = 1;
@@ -70,6 +70,21 @@ export const getAdminUsers = async (req: AuthRequest, res: Response) => {
     if (search) {
       whereClause += ` AND (full_name ILIKE $${paramIndex} OR email ILIKE $${paramIndex} OR phone ILIKE $${paramIndex})`;
       params.push(`%${search}%`);
+      paramIndex++;
+    }
+    if (isActive === 'true' || isActive === 'false') {
+      whereClause += ` AND is_active = $${paramIndex}`;
+      params.push(isActive === 'true');
+      paramIndex++;
+    }
+    if (dateFrom) {
+      whereClause += ` AND created_at >= $${paramIndex}`;
+      params.push(dateFrom);
+      paramIndex++;
+    }
+    if (dateTo) {
+      whereClause += ` AND created_at <= $${paramIndex}`;
+      params.push(dateTo);
       paramIndex++;
     }
 
@@ -119,6 +134,24 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
   }
 };
 
+export const bulkUpdateUsers = async (req: AuthRequest, res: Response) => {
+  try {
+    const { ids, updates } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ success: false, error: 'No user IDs provided.' });
+    }
+    if (updates.isActive !== undefined) {
+      await pool.query(
+        `UPDATE users SET is_active = $1, updated_at = NOW() WHERE id = ANY($2::uuid[])`,
+        [updates.isActive, ids]
+      );
+    }
+    return res.json({ success: true, message: `${ids.length} user(s) updated.` });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: 'Internal server error.' });
+  }
+};
+
 export const deleteUser = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
@@ -137,6 +170,108 @@ export const deleteUser = async (req: AuthRequest, res: Response) => {
 
     await pool.query(`DELETE FROM users WHERE id = $1`, [id]);
     return res.json({ success: true, message: 'User deleted successfully.' });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: 'Internal server error.' });
+  }
+};
+
+export const getAdminProperties = async (req: AuthRequest, res: Response) => {
+  try {
+    const { page = 1, limit = 12, search, city, state, status } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
+    const params: any[] = [];
+    let paramIndex = 1;
+    let whereClause = 'WHERE 1=1';
+
+    if (search) {
+      whereClause += ` AND (p.name ILIKE $${paramIndex} OR p.location ILIKE $${paramIndex} OR p.city ILIKE $${paramIndex})`;
+      params.push(`%${search}%`);
+      paramIndex++;
+    }
+    if (city) {
+      whereClause += ` AND p.city ILIKE $${paramIndex}`;
+      params.push(`%${city}%`);
+      paramIndex++;
+    }
+    if (state) {
+      whereClause += ` AND p.state ILIKE $${paramIndex}`;
+      params.push(`%${state}%`);
+      paramIndex++;
+    }
+    if (status === 'active' || status === 'inactive') {
+      whereClause += ` AND p.is_active = $${paramIndex}`;
+      params.push(status === 'active');
+      paramIndex++;
+    }
+
+    const countResult = await pool.query(`SELECT COUNT(*) FROM properties p ${whereClause}`, params);
+    const total = parseInt(countResult.rows[0].count, 10);
+
+    const result = await pool.query(
+      `SELECT p.*, 
+        u.full_name as owner_name, u.phone as owner_phone,
+        (SELECT COUNT(*) FROM rooms r WHERE r.property_id = p.id) as total_rooms,
+        (SELECT COUNT(*) FROM rooms r WHERE r.property_id = p.id AND r.status = 'vacant') as vacant_rooms
+       FROM properties p
+       JOIN users u ON p.owner_id = u.id
+       ${whereClause}
+       ORDER BY p.created_at DESC
+       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`,
+      [...params, Number(limit), offset]
+    );
+
+    return res.json({
+      success: true,
+      data: result.rows,
+      pagination: { page: Number(page), limit: Number(limit), total, totalPages: Math.ceil(total / Number(limit)) },
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: 'Internal server error.' });
+  }
+};
+
+export const getAdminAnalytics = async (req: AuthRequest, res: Response) => {
+  try {
+    const userGrowth = await pool.query(
+      `SELECT DATE_TRUNC('month', created_at) as month, COUNT(*) as count
+       FROM users GROUP BY month ORDER BY month ASC LIMIT 12`
+    );
+
+    const revenueByMonth = await pool.query(
+      `SELECT DATE_TRUNC('month', paid_at) as month, SUM(amount) as revenue
+       FROM payments WHERE status = 'completed' AND paid_at >= NOW() - INTERVAL '12 months'
+       GROUP BY month ORDER BY month`
+    );
+
+    const propertyGrowth = await pool.query(
+      `SELECT DATE_TRUNC('month', created_at) as month, COUNT(*) as count
+       FROM properties GROUP BY month ORDER BY month ASC LIMIT 12`
+    );
+
+    const conversion = await pool.query(
+      `SELECT
+        (SELECT COUNT(*) FROM enquiries) as total_enquiries,
+        (SELECT COUNT(*) FROM enquiries WHERE status = 'converted') as converted_enquiries,
+        (SELECT COUNT(*) FROM tenants) as total_tenants`
+    );
+
+    const revenueBreakdown = await pool.query(
+      `SELECT payment_type, COUNT(*) as count, SUM(amount) as total
+       FROM payments WHERE status = 'completed' GROUP BY payment_type`
+    );
+
+    const userDistribution = await pool.query(
+      `SELECT role, COUNT(*) as count FROM users GROUP BY role`
+    );
+
+    return res.json({ success: true, data: {
+      userGrowth: userGrowth.rows,
+      revenueByMonth: revenueByMonth.rows,
+      propertyGrowth: propertyGrowth.rows,
+      conversion: conversion.rows[0],
+      revenueBreakdown: revenueBreakdown.rows,
+      userDistribution: userDistribution.rows,
+    }});
   } catch (err) {
     return res.status(500).json({ success: false, error: 'Internal server error.' });
   }

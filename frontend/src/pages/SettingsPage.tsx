@@ -1,16 +1,14 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, User, Sun, Moon, LogOut, Loader2, Lock, Trash2, AlertTriangle } from 'lucide-react';
+import { Shield, User, LogOut, Loader2, Lock, Trash2, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '../store/authStore';
-import { useThemeStore } from '../store/themeStore';
 import { authApi } from '../services/endpoints';
 import { Card } from '../components/ui/Table';
 import { Modal } from '../components/ui/Modal';
 
 export default function SettingsPage() {
   const { user, logout } = useAuthStore();
-  const { theme, toggleTheme, setTheme } = useThemeStore();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -66,24 +64,6 @@ export default function SettingsPage() {
             <Shield className="w-3 h-3" /> {user?.role}
           </div>
         </div>
-      </Card>
-
-      {/* Theme */}
-      <Card>
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-          {theme === 'dark' ? <Moon className="w-4 h-4 text-primary-500" /> : <Sun className="w-4 h-4 text-primary-500" />} Appearance
-        </h3>
-        <div className="flex items-center gap-3">
-          <button onClick={toggleTheme}
-            className={`flex-1 p-3 rounded-xl border-2 transition-all text-center text-gray-700 dark:text-gray-300 ${theme === 'light' ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
-            <Sun className="w-5 h-5 mx-auto mb-1" /> Light
-          </button>
-          <button onClick={() => setTheme('dark')}
-            className={`flex-1 p-3 rounded-xl border-2 transition-all text-center text-gray-700 dark:text-gray-300 ${theme === 'dark' ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
-            <Moon className="w-5 h-5 mx-auto mb-1" /> Dark
-          </button>
-        </div>
-        <p className="text-xs text-gray-400 mt-3">Theme auto-switches based on sunrise/sunset in your timezone.</p>
       </Card>
 
       {/* Change Password */}

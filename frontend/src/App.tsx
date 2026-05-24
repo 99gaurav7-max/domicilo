@@ -35,6 +35,8 @@ const TenantPayments = lazy(() => import('./pages/tenant/TenantPayments'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'));
 const AdminPayments = lazy(() => import('./pages/admin/AdminPayments'));
+const AdminProperties = lazy(() => import('./pages/admin/AdminProperties'));
+const AdminAnalytics = lazy(() => import('./pages/admin/AdminAnalytics'));
 
 function PageLoader() {
   return (
@@ -132,9 +134,9 @@ function AppContent() {
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<SuspenseWrapper><AdminDashboard /></SuspenseWrapper>} />
           <Route path="users" element={<SuspenseWrapper><AdminUsers /></SuspenseWrapper>} />
-          <Route path="properties" element={<SuspenseWrapper><OwnerProperties /></SuspenseWrapper>} />
+          <Route path="properties" element={<SuspenseWrapper><AdminProperties /></SuspenseWrapper>} />
           <Route path="payments" element={<SuspenseWrapper><AdminPayments /></SuspenseWrapper>} />
-          <Route path="analytics" element={<SuspenseWrapper><OwnerAnalytics /></SuspenseWrapper>} />
+          <Route path="analytics" element={<SuspenseWrapper><AdminAnalytics /></SuspenseWrapper>} />
         </Route>
 
         {/* Fallback */}

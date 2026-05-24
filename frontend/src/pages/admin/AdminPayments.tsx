@@ -57,7 +57,7 @@ export default function AdminPayments() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">All Payments</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Platform-wide transaction overview</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Platform-wide transaction overview — rent, water, electricity, maintenance, and other payments from all properties</p>
         </div>
         <button onClick={handleExport} className="btn-secondary text-sm flex items-center gap-2">
           <Download className="w-4 h-4" /> Export CSV

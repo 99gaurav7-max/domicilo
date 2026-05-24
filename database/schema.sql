@@ -5,7 +5,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Enum types
-CREATE TYPE user_role AS ENUM ('admin', 'owner', 'tenant');
+CREATE TYPE user_role AS ENUM ('admin', 'owner', 'tenant', 'other');
 CREATE TYPE room_type AS ENUM ('1RK', '1BHK', '2BHK', '3BHK', '4BHK', '5BHK', '6BHK', '7BHK', '8BHK', '9BHK', '10BHK');
 CREATE TYPE occupancy_status AS ENUM ('vacant', 'occupied', 'maintenance');
 CREATE TYPE payment_status AS ENUM ('pending', 'completed', 'failed', 'refunded');

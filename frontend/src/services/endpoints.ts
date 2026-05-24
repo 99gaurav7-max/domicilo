@@ -77,6 +77,8 @@ export const adminApi = {
   getDashboard: () => api.get<ApiResponse<AdminDashboardData>>('/admin/dashboard'),
   getUsers: (params?: Record<string, any>) =>
     api.get<ApiResponse<User[]> & { pagination: Pagination }>('/admin/users', { params }),
+  bulkUpdateUsers: (ids: string[], updates: { isActive?: boolean }) =>
+    api.put<ApiResponse>('/admin/users/bulk', { ids, updates }),
   updateUser: (id: string, data: any) => api.put<ApiResponse>(`/admin/users/${id}`, data),
   deleteUser: (id: string) => api.delete<ApiResponse>(`/admin/users/${id}`),
   getPayments: (params?: Record<string, any>) =>
@@ -87,4 +89,5 @@ export const adminApi = {
   exportCsv: (type: string) => api.get(`/admin/export?type=${type}`, { responseType: 'blob' }),
   getProperties: (params?: Record<string, any>) =>
     api.get<ApiResponse<Property[]> & { pagination: Pagination }>('/admin/properties', { params }),
+  getAnalytics: () => api.get<ApiResponse>('/admin/analytics'),
 };

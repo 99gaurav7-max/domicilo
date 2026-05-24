@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import { getAdminDashboard, getAdminUsers, updateUser, deleteUser, exportCsv } from '../controllers/admin';
+import { getAdminDashboard, getAdminUsers, updateUser, bulkUpdateUsers, deleteUser, exportCsv, getAdminProperties, getAdminAnalytics } from '../controllers/admin';
 import { getPayments } from '../controllers/payments';
 import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../controllers/leads';
-import { getProperties } from '../controllers/properties';
 import { authenticate, authorize } from '../middleware/auth';
 
 const router = Router();
@@ -10,8 +9,10 @@ const router = Router();
 router.use(authenticate, authorize('admin'));
 
 router.get('/dashboard', getAdminDashboard);
-router.get('/properties', getProperties);
+router.get('/properties', getAdminProperties);
+router.get('/analytics', getAdminAnalytics);
 router.get('/users', getAdminUsers);
+router.put('/users/bulk', bulkUpdateUsers);
 router.put('/users/:id', updateUser);
 router.delete('/users/:id', deleteUser);
 router.get('/payments', getPayments);
