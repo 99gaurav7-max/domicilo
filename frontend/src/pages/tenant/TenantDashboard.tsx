@@ -39,7 +39,7 @@ export default function TenantDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="kpi-card">
           <div className="flex items-start justify-between mb-3">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Monthly Rent</p>
+            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Monthly Rent</p>
             <DollarSign className="w-4 h-4 text-primary-400" />
           </div>
           <p className="text-xl font-bold text-gray-900 dark:text-white">₹{tenant.rentAmount.toLocaleString()}</p>
@@ -47,7 +47,7 @@ export default function TenantDashboard() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
           className={`kpi-card ${finances.totalDue > 0 ? 'ring-1 ring-amber-200 dark:ring-amber-900' : ''}`}>
           <div className="flex items-start justify-between mb-3">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Due</p>
+            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Total Due</p>
             <Clock className="w-4 h-4 text-amber-400" />
           </div>
           <p className="text-xl font-bold text-gray-900 dark:text-white">₹{finances.totalDue.toLocaleString()}</p>
@@ -55,7 +55,7 @@ export default function TenantDashboard() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
           className={`kpi-card ${finances.overdueAmount > 0 ? 'ring-1 ring-red-200 dark:ring-red-900' : ''}`}>
           <div className="flex items-start justify-between mb-3">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Overdue</p>
+            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Overdue</p>
             <AlertTriangle className="w-4 h-4 text-red-400" />
           </div>
           <p className="text-xl font-bold text-gray-900 dark:text-white">₹{finances.overdueAmount.toLocaleString()}</p>
@@ -63,7 +63,7 @@ export default function TenantDashboard() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
           className={`kpi-card ${finances.unpaidFines > 0 ? 'ring-1 ring-red-200 dark:ring-red-900' : ''}`}>
           <div className="flex items-start justify-between mb-3">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Unpaid Fines</p>
+            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Unpaid Fines</p>
             <AlertTriangle className="w-4 h-4 text-orange-400" />
           </div>
           <p className="text-xl font-bold text-gray-900 dark:text-white">₹{finances.unpaidFines.toLocaleString()}</p>
@@ -81,24 +81,24 @@ export default function TenantDashboard() {
               </div>
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">{property.name}</p>
-                <p className="text-xs text-gray-500 flex items-center gap-1 mt-1"><MapPin className="w-3 h-3" /> {property.location}, {property.city}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 mt-1"><MapPin className="w-3 h-3" /> {property.location}, {property.city}</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-2 text-sm">
               <div className="p-2 rounded-lg bg-gray-50 dark:bg-gray-900/50">
-                <p className="text-xs text-gray-500">Room</p>
-                <p className="font-medium">{room.number} ({room.type})</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Room</p>
+                <p className="font-medium text-gray-900 dark:text-white">{room.number} ({room.type})</p>
               </div>
               <div className="p-2 rounded-lg bg-gray-50 dark:bg-gray-900/50">
-                <p className="text-xs text-gray-500">Rent</p>
-                <p className="font-medium">₹{room.rent.toLocaleString()}/mo</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Rent</p>
+                <p className="font-medium text-gray-900 dark:text-white">₹{room.rent.toLocaleString()}/mo</p>
               </div>
               <div className="p-2 rounded-lg bg-gray-50 dark:bg-gray-900/50">
-                <p className="text-xs text-gray-500">Lease Start</p>
-                <p className="font-medium">{new Date(tenant.leaseStart).toLocaleDateString()}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Lease Start</p>
+                <p className="font-medium text-gray-900 dark:text-white">{new Date(tenant.leaseStart).toLocaleDateString()}</p>
               </div>
               <div className="p-2 rounded-lg bg-gray-50 dark:bg-gray-900/50">
-                <p className="text-xs text-gray-500">Status</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Status</p>
                 <StatusBadge status={room.status} />
               </div>
             </div>
@@ -109,26 +109,26 @@ export default function TenantDashboard() {
         <Card className="lg:col-span-2">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Payment History</h3>
           {payments.length === 0 ? (
-            <p className="text-sm text-gray-500">No payments yet.</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">No payments yet.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gray-100 dark:border-gray-800">
-                    <th className="text-left py-2 text-xs text-gray-500 font-medium">Invoice</th>
-                    <th className="text-left py-2 text-xs text-gray-500 font-medium">Type</th>
-                    <th className="text-left py-2 text-xs text-gray-500 font-medium">Amount</th>
-                    <th className="text-left py-2 text-xs text-gray-500 font-medium">Date</th>
-                    <th className="text-left py-2 text-xs text-gray-500 font-medium">Status</th>
+                    <th className="text-left py-2 text-xs text-gray-500 dark:text-gray-400 font-medium">Invoice</th>
+                    <th className="text-left py-2 text-xs text-gray-500 dark:text-gray-400 font-medium">Type</th>
+                    <th className="text-left py-2 text-xs text-gray-500 dark:text-gray-400 font-medium">Amount</th>
+                    <th className="text-left py-2 text-xs text-gray-500 dark:text-gray-400 font-medium">Date</th>
+                    <th className="text-left py-2 text-xs text-gray-500 dark:text-gray-400 font-medium">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {payments.slice(0, 5).map((p) => (
                     <tr key={p.id} className="border-b border-gray-50 dark:border-gray-900">
-                      <td className="py-2.5 text-xs font-mono text-gray-500">{p.invoice_number}</td>
-                      <td className="py-2.5 capitalize">{p.payment_type}</td>
-                      <td className="py-2.5 font-medium">₹{p.amount.toLocaleString()}</td>
-                      <td className="py-2.5 text-gray-500">{p.paid_at ? new Date(p.paid_at).toLocaleDateString() : '-'}</td>
+                      <td className="py-2.5 text-xs font-mono text-gray-500 dark:text-gray-400">{p.invoice_number}</td>
+                      <td className="py-2.5 capitalize text-gray-900 dark:text-gray-100">{p.payment_type}</td>
+                      <td className="py-2.5 font-medium text-gray-900 dark:text-white">₹{p.amount.toLocaleString()}</td>
+                      <td className="py-2.5 text-gray-500 dark:text-gray-400">{p.paid_at ? new Date(p.paid_at).toLocaleDateString() : '-'}</td>
                       <td className="py-2.5"><StatusBadge status={p.status} /></td>
                     </tr>
                   ))}
@@ -151,7 +151,7 @@ export default function TenantDashboard() {
           <Bell className="w-4 h-4 text-gray-400" />
         </div>
         {data.notifications.length === 0 ? (
-          <p className="text-sm text-gray-500">No notifications yet.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">No notifications yet.</p>
         ) : (
           <div className="space-y-2">
             {data.notifications.slice(0, 5).map((n) => (
@@ -159,9 +159,9 @@ export default function TenantDashboard() {
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="font-medium text-gray-900 dark:text-white">{n.title}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{n.message}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{n.message}</p>
                   </div>
-                  <span className="text-[10px] text-gray-400">{new Date(n.created_at).toLocaleDateString()}</span>
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500">{new Date(n.created_at).toLocaleDateString()}</span>
                 </div>
               </div>
             ))}

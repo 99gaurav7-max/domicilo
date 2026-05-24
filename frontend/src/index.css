@@ -26,6 +26,7 @@
   --color-accent-900: #0c4a6e;
 
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
 }
 
 * {

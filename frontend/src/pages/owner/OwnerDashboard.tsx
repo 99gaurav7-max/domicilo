@@ -109,10 +109,10 @@ export default function OwnerDashboard() {
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-gray-900 dark:text-white">Revenue Over Time</h3>
             <select value={timeframe} onChange={(e) => setTimeframe(e.target.value)}
-              className="text-xs border border-gray-200 dark:border-gray-700 rounded-lg px-2 py-1 bg-transparent">
-              <option value="12months">Last 12 Months</option>
-              <option value="6months">Last 6 Months</option>
-              <option value="3months">Last 3 Months</option>
+              className="text-xs border border-gray-200 dark:border-gray-700 rounded-lg px-2 py-1 bg-transparent text-gray-700 dark:text-gray-300">
+              <option value="12months" className="text-gray-900 dark:text-gray-100">Last 12 Months</option>
+              <option value="6months" className="text-gray-900 dark:text-gray-100">Last 6 Months</option>
+              <option value="3months" className="text-gray-900 dark:text-gray-100">Last 3 Months</option>
             </select>
           </div>
           <div className="h-64">

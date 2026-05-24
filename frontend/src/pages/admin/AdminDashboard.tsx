@@ -79,7 +79,7 @@ export default function AdminDashboard() {
             <motion.div key={kpi.key} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}
               className={`kpi-card ${kpi.danger && value > 0 ? 'ring-1 ring-red-200 dark:ring-red-900' : ''}`}>
               <div className="flex items-start justify-between mb-2">
-                <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wide">{kpi.label}</p>
+                <p className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{kpi.label}</p>
                 <Icon className={`w-3.5 h-3.5 ${kpi.danger && value > 0 ? 'text-red-400' : 'text-primary-400'}`} />
               </div>
               <p className="text-lg font-bold text-gray-900 dark:text-white">
@@ -119,10 +119,10 @@ export default function AdminDashboard() {
               <div key={p.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors">
                 <div>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">{p.tenant_name}</p>
-                  <p className="text-xs text-gray-500">{p.property_name}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{p.property_name}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium">₹{p.amount.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">₹{p.amount.toLocaleString()}</p>
                   <StatusBadge status={p.status} />
                 </div>
               </div>

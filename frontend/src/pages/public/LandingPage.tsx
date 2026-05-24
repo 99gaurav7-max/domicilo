@@ -109,7 +109,7 @@ export default function LandingPage() {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-600 via-primary-500 to-accent-500 flex items-center justify-center shadow-lg shadow-primary-500/25 group-hover:shadow-primary-500/40 transition-all duration-300 group-hover:scale-105">
                 <Home className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-2xl bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">Domicilo</span>
+              <span className="font-display font-bold text-2xl bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent tracking-tight">Domicilo</span>
             </Link>
 
             <div className="hidden md:flex items-center gap-8">
@@ -233,10 +233,10 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
-                className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-6"
+                className="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.05] tracking-tight mb-8"
               >
                 Simplify Rental{' '}
-                <span className="bg-gradient-to-r from-blue-300 via-cyan-200 to-teal-200 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-blue-200 via-cyan-200 to-teal-200 bg-clip-text text-transparent">
                   Management
                 </span>
               </motion.h1>
@@ -245,7 +245,7 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.6 }}
-                className="text-lg text-blue-100/90 mb-10 max-w-lg leading-relaxed"
+                className="text-lg md:text-xl text-blue-100/90 mb-10 max-w-xl leading-relaxed tracking-wide font-light"
               >
                 The all-in-one platform for property owners to manage rentals, track payments, and grow their portfolio. 
                 Tenants get a seamless experience with easy payments and real-time updates.
@@ -428,11 +428,11 @@ export default function LandingPage() {
             <Sparkles className="w-3.5 h-3.5" />
             Powerful Features
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 leading-tight tracking-tight">
             Everything you need to{' '}
             <span className="bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">manage rentals</span>
           </h2>
-          <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg">
+          <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
             Powerful tools for property owners and a seamless experience for tenants — all in one platform.
           </p>
         </motion.div>
@@ -457,8 +457,8 @@ export default function LandingPage() {
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500/10 to-accent-500/10 dark:from-primary-400/10 dark:to-accent-400/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
                     <Icon className="w-7 h-7 text-primary-600 dark:text-primary-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">{feature.title}</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{feature.description}</p>
+                  <h3 className="font-display text-xl font-semibold text-gray-900 dark:text-white mb-3 tracking-tight">{feature.title}</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed tracking-wide">{feature.description}</p>
                 </div>
               </motion.div>
             );
@@ -479,11 +479,11 @@ export default function LandingPage() {
               <Zap className="w-3.5 h-3.5" />
               Simple Process
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 leading-tight tracking-tight">
               How it{' '}
               <span className="bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">Works</span>
             </h2>
-            <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg">
+            <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
               Get started in minutes. No complex setup, no hidden costs.
             </p>
           </motion.div>
@@ -504,8 +504,8 @@ export default function LandingPage() {
                     <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r ${step.color} bg-opacity-10 text-white text-xs font-medium mb-4`}>
                       Step {step.number}
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">{step.title}</h3>
-                    <p className="text-gray-500 dark:text-gray-400 max-w-md leading-relaxed mx-auto lg:mx-0">{step.description}</p>
+                    <h3 className="font-display text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-3 tracking-tight">{step.title}</h3>
+                    <p className="text-gray-500 dark:text-gray-400 max-w-md leading-relaxed tracking-wide mx-auto lg:mx-0">{step.description}</p>
                   </div>
                   <div className="relative flex-shrink-0">
                     <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center text-white text-xl font-bold shadow-lg`}>
@@ -533,11 +533,11 @@ export default function LandingPage() {
             <Quote className="w-3.5 h-3.5" />
             Testimonials
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 leading-tight tracking-tight">
             What our{' '}
             <span className="bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">Users</span> Say
           </h2>
-          <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg">
+          <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
             Real feedback from property owners and tenants who use Domicilo every day.
           </p>
         </motion.div>
@@ -557,7 +557,7 @@ export default function LandingPage() {
                   <Star key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" />
                 ))}
               </div>
-              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-8 italic">
+              <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed mb-8 font-light italic tracking-wide">
                 &ldquo;{testimonials[activeTestimonial].quote}&rdquo;
               </p>
               <div className="flex items-center gap-4">
@@ -565,8 +565,8 @@ export default function LandingPage() {
                   {testimonials[activeTestimonial].initials}
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900 dark:text-white">{testimonials[activeTestimonial].name}</p>
-                  <p className="text-sm text-gray-500">{testimonials[activeTestimonial].role}</p>
+                  <p className="font-display font-semibold text-gray-900 dark:text-white tracking-tight">{testimonials[activeTestimonial].name}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{testimonials[activeTestimonial].role}</p>
                 </div>
               </div>
             </motion.div>
@@ -617,11 +617,11 @@ export default function LandingPage() {
                 <Medal className="w-3.5 h-3.5 text-yellow-400" />
                 Start Your Journey Today
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+              <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight tracking-tight">
                 Ready to transform your{' '}
-                <span className="bg-gradient-to-r from-blue-300 via-cyan-200 to-teal-200 bg-clip-text text-transparent">rental management</span>?
+                <span className="bg-gradient-to-r from-blue-200 via-cyan-200 to-teal-200 bg-clip-text text-transparent">rental management</span>?
               </h2>
-              <p className="text-blue-100/90 mb-10 max-w-xl mx-auto text-lg">
+              <p className="text-blue-100/90 mb-10 max-w-xl mx-auto text-lg leading-relaxed tracking-wide">
                 Join thousands of property owners and tenants already using Domicilo. Get started free, no credit card required.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
