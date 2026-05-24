@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import { adminApi } from '../../services/endpoints';
 import { AdminDashboardData, Payment } from '../../types';
 import { Card, StatusBadge, EmptyState } from '../../components/ui/Table';
+import { useThemeStore } from '../../store/themeStore';
 import { KPISkeleton } from '../../components/ui/Skeleton';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
@@ -25,6 +26,7 @@ const kpiConfig = [
 ];
 
 export default function AdminDashboard() {
+  const { theme } = useThemeStore();
   const [data, setData] = useState<AdminDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -99,7 +101,7 @@ export default function AdminDashboard() {
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                   <XAxis dataKey="month" tick={{ fontSize: 11 }} tickFormatter={(v) => new Date(v).toLocaleString('default', { month: 'short' })} />
                   <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
-                  <Tooltip contentStyle={{ borderRadius: '12px' }} />
+                  <Tooltip contentStyle={{ borderRadius: '12px', background: theme === 'dark' ? '#1e293b' : '#fff', color: theme === 'dark' ? '#e2e8f0' : '#1e293b', border: '1px solid ' + (theme === 'dark' ? '#334155' : '#e5e7eb') }} />
                   <Line type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={2} dot={{ fill: '#3b82f6', r: 3 }} />
                 </LineChart>
               </ResponsiveContainer>

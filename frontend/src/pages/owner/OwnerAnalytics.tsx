@@ -6,8 +6,10 @@ import { ownerApi } from '../../services/endpoints';
 import { Card, Select } from '../../components/ui/Table';
 import { KPISkeleton } from '../../components/ui/Skeleton';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { useThemeStore } from '../../store/themeStore';
 
 export default function OwnerAnalytics() {
+  const { theme } = useThemeStore();
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [timeframe, setTimeframe] = useState('30');
@@ -97,7 +99,7 @@ export default function OwnerAnalytics() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => new Date(v).toLocaleDateString()} />
                 <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
-                <Tooltip contentStyle={{ borderRadius: '12px' }} />
+                <Tooltip contentStyle={{ borderRadius: '12px', background: theme === 'dark' ? '#1e293b' : '#fff', color: theme === 'dark' ? '#e2e8f0' : '#1e293b', border: '1px solid ' + (theme === 'dark' ? '#334155' : '#e5e7eb') }} />
                 <Legend />
                 <Bar dataKey="rent" name="Rent" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="electricity" name="Electricity" fill="#f59e0b" radius={[4, 4, 0, 0]} />

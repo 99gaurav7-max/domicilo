@@ -4,7 +4,6 @@ import {
   FileText, BarChart3, ClipboardList, Key, Search
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
-import { useState } from 'react';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -43,9 +42,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   return (
     <>
-      {isOpen && <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-30 lg:hidden" onClick={onClose} />}
+      {isOpen && <div className="fixed inset-0 bg-black/30 z-30 lg:hidden mobile-overlay" onClick={onClose} />}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 glass border-r border-gray-200/50 dark:border-gray-800/50 z-40 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-0 left-0 h-full w-64 glass border-r border-gray-200/50 dark:border-gray-800/50 z-40 transform transition-transform duration-200 ease-out lg:translate-x-0 sidebar-panel ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >

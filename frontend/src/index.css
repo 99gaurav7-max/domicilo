@@ -43,6 +43,38 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Touch optimization: remove 300ms tap delay + grey highlight */
+button, a, input, select, textarea, [role="button"], [role="link"], summary, label {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* GPU-accelerated animations only */
+.sidebar-panel, .mobile-menu-panel, .mobile-overlay {
+  will-change: transform, opacity;
+}
+
+/* Instant active feedback for all interactive elements */
+button:active:not(:disabled), a:active:not(:disabled),
+[role="button"]:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* iOS input fixes */
+input, select, textarea {
+  font-size: 16px; /* prevents iOS zoom on focus */
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 .glass {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);

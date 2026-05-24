@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useThemeStore } from '../../store/themeStore';
 import {
   TrendingUp, DollarSign, Home, Users, Clock, AlertTriangle, Building2, ClipboardList,
   BarChart3, Download, ShieldAlert
@@ -28,6 +29,7 @@ export default function OwnerDashboard() {
   const navigate = useNavigate();
   const [data, setData] = useState<OwnerDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const { theme } = useThemeStore();
   const [timeframe, setTimeframe] = useState('12months');
 
   useEffect(() => {
@@ -122,7 +124,7 @@ export default function OwnerDashboard() {
                     const d = new Date(v); return d.toLocaleString('default', { month: 'short' });
                   }} />
                   <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
-                  <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #e5e7eb' }} />
+                  <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #e5e7eb', background: theme === 'dark' ? '#1e293b' : '#fff', color: theme === 'dark' ? '#e2e8f0' : '#1e293b' }} />
                   <Line type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={2} dot={{ fill: '#3b82f6', r: 3 }} />
                 </LineChart>
               </ResponsiveContainer>
