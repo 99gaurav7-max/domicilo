@@ -120,12 +120,11 @@ export default function SettingsPage() {
               try {
                 await authApi.deleteAccount();
                 toast.success('Account deleted.');
+                setShowDeleteModal(false);
                 logout();
               } catch (err: any) {
                 toast.error(err.response?.data?.error || 'Failed to delete account');
-              } finally {
                 setDeleting(false);
-                setShowDeleteModal(false);
               }
             }} disabled={deleting} className="flex-1 px-4 py-2.5 rounded-xl bg-red-600 text-white text-sm font-medium hover:bg-red-700 disabled:opacity-50 flex items-center justify-center gap-2">
               {deleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}

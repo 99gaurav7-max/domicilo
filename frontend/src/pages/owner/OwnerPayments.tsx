@@ -40,7 +40,7 @@ export default function OwnerPayments() {
           Type: p.payment_type,
           Status: p.status,
           Date: p.paid_at ? new Date(p.paid_at).toLocaleDateString() : '',
-          DueDate: new Date(p.due_date).toLocaleDateString(),
+          DueDate: p.due_date ? new Date(p.due_date).toLocaleDateString() : '',
         })));
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);

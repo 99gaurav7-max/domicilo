@@ -158,7 +158,7 @@ export default function OwnerLeads() {
               </div>
               <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50">
                 <p className="text-xs text-gray-500 mb-1">Room Type</p>
-                <p className="font-medium">{selectedLead.room_type}</p>
+                <p className="font-medium text-gray-900 dark:text-white">{selectedLead.room_type}</p>
               </div>
               <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50">
                 <p className="text-xs text-gray-500 mb-1">Status</p>
@@ -167,7 +167,7 @@ export default function OwnerLeads() {
               {selectedLead.preferred_move_in && (
                 <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50">
                   <p className="text-xs text-gray-500 mb-1">Preferred Move-in</p>
-                  <p className="font-medium">{new Date(selectedLead.preferred_move_in).toLocaleDateString()}</p>
+                  <p className="font-medium text-gray-900 dark:text-white">{new Date(selectedLead.preferred_move_in).toLocaleDateString()}</p>
                 </div>
               )}
             </div>

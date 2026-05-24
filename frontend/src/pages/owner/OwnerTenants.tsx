@@ -67,7 +67,7 @@ export default function OwnerTenants() {
     setSaving(true);
     try {
       await ownerApi.createTenant(form);
-      toast.success('Tenant created successfully! Onboarding initiated.');
+      toast.success('Tenant created successfully');
       setShowCreate(false);
       setForm({ fullName: '', phone: '', email: '', propertyId: '', roomId: '', rentAmount: 0, securityDeposit: 0, leaseStart: '' });
       fetchTenants();
@@ -163,10 +163,14 @@ export default function OwnerTenants() {
                   </td>
                   <td><StatusBadge status={t.is_active ? 'active' : 'inactive'} /></td>
                   <td className="text-right">
-                    <button onClick={() => { setShowFine(t); setFineForm({ amount: Math.round((t.rent_amount || t.room_rent || 0) * 0.1), reason: 'Late fee', percentage: 10 }); }}
-                      className="px-2 py-1 text-xs rounded-lg bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 hover:bg-amber-100 transition-colors">
-                      Charge Fine
-                    </button>
+                    {t.is_active ? (
+                      <button onClick={() => { setShowFine(t); setFineForm({ amount: Math.round((t.rent_amount || t.room_rent || 0) * 0.1), reason: 'Late fee', percentage: 10 }); }}
+                        className="px-2 py-1 text-xs rounded-lg bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 hover:bg-amber-100 transition-colors">
+                        Charge Fine
+                      </button>
+                    ) : (
+                      <span className="text-xs text-gray-400">Inactive</span>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -183,52 +187,52 @@ export default function OwnerTenants() {
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name *</label>
               <input type="text" value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone *</label>
               <input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
               <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Property *</label>
               <select value={form.propertyId} onChange={(e) => setForm({ ...form, propertyId: e.target.value, roomId: '' })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
-                <option value="">Select Property</option>
-                {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100">
+                <option value="" className="text-gray-900 dark:text-gray-100">Select Property</option>
+                {properties.map((p) => <option key={p.id} value={p.id} className="text-gray-900 dark:text-gray-100">{p.name}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Room *</label>
               <select value={form.roomId} onChange={(e) => setForm({ ...form, roomId: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
-                <option value="">Select Room</option>
-                {rooms.map((r) => <option key={r.id} value={r.id}>{r.room_number} - {r.room_type} (₹{r.rent.toLocaleString()})</option>)}
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100">
+                <option value="" className="text-gray-900 dark:text-gray-100">Select Room</option>
+                {rooms.map((r) => <option key={r.id} value={r.id} className="text-gray-900 dark:text-gray-100">{r.room_number} - {r.room_type} (₹{r.rent.toLocaleString()})</option>)}
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rent Amount *</label>
               <input type="number" value={form.rentAmount || ''} onChange={(e) => setForm({ ...form, rentAmount: Number(e.target.value) })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Security Deposit</label>
               <input type="number" value={form.securityDeposit || ''} onChange={(e) => setForm({ ...form, securityDeposit: Number(e.target.value) })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Lease Start</label>
               <input type="date" value={form.leaseStart} onChange={(e) => setForm({ ...form, leaseStart: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100" />
             </div>
           </div>
           <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={() => setShowCreate(false)} className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm">Cancel</button>
+            <button type="button" onClick={() => setShowCreate(false)} className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">Cancel</button>
             <button type="submit" disabled={saving} className="btn-primary text-sm">{saving ? 'Creating...' : 'Create Tenant'}</button>
           </div>
         </form>
@@ -250,20 +254,20 @@ export default function OwnerTenants() {
                 const rent = showFine.rent_amount || showFine.room_rent || 0;
                 setFineForm({ ...fineForm, percentage: pct, amount: calcFinePreview(rent, pct) });
               }}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fine Amount *</label>
               <input type="number" value={fineForm.amount} onChange={(e) => setFineForm({ ...fineForm, amount: Number(e.target.value) })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reason</label>
               <input type="text" value={fineForm.reason} onChange={(e) => setFineForm({ ...fineForm, reason: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" placeholder="Late payment fee" />
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100" placeholder="Late payment fee" />
             </div>
             <div className="flex justify-end gap-3">
-              <button onClick={() => setShowFine(null)} className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm">Cancel</button>
+              <button onClick={() => setShowFine(null)} className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">Cancel</button>
               <button onClick={handleApplyFine} className="btn-primary text-sm">Apply Fine</button>
             </div>
           </div>

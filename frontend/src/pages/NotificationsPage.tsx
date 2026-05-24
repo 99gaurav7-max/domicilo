@@ -12,11 +12,13 @@ export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const notificationApi = user?.role === 'admin' ? adminApi : user?.role === 'owner' ? ownerApi : user?.role === 'tenant' ? tenantApi : null;
+
   const fetchNotifications = async () => {
     setLoading(true);
     try {
-      const api = user?.role === 'admin' ? adminApi : user?.role === 'owner' ? ownerApi : tenantApi;
-      const res = await api.getNotifications();
+      if (!notificationApi) { setLoading(false); return; }
+      const res = await notificationApi.getNotifications();
       if (res.data.success) {
         setNotifications(res.data.data || []);
       }
@@ -31,8 +33,8 @@ export default function NotificationsPage() {
 
   const handleMarkAllRead = async () => {
     try {
-      const api = user?.role === 'admin' ? adminApi : user?.role === 'owner' ? ownerApi : tenantApi;
-      await api.markAllNotificationsRead();
+      if (!notificationApi) return;
+      await notificationApi.markAllNotificationsRead();
       setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
       toast.success('All marked as read');
     } catch {
@@ -42,8 +44,8 @@ export default function NotificationsPage() {
 
   const handleMarkRead = async (id: string) => {
     try {
-      const api = user?.role === 'admin' ? adminApi : user?.role === 'owner' ? ownerApi : tenantApi;
-      await api.markNotificationRead(id);
+      if (!notificationApi) return;
+      await notificationApi.markNotificationRead(id);
       setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, is_read: true } : n)));
     } catch {}
   };

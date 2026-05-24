@@ -93,6 +93,8 @@ export default function OwnerAnalytics() {
         <div className="h-80">
           {loading ? (
             <div className="skeleton h-full w-full" />
+          ) : data.length === 0 ? (
+            <div className="flex items-center justify-center h-full text-gray-400 text-sm">No data available for this period</div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data}>

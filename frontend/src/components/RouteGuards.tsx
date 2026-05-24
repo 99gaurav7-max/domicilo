@@ -17,7 +17,7 @@ export function ProtectedRoute({ children, roles }: { children: React.ReactNode;
   }
 
   if (roles && user && !roles.includes(user.role)) {
-    return <Navigate to={`/${user.role}/dashboard`} replace />;
+    return <Navigate to={user.role === 'other' ? '/properties' : `/${user.role}/dashboard`} replace />;
   }
 
   return <>{children}</>;

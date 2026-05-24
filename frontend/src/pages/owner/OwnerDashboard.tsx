@@ -96,7 +96,7 @@ export default function OwnerDashboard() {
                 <Icon className={`w-4 h-4 ${kpi.danger && value > 0 ? 'text-red-400' : 'text-primary-400'}`} />
               </div>
               <p className="text-xl font-bold text-gray-900 dark:text-white">
-                {kpi.prefix || ''}{kpi.format ? value?.toLocaleString() : value}{kpi.suffix || ''}
+                {kpi.prefix || ''}{value != null ? (kpi.format ? value.toLocaleString() : value) : 0}{kpi.suffix || ''}
               </p>
             </motion.div>
           );
