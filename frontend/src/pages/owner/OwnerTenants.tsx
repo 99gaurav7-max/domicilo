@@ -143,22 +143,22 @@ export default function OwnerTenants() {
                 <tr key={t.id}>
                   <td className="font-medium text-gray-900 dark:text-white">{t.full_name}</td>
                   <td>
-                    <div className="flex flex-col text-xs text-gray-500">
+                    <div className="flex flex-col text-xs text-gray-500 dark:text-gray-400">
                       <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> {t.phone}</span>
                       {t.email && <span className="flex items-center gap-1"><Mail className="w-3 h-3" /> {t.email}</span>}
                     </div>
                   </td>
                   <td className="text-sm text-gray-600 dark:text-gray-400">{t.property_name}</td>
-                  <td><span className="text-sm">{t.room_number} ({t.room_type})</span></td>
-                  <td className="font-medium">₹{(t.rent_amount || t.room_rent || 0).toLocaleString()}</td>
+                  <td><span className="text-sm text-gray-700 dark:text-gray-300">{t.room_number} ({t.room_type})</span></td>
+                  <td className="font-medium text-gray-900 dark:text-white">₹{(t.rent_amount || t.room_rent || 0).toLocaleString()}</td>
                   <td>
                     {(t.due_amount || 0) > 0 ? (
                       <span className="text-amber-600 dark:text-amber-400 font-medium">₹{(t.due_amount || 0).toLocaleString()}</span>
                     ) : (
-                      <span className="text-green-600 text-xs">No dues</span>
+                      <span className="text-green-600 dark:text-green-400 text-xs">No dues</span>
                     )}
                     {(t.overdue_amount || 0) > 0 && (
-                      <span className="block text-xs text-red-500">Overdue: ₹{t.overdue_amount?.toLocaleString()}</span>
+                      <span className="block text-xs text-red-500 dark:text-red-400">Overdue: ₹{t.overdue_amount?.toLocaleString()}</span>
                     )}
                   </td>
                   <td><StatusBadge status={t.is_active ? 'active' : 'inactive'} /></td>

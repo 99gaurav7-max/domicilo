@@ -79,7 +79,7 @@ export default function OwnerAnalytics() {
         ].map((item, i) => (
           <motion.div key={item.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="kpi-card">
             <div className="flex items-start justify-between mb-2">
-              <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wide">{item.label}</p>
+              <p className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{item.label}</p>
               <item.icon className={`w-3.5 h-3.5 ${item.color}`} />
             </div>
             <p className="text-lg font-bold text-gray-900 dark:text-white">₹{item.value.toLocaleString()}</p>
@@ -94,7 +94,7 @@ export default function OwnerAnalytics() {
           {loading ? (
             <div className="skeleton h-full w-full" />
           ) : data.length === 0 ? (
-            <div className="flex items-center justify-center h-full text-gray-400 text-sm">No data available for this period</div>
+            <div className="flex items-center justify-center h-full text-gray-400 dark:text-gray-500 text-sm">No data available for this period</div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data}>

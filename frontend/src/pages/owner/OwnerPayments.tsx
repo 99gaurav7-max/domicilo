@@ -109,13 +109,13 @@ export default function OwnerPayments() {
             <tbody>
               {payments.map((p) => (
                 <tr key={p.id}>
-                  <td className="text-xs font-mono text-gray-500">{p.invoice_number}</td>
+                  <td className="text-xs font-mono text-gray-500 dark:text-gray-400">{p.invoice_number}</td>
                   <td className="font-medium text-gray-900 dark:text-white">{p.tenant_name}</td>
                   <td className="text-sm text-gray-600 dark:text-gray-400">{p.property_name}</td>
-                  <td className="font-medium">₹{p.amount.toLocaleString()}</td>
+                  <td className="font-medium text-gray-900 dark:text-white">₹{p.amount.toLocaleString()}</td>
                   <td><StatusBadge status={p.payment_type} /></td>
-                  <td className="text-sm">{new Date(p.due_date).toLocaleDateString()}</td>
-                  <td className="text-sm">{p.paid_at ? new Date(p.paid_at).toLocaleDateString() : '-'}</td>
+                  <td className="text-sm text-gray-700 dark:text-gray-300">{new Date(p.due_date).toLocaleDateString()}</td>
+                  <td className="text-sm text-gray-700 dark:text-gray-300">{p.paid_at ? new Date(p.paid_at).toLocaleDateString() : '-'}</td>
                   <td><StatusBadge status={p.status} /></td>
                 </tr>
               ))}

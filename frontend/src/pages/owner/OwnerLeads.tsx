@@ -90,14 +90,14 @@ export default function OwnerLeads() {
                 <tr key={lead.id} className="cursor-pointer" onClick={() => setSelectedLead(lead)}>
                   <td className="font-medium text-gray-900 dark:text-white">{lead.name}</td>
                   <td>
-                    <div className="flex flex-col text-xs text-gray-500">
+                    <div className="flex flex-col text-xs text-gray-500 dark:text-gray-400">
                       <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> {lead.phone}</span>
                       {lead.email && <span className="flex items-center gap-1"><Mail className="w-3 h-3" /> {lead.email}</span>}
                     </div>
                   </td>
-                  <td className="text-sm text-gray-600">{lead.property_name}</td>
-                  <td>{lead.room_type}</td>
-                  <td className="text-sm text-gray-500">{new Date(lead.created_at).toLocaleDateString()}</td>
+                  <td className="text-sm text-gray-600 dark:text-gray-400">{lead.property_name}</td>
+                  <td className="text-gray-700 dark:text-gray-300">{lead.room_type}</td>
+                  <td className="text-sm text-gray-500 dark:text-gray-400">{new Date(lead.created_at).toLocaleDateString()}</td>
                   <td><StatusBadge status={lead.status} /></td>
                   <td className="text-right">
                     <div className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>

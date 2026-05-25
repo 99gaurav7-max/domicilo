@@ -1,21 +1,24 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Edit3, Trash2, Building2, MapPin, Home, Eye } from 'lucide-react';
+import { Plus, Trash2, Building2, MapPin, Home, Eye, GripVertical, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { ownerApi } from '../../services/endpoints';
 import { Property } from '../../types';
-import { TableContainer, Card, StatusBadge, EmptyState, SearchInput } from '../../components/ui/Table';
+import { TableContainer, Card, StatusBadge, EmptyState, Select } from '../../components/ui/Table';
 import { Pagination } from '../../components/ui/Pagination';
 import { Modal, ConfirmDialog } from '../../components/ui/Modal';
 import { TableSkeleton } from '../../components/ui/Skeleton';
 import { indianStatesCities } from '../../data/indianStatesCities';
+
+const roomTypes = ['1RK', '1BHK', '2BHK', '3BHK', '4BHK', '5BHK', '6BHK', '7BHK', '8BHK', '9BHK', '10BHK'];
 
 export default function OwnerProperties() {
   const navigate = useNavigate();
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [status, setStatus] = useState('');
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 0 });
   const [showCreate, setShowCreate] = useState(false);
@@ -24,7 +27,7 @@ export default function OwnerProperties() {
 
   const fetchProperties = () => {
     setLoading(true);
-    ownerApi.getProperties({ page, limit: 10, search }).then((res) => {
+    ownerApi.getProperties({ page, limit: 10, search, status: status || undefined }).then((res) => {
       if (res.data.success) {
         setProperties(res.data.data!);
         setPagination(res.data.pagination!);
@@ -32,14 +35,28 @@ export default function OwnerProperties() {
     }).finally(() => setLoading(false));
   };
 
-  useEffect(() => { fetchProperties(); }, [page, search]);
+  useEffect(() => { fetchProperties(); }, [page, search, status]);
 
   const [form, setForm] = useState({
     name: '', description: '', location: '', city: '', state: '', pincode: '',
     amenities: [] as string[], images: [] as string[],
   });
 
+  const [rooms, setRooms] = useState<{ roomNumber: string; roomType: string; rent: string; securityDeposit: string; floorNumber: string; squareFeet: string }[]>([]);
+
   const formCities = form.state ? indianStatesCities[form.state] || [] : [];
+
+  const addRoom = () => {
+    setRooms([...rooms, { roomNumber: '', roomType: '1BHK', rent: '', securityDeposit: '', floorNumber: '', squareFeet: '' }]);
+  };
+
+  const removeRoom = (i: number) => {
+    setRooms(rooms.filter((_, idx) => idx !== i));
+  };
+
+  const updateRoom = (i: number, field: string, value: string) => {
+    setRooms(rooms.map((r, idx) => idx === i ? { ...r, [field]: value } : r));
+  };
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,12 +64,29 @@ export default function OwnerProperties() {
       toast.error('Please fill in required fields');
       return;
     }
+    for (let i = 0; i < rooms.length; i++) {
+      if (!rooms[i].roomNumber || !rooms[i].roomType || !rooms[i].rent) {
+        toast.error(`Room ${i + 1}: Room number, type, and rent are required`);
+        return;
+      }
+    }
     setSaving(true);
     try {
-      await ownerApi.createProperty(form);
+      await ownerApi.createProperty({
+        ...form,
+        rooms: rooms.map(r => ({
+          roomNumber: r.roomNumber,
+          roomType: r.roomType,
+          rent: Number(r.rent),
+          securityDeposit: r.securityDeposit ? Number(r.securityDeposit) : 0,
+          floorNumber: r.floorNumber ? Number(r.floorNumber) : null,
+          squareFeet: r.squareFeet ? Number(r.squareFeet) : null,
+        })),
+      });
       toast.success('Property created successfully');
       setShowCreate(false);
       setForm({ name: '', description: '', location: '', city: '', state: '', pincode: '', amenities: [], images: [] });
+      setRooms([]);
       fetchProperties();
     } catch (err: any) {
       toast.error(err.response?.data?.error || 'Failed to create property');
@@ -95,12 +129,19 @@ export default function OwnerProperties() {
       </div>
 
       <TableContainer
-        searchable
-        searchPlaceholder="Search properties..."
+        searchable searchPlaceholder="Search by name, location, city..."
         onSearch={(q) => { setSearch(q); setPage(1); }}
+        filters={
+          <Select value={status} onChange={(v) => { setStatus(v); setPage(1); }}
+            options={[
+              { value: 'active', label: 'Active' },
+              { value: 'inactive', label: 'Inactive' },
+            ]}
+            placeholder="All Status" />
+        }
       >
         {loading ? (
-          <TableSkeleton rows={5} cols={6} />
+          <TableSkeleton rows={5} cols={7} />
         ) : properties.length === 0 ? (
           <EmptyState icon={<Building2 className="w-8 h-8" />} title="No properties yet"
             description="Add your first property to start managing rentals."
@@ -109,12 +150,12 @@ export default function OwnerProperties() {
           <>
             <thead>
               <tr className="sticky-table-header">
-                <th>Property</th>
-                <th>Location</th>
-                <th>Rooms</th>
-                <th>Vacant</th>
-                <th>Tenants</th>
-                <th>Status</th>
+                <th className="text-left">Property</th>
+                <th className="text-left">Location</th>
+                <th className="text-center">Rooms</th>
+                <th className="text-center">Vacant</th>
+                <th className="text-center">Tenants</th>
+                <th className="text-center">Status</th>
                 <th className="text-right">Actions</th>
               </tr>
             </thead>
@@ -122,17 +163,23 @@ export default function OwnerProperties() {
               {properties.map((p) => (
                 <tr key={p.id}>
                   <td className="font-medium text-gray-900 dark:text-white">{p.name}</td>
-                  <td className="text-gray-500">
-                    <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {p.city}</span>
+                  <td className="text-gray-500 dark:text-gray-400">
+                    <span className="flex items-center gap-1"><MapPin className="w-3 h-3 flex-shrink-0" /> {p.city}, {p.state}</span>
                   </td>
-                  <td>{p.rooms?.length || 0}</td>
-                  <td><StatusBadge status={p.vacant_rooms! > 0 ? `${p.vacant_rooms} vacant` : 'full'} /></td>
-                  <td>{p.tenant_count || 0}</td>
-                  <td><StatusBadge status={p.is_active ? 'active' : 'inactive'} /></td>
+                  <td className="text-center text-gray-700 dark:text-gray-300">{p.rooms?.length || 0}</td>
+                  <td className="text-center">
+                    <StatusBadge status={p.vacant_rooms! > 0 ? `${p.vacant_rooms} vacant` : 'full'} />
+                  </td>
+                  <td className="text-center text-gray-700 dark:text-gray-300">{p.tenant_count || 0}</td>
+                  <td className="text-center"><StatusBadge status={p.is_active ? 'active' : 'inactive'} /></td>
                   <td className="text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <button onClick={() => navigate(`/properties/${p.id}`)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400" title="View Details"><Eye className="w-4 h-4" /></button>
-                      <button onClick={(e) => { e.stopPropagation(); setDeleteId(p.id); }} className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-400" title="Delete"><Trash2 className="w-4 h-4" /></button>
+                      <button onClick={() => navigate(`/properties/${p.id}`)} className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors flex items-center gap-1">
+                        <Eye className="w-3 h-3" /> View
+                      </button>
+                      <button onClick={(e) => { e.stopPropagation(); setDeleteId(p.id); }} className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors flex items-center gap-1">
+                        <Trash2 className="w-3 h-3" /> Delete
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -145,7 +192,7 @@ export default function OwnerProperties() {
 
       {/* Create Property Modal */}
       <Modal isOpen={showCreate} onClose={() => setShowCreate(false)} title="Add New Property" size="xl">
-        <form onSubmit={handleCreate} className="space-y-4">
+        <form onSubmit={handleCreate} className="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="sm:col-span-2">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Property Name *</label>
@@ -200,7 +247,67 @@ export default function OwnerProperties() {
               </div>
             </div>
           </div>
-          <div className="flex justify-end gap-3 pt-2">
+
+          {/* Rooms Section */}
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+            <div className="flex items-center justify-between mb-3">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Rooms</label>
+              <button type="button" onClick={addRoom} className="text-xs px-3 py-1.5 rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 font-medium hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors flex items-center gap-1">
+                <Plus className="w-3 h-3" /> Add Room
+              </button>
+            </div>
+            {rooms.length === 0 && (
+              <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">No rooms added yet. You can add rooms now or later from the property detail page.</p>
+            )}
+            <div className="space-y-3">
+              {rooms.map((room, i) => (
+                <div key={i} className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/30">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">Room {i + 1}</span>
+                    <button type="button" onClick={() => removeRoom(i)} className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-400">
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    <div>
+                      <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5">Room No. *</label>
+                      <input type="text" value={room.roomNumber} onChange={(e) => updateRoom(i, 'roomNumber', e.target.value)}
+                        className="w-full px-2 py-1.5 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs text-gray-900 dark:text-gray-100" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5">Type *</label>
+                      <select value={room.roomType} onChange={(e) => updateRoom(i, 'roomType', e.target.value)}
+                        className="w-full px-2 py-1.5 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs text-gray-900 dark:text-gray-100">
+                        {roomTypes.map((t) => <option key={t} value={t} className="text-gray-900 dark:text-gray-100">{t}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5">Rent (₹) *</label>
+                      <input type="number" value={room.rent} onChange={(e) => updateRoom(i, 'rent', e.target.value)}
+                        className="w-full px-2 py-1.5 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs text-gray-900 dark:text-gray-100" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5">Deposit (₹)</label>
+                      <input type="number" value={room.securityDeposit} onChange={(e) => updateRoom(i, 'securityDeposit', e.target.value)}
+                        className="w-full px-2 py-1.5 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs text-gray-900 dark:text-gray-100" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5">Floor</label>
+                      <input type="number" value={room.floorNumber} onChange={(e) => updateRoom(i, 'floorNumber', e.target.value)}
+                        className="w-full px-2 py-1.5 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs text-gray-900 dark:text-gray-100" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5">Sq.Ft.</label>
+                      <input type="number" value={room.squareFeet} onChange={(e) => updateRoom(i, 'squareFeet', e.target.value)}
+                        className="w-full px-2 py-1.5 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs text-gray-900 dark:text-gray-100" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 pt-2 sticky bottom-0 bg-white dark:bg-gray-950 py-3 border-t border-gray-100 dark:border-gray-800">
             <button type="button" onClick={() => setShowCreate(false)} className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">Cancel</button>
             <button type="submit" disabled={saving} className="btn-primary text-sm">{saving ? 'Creating...' : 'Create Property'}</button>
           </div>
