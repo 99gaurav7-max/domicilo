@@ -39,7 +39,7 @@ export default function AdminPayments() {
           Type: p.payment_type,
           Status: p.status,
           Date: p.paid_at ? new Date(p.paid_at).toLocaleDateString() : '',
-          DueDate: new Date(p.due_date).toLocaleDateString(),
+          DueDate: p.due_date ? new Date(p.due_date).toLocaleDateString() : '',
         })));
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
@@ -96,13 +96,13 @@ export default function AdminPayments() {
             <tbody>
               {payments.map((p) => (
                 <tr key={p.id}>
-                  <td className="text-xs font-mono text-gray-500">{p.invoice_number}</td>
+                  <td className="text-xs font-mono text-gray-500 dark:text-gray-400">{p.invoice_number}</td>
                   <td className="font-medium text-gray-900 dark:text-white">{p.tenant_name}</td>
                   <td className="text-sm text-gray-600 dark:text-gray-400">{p.property_name}</td>
-                  <td className="font-medium">₹{p.amount.toLocaleString()}</td>
+                  <td className="font-medium text-gray-900 dark:text-gray-100">₹{p.amount.toLocaleString()}</td>
                   <td><StatusBadge status={p.payment_type} /></td>
-                  <td className="text-sm">{new Date(p.due_date).toLocaleDateString()}</td>
-                  <td className="text-sm">{p.paid_at ? new Date(p.paid_at).toLocaleDateString() : '-'}</td>
+                  <td className="text-sm text-gray-500 dark:text-gray-400">{p.due_date ? new Date(p.due_date).toLocaleDateString() : '-'}</td>
+                  <td className="text-sm text-gray-500 dark:text-gray-400">{p.paid_at ? new Date(p.paid_at).toLocaleDateString() : '-'}</td>
                   <td><StatusBadge status={p.status} /></td>
                 </tr>
               ))}

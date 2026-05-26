@@ -83,7 +83,7 @@ export default function AdminDashboard() {
                 <Icon className={`w-3.5 h-3.5 ${kpi.danger && value > 0 ? 'text-red-400' : 'text-primary-400'}`} />
               </div>
               <p className="text-lg font-bold text-gray-900 dark:text-white">
-                {kpi.prefix || ''}{kpi.format ? value?.toLocaleString() : value}
+                {kpi.prefix || ''}{value != null ? (kpi.format ? value.toLocaleString() : value) : 0}
               </p>
             </motion.div>
           );
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
                   <Line type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={2} dot={{ fill: '#3b82f6', r: 3 }} />
                 </LineChart>
               </ResponsiveContainer>
-            ) : <p className="text-sm text-gray-400 text-center py-20">No revenue data available</p>}
+            ) : <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-20">No revenue data available</p>}
           </div>
         </Card>
 
@@ -114,7 +114,7 @@ export default function AdminDashboard() {
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Recent Payments</h3>
           <div className="space-y-2">
             {recentPayments.length === 0 ? (
-              <p className="text-sm text-gray-400 py-8 text-center">No recent payments</p>
+              <p className="text-sm text-gray-400 dark:text-gray-500 py-8 text-center">No recent payments</p>
             ) : recentPayments.slice(0, 5).map((p) => (
               <div key={p.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors">
                 <div>

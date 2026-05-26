@@ -198,8 +198,8 @@ export default function AdminUsers() {
                     </button>
                   </td>
                   <td className="font-medium text-gray-900 dark:text-white">{u.fullName}</td>
-                  <td className="text-sm text-gray-500">{u.email}</td>
-                  <td className="text-sm text-gray-500">{u.phone}</td>
+                  <td className="text-sm text-gray-500 dark:text-gray-400">{u.email}</td>
+                  <td className="text-sm text-gray-500 dark:text-gray-400">{u.phone}</td>
                   <td>
                     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
                       u.role === 'admin' ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400' :
@@ -211,7 +211,7 @@ export default function AdminUsers() {
                     </span>
                   </td>
                   <td><StatusBadge status={u.isActive ? 'active' : 'inactive'} /></td>
-                  <td className="text-sm text-gray-500">{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-'}</td>
+                  <td className="text-sm text-gray-500 dark:text-gray-400">{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-'}</td>
                   <td className="text-right">
                     <div className="flex items-center justify-end gap-1">
                       <button onClick={() => setEditUser(u)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400">
@@ -237,30 +237,30 @@ export default function AdminUsers() {
         {editUser && (
           <form onSubmit={handleUpdate} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Full Name</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
               <input type="text" value={editUser.fullName} onChange={(e) => setEditUser({ ...editUser, fullName: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100" />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Email</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
               <input type="email" value={editUser.email} onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border bg-white dark:bg-gray-800 text-sm" />
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100" />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Phone</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone</label>
               <input type="tel" value={editUser.phone} onChange={(e) => setEditUser({ ...editUser, phone: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border bg-white dark:bg-gray-800 text-sm" />
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100" />
             </div>
             <div className="flex items-center gap-2">
               <label className="flex items-center gap-2">
                 <input type="checkbox" checked={editUser.isActive ?? true}
                   onChange={(e) => setEditUser({ ...editUser, isActive: e.target.checked })}
-                  className="rounded border-gray-300 text-primary-600" />
-                <span className="text-sm">Active</span>
+                  className="rounded border-gray-300 dark:border-gray-600 text-primary-600" />
+                <span className="text-sm text-gray-700 dark:text-gray-300">Active</span>
               </label>
             </div>
             <div className="flex justify-end gap-3">
-              <button type="button" onClick={() => setEditUser(null)} className="px-4 py-2 rounded-lg border text-sm">Cancel</button>
+              <button type="button" onClick={() => setEditUser(null)} className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">Cancel</button>
               <button type="submit" disabled={saving} className="btn-primary text-sm">{saving ? 'Saving...' : 'Save Changes'}</button>
             </div>
           </form>

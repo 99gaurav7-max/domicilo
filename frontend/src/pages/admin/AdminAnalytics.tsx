@@ -59,7 +59,7 @@ export default function AdminAnalytics() {
                   <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]} name="New Users" />
                 </BarChart>
               </ResponsiveContainer>
-            ) : <p className="text-sm text-gray-400 text-center py-20">No user growth data</p>}
+            ) : <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-20">No user growth data</p>}
           </div>
         </Card>
 
@@ -80,7 +80,7 @@ export default function AdminAnalytics() {
                   <Line type="monotone" dataKey="revenue" stroke="#10b981" strokeWidth={2} dot={{ fill: '#10b981', r: 3 }} />
                 </LineChart>
               </ResponsiveContainer>
-            ) : <p className="text-sm text-gray-400 text-center py-20">No revenue data</p>}
+            ) : <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-20">No revenue data</p>}
           </div>
         </Card>
 
@@ -101,7 +101,7 @@ export default function AdminAnalytics() {
                   <Bar dataKey="count" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="New Properties" />
                 </BarChart>
               </ResponsiveContainer>
-            ) : <p className="text-sm text-gray-400 text-center py-20">No property growth data</p>}
+            ) : <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-20">No property growth data</p>}
           </div>
         </Card>
 
@@ -123,11 +123,11 @@ export default function AdminAnalytics() {
                   <Tooltip contentStyle={tooltipStyle} />
                 </PieChart>
               </ResponsiveContainer>
-            ) : <p className="text-sm text-gray-400 text-center py-20">No revenue breakdown</p>}
+            ) : <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-20">No revenue breakdown</p>}
           </div>
           <div className="flex flex-wrap gap-3 mt-2">
             {data.revenueBreakdown?.map((item: any, i: number) => (
-              <span key={item.payment_type} className="flex items-center gap-1 text-xs text-gray-500">
+              <span key={item.payment_type} className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
                 {item.payment_type}: ₹{Number(item.total).toLocaleString()}
               </span>
@@ -144,18 +144,18 @@ export default function AdminAnalytics() {
             <div className="grid grid-cols-3 gap-4">
               <div className="text-center p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20">
                 <p className="text-2xl font-bold text-blue-600">{data.conversion.total_enquiries}</p>
-                <p className="text-xs text-gray-500 mt-1">Total Enquiries</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Enquiries</p>
               </div>
               <div className="text-center p-4 rounded-xl bg-green-50 dark:bg-green-900/20">
                 <p className="text-2xl font-bold text-green-600">{data.conversion.converted_enquiries}</p>
-                <p className="text-xs text-gray-500 mt-1">Converted</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Converted</p>
               </div>
               <div className="text-center p-4 rounded-xl bg-purple-50 dark:bg-purple-900/20">
                 <p className="text-2xl font-bold text-purple-600">{data.conversion.total_tenants}</p>
-                <p className="text-xs text-gray-500 mt-1">Total Tenants</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Tenants</p>
               </div>
             </div>
-          ) : <p className="text-sm text-gray-400 py-8 text-center">No conversion data</p>}
+          ) : <p className="text-sm text-gray-400 dark:text-gray-500 py-8 text-center">No conversion data</p>}
         </Card>
 
         {/* User Distribution */}
@@ -176,11 +176,11 @@ export default function AdminAnalytics() {
                   <Tooltip contentStyle={tooltipStyle} />
                 </PieChart>
               </ResponsiveContainer>
-            ) : <p className="text-sm text-gray-400 text-center py-20">No user data</p>}
+            ) : <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-20">No user data</p>}
           </div>
           <div className="flex flex-wrap gap-3 mt-2">
             {data.userDistribution?.map((item: any, i: number) => (
-              <span key={item.role} className="flex items-center gap-1 text-xs text-gray-500">
+              <span key={item.role} className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
                 {item.role}: {item.count}
               </span>

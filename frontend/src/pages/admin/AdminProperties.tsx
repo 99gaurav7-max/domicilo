@@ -79,7 +79,7 @@ export default function AdminProperties() {
               ]}
               placeholder="All Status" />
             <input type="text" value={city} onChange={(e) => { setCity(e.target.value); setPage(1); }}
-              placeholder="City..." className="px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm w-32" />
+              placeholder="City..." className="px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm w-32 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500" />
           </div>
         }
       >
@@ -105,13 +105,13 @@ export default function AdminProperties() {
               {properties.map((p) => (
                 <tr key={p.id}>
                   <td className="font-medium text-gray-900 dark:text-white">{p.name}</td>
-                  <td className="text-sm text-gray-500">{p.owner_name}</td>
-                  <td className="text-sm text-gray-500">{p.location}</td>
-                  <td className="text-sm text-gray-500">{p.city}</td>
-                  <td className="text-sm">{(p as any).total_rooms || '-'}</td>
-                  <td className="text-sm">{(p as any).vacant_rooms ?? '-'}</td>
+                  <td className="text-sm text-gray-500 dark:text-gray-400">{p.owner_name}</td>
+                  <td className="text-sm text-gray-500 dark:text-gray-400">{p.location}</td>
+                  <td className="text-sm text-gray-500 dark:text-gray-400">{p.city}</td>
+                  <td className="text-sm text-gray-900 dark:text-gray-100">{(p as any).total_rooms || '-'}</td>
+                  <td className="text-sm text-gray-900 dark:text-gray-100">{(p as any).vacant_rooms ?? '-'}</td>
                   <td><StatusBadge status={p.is_active ? 'active' : 'inactive'} /></td>
-                  <td className="text-sm text-gray-500">{new Date(p.created_at).toLocaleDateString()}</td>
+                  <td className="text-sm text-gray-500 dark:text-gray-400">{p.created_at ? new Date(p.created_at).toLocaleDateString() : '-'}</td>
                 </tr>
               ))}
             </tbody>
