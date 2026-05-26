@@ -73,7 +73,7 @@ function AppContent() {
   }, []);
 
   return (
-    <BrowserRouter>
+    <>
       <ScrollToTop />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
@@ -147,20 +147,22 @@ function AppContent() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       </AnimatePresence>
-    </BrowserRouter>
+    </>
   );
 }
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Toaster position="top-center" toastOptions={{
-        className: 'toast-default',
-        duration: 3000,
-        success: { className: 'toast-success', iconTheme: { primary: '#10b981', secondary: '#fff' } },
-        error: { className: 'toast-error', iconTheme: { primary: '#ef4444', secondary: '#fff' } },
-      }} />
-      <AppContent />
-    </QueryClientProvider>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <Toaster position="top-center" toastOptions={{
+          className: 'toast-default',
+          duration: 3000,
+          success: { className: 'toast-success', iconTheme: { primary: '#10b981', secondary: '#fff' } },
+          error: { className: 'toast-error', iconTheme: { primary: '#ef4444', secondary: '#fff' } },
+        }} />
+        <AppContent />
+      </QueryClientProvider>
+    </BrowserRouter>
   );
 }
