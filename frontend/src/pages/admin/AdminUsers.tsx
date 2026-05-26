@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import Papa from 'papaparse';
 import { adminApi } from '../../services/endpoints';
 import { User } from '../../types';
-import { TableContainer, Card, StatusBadge, SearchInput, Select, EmptyState } from '../../components/ui/Table';
+import { TableContainer, StatusBadge, SearchInput, Select, EmptyState } from '../../components/ui/Table';
 import { Pagination } from '../../components/ui/Pagination';
 import { Modal, ConfirmDialog } from '../../components/ui/Modal';
 import { TableSkeleton } from '../../components/ui/Skeleton';
@@ -215,11 +215,11 @@ export default function AdminUsers() {
                   <td className="text-sm text-gray-500 dark:text-gray-400">{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-'}</td>
                   <td className="text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <button onClick={() => setEditUser(u)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400">
+                      <button onClick={() => setEditUser(u)} aria-label="Edit user" className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400 transition-colors">
                         <Edit3 className="w-4 h-4" />
                       </button>
                       {u.role !== 'admin' && (
-                        <button onClick={() => setDeleteId(u.id)} className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-400">
+                        <button onClick={() => setDeleteId(u.id)} aria-label="Delete user" className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-400 transition-colors">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       )}

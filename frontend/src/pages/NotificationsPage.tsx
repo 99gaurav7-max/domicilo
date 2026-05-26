@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { tenantApi, adminApi, ownerApi } from '../services/endpoints';
 import { useAuthStore } from '../store/authStore';
 import { Notification } from '../types';
-import { EmptyState, StatusBadge } from '../components/ui/Table';
+import { EmptyState } from '../components/ui/Table';
 import { Skeleton } from '../components/ui/Skeleton';
 
 export default function NotificationsPage() {

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, Loader2, Shield, Building2, User, Check, Crown, Eye, EyeOff, X, AlertCircle } from 'lucide-react';
+import { Home, Loader2, Shield, Building2, User, Check, Crown, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { authApi } from '../../services/endpoints';
 

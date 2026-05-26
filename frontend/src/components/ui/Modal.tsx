@@ -32,7 +32,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
               <Dialog.Panel className={`w-full ${sizes[size]} transform overflow-hidden rounded-3xl bg-white/90 dark:bg-black/70 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-2xl shadow-black/20 p-6 transition-all`}>
                 <div className="flex items-center justify-between mb-4">
                   <Dialog.Title className="text-lg font-semibold text-gray-900 dark:text-white">{title}</Dialog.Title>
-                  <button onClick={onClose} className="p-1.5 rounded-xl hover:bg-royal-500/10 transition-colors">
+                  <button onClick={onClose} aria-label="Close modal" className="p-1.5 rounded-xl hover:bg-royal-500/10 transition-colors">
                     <X className="w-5 h-5 text-gray-400" />
                   </button>
                 </div>

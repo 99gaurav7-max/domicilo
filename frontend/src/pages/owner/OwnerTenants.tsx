@@ -4,7 +4,7 @@ import { UserPlus, Phone, Mail, Home, AlertTriangle, Loader2 } from 'lucide-reac
 import toast from 'react-hot-toast';
 import { ownerApi, propertyApi } from '../../services/endpoints';
 import { Tenant, Property, Room } from '../../types';
-import { TableContainer, StatusBadge, EmptyState, SearchInput, Select } from '../../components/ui/Table';
+import { TableContainer, StatusBadge, EmptyState, Select } from '../../components/ui/Table';
 import { Pagination } from '../../components/ui/Pagination';
 import { Modal, ConfirmDialog } from '../../components/ui/Modal';
 import { TableSkeleton } from '../../components/ui/Skeleton';

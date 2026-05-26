@@ -7,11 +7,10 @@ import { propertyApi } from '../../services/endpoints';
 import { Property } from '../../types';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { Pagination } from '../../components/ui/Pagination';
+import { indianStatesCities } from '../../data/indianStatesCities';
 
 const roomTypes = ['1RK', '1BHK', '2BHK', '3BHK', '4BHK', '5BHK', '6BHK', '7BHK', '8BHK', '9BHK', '10BHK'];
 const amenities = ['WiFi', 'Parking', 'Gym', 'Security', 'Power Backup', 'Lift', 'Swimming Pool', 'Garden'];
-
-import { indianStatesCities } from '../../data/indianStatesCities';
 
 export default function PropertiesPage() {
   const navigate = useNavigate();
@@ -56,8 +55,7 @@ export default function PropertiesPage() {
         setProperties(res.data.data || []);
         setPagination(res.data.pagination || { page: 1, limit: 12, total: 0, totalPages: 0 });
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
       toast.error('Failed to load properties');
     } finally {
       setLoading(false);

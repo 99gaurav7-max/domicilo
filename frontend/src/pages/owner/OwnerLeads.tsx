@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Mail, Calendar, CheckCircle, XCircle, MessageSquare } from 'lucide-react';
+import { Phone, Mail, MessageSquare } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { ownerApi } from '../../services/endpoints';
 import { Enquiry } from '../../types';
-import { TableContainer, StatusBadge, EmptyState, Select, SearchInput } from '../../components/ui/Table';
+import { TableContainer, StatusBadge, EmptyState, Select } from '../../components/ui/Table';
 import { Pagination } from '../../components/ui/Pagination';
 import { Modal, ConfirmDialog } from '../../components/ui/Modal';
 import { TableSkeleton } from '../../components/ui/Skeleton';

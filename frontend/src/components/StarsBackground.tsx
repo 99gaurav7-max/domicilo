@@ -72,7 +72,8 @@ export default function StarsBackground() {
     function drawNebula(x: number, y: number, radius: number, color: string) {
       const gradient = cxt.createRadialGradient(x, y, 0, x, y, radius);
       gradient.addColorStop(0, color);
-      gradient.addColorStop(0.4, color.replace('0.', '0.03'));
+      const mid = color.replace(/[\d.]+\)$/, '0.008)');
+      gradient.addColorStop(0.5, mid);
       gradient.addColorStop(1, 'transparent');
       cxt.fillStyle = gradient;
       cxt.fillRect(x - radius, y - radius, radius * 2, radius * 2);

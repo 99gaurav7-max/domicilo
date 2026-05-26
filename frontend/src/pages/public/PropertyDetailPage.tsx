@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { MapPin, Home, Users, Wifi, Car, Dumbbell, Shield, Zap, Waves, TreePine, ChevronLeft, Phone, Mail, Calendar, MessageSquare, Loader2, LogIn } from 'lucide-react';
+import { MapPin, Home, Users, Wifi, Car, Dumbbell, Shield, Zap, Waves, TreePine, ChevronLeft, Phone, Mail, Loader2, LogIn } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { propertyApi } from '../../services/endpoints';
 import { Property } from '../../types';

@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import Papa from 'papaparse';
 import { adminApi } from '../../services/endpoints';
 import { Property } from '../../types';
-import { TableContainer, StatusBadge, SearchInput, Select, EmptyState } from '../../components/ui/Table';
+import { TableContainer, StatusBadge, Select, EmptyState } from '../../components/ui/Table';
 import { Pagination } from '../../components/ui/Pagination';
 import { TableSkeleton } from '../../components/ui/Skeleton';
 

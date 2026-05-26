@@ -3,14 +3,13 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
   Home, CreditCard, DollarSign, Clock, AlertTriangle, Bell,
-  FileText, MapPin, CheckCircle, XCircle, Loader2
+  MapPin, Loader2
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { tenantApi } from '../../services/endpoints';
 import { TenantDashboardData } from '../../types';
 import { Card, StatusBadge, EmptyState } from '../../components/ui/Table';
 import { KPISkeleton, TableSkeleton } from '../../components/ui/Skeleton';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 export default function TenantDashboard() {
   const navigate = useNavigate();
@@ -53,7 +52,7 @@ export default function TenantDashboard() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="kpi-card relative overflow-hidden before:absolute before:top-0 before:left-4 before:right-4 before:h-[3px] before:bg-gradient-to-r before:from-gold-400 before:to-royal-500 before:rounded-full"
+          className="kpi-card relative overflow-hidden"
         >
           <div className="flex items-start justify-between mb-3">
             <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide font-display">Monthly Rent</p>
@@ -66,7 +65,7 @@ export default function TenantDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className={`kpi-card relative overflow-hidden before:absolute before:top-0 before:left-4 before:right-4 before:h-[3px] before:bg-gradient-to-r before:from-gold-400 before:to-royal-500 before:rounded-full ${finances.totalDue > 0 ? 'ring-1 ring-amber-200 dark:ring-amber-900' : ''}`}
+          className={`kpi-card relative overflow-hidden ${finances.totalDue > 0 ? 'ring-1 ring-amber-200 dark:ring-amber-900' : ''}`}
         >
           <div className="flex items-start justify-between mb-3">
             <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide font-display">Total Due</p>
@@ -79,7 +78,7 @@ export default function TenantDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className={`kpi-card relative overflow-hidden before:absolute before:top-0 before:left-4 before:right-4 before:h-[3px] before:bg-gradient-to-r before:from-gold-400 before:to-royal-500 before:rounded-full ${finances.overdueAmount > 0 ? 'ring-1 ring-red-200 dark:ring-red-900' : ''}`}
+          className={`kpi-card relative overflow-hidden ${finances.overdueAmount > 0 ? 'ring-1 ring-red-200 dark:ring-red-900' : ''}`}
         >
           <div className="flex items-start justify-between mb-3">
             <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide font-display">Overdue</p>
@@ -92,7 +91,7 @@ export default function TenantDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className={`kpi-card relative overflow-hidden before:absolute before:top-0 before:left-4 before:right-4 before:h-[3px] before:bg-gradient-to-r before:from-gold-400 before:to-royal-500 before:rounded-full ${finances.unpaidFines > 0 ? 'ring-1 ring-red-200 dark:ring-red-900' : ''}`}
+          className={`kpi-card relative overflow-hidden ${finances.unpaidFines > 0 ? 'ring-1 ring-red-200 dark:ring-red-900' : ''}`}
         >
           <div className="flex items-start justify-between mb-3">
             <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide font-display">Unpaid Fines</p>
