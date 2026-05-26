@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Download, Building2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Papa from 'papaparse';
@@ -56,13 +57,13 @@ export default function AdminProperties() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Properties</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white font-display">Properties</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">View all platform properties (read-only)</p>
         </div>
-        <button onClick={handleExport} className="btn-secondary text-sm flex items-center gap-2">
+        <button onClick={handleExport} className="rounded-2xl border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 text-sm flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 transition-all">
           <Download className="w-4 h-4" /> Export CSV
         </button>
       </div>
@@ -79,7 +80,7 @@ export default function AdminProperties() {
               ]}
               placeholder="All Status" />
             <input type="text" value={city} onChange={(e) => { setCity(e.target.value); setPage(1); }}
-              placeholder="City..." className="px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm w-32 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500" />
+              placeholder="City..." className="px-3 py-2 rounded-2xl border border-gray-200 dark:border-white/10 bg-white/70 dark:bg-black/30 backdrop-blur-sm text-sm w-32 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50" />
           </div>
         }
       >
@@ -119,6 +120,6 @@ export default function AdminProperties() {
         )}
       </TableContainer>
       {pagination.totalPages > 1 && <Pagination {...pagination} onPageChange={setPage} />}
-    </div>
+    </motion.div>
   );
 }

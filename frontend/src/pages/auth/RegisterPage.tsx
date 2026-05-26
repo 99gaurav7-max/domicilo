@@ -86,35 +86,42 @@ export default function RegisterPage() {
     `w-full px-4 py-2.5 rounded-xl border text-sm transition-all outline-none ${
       hasError
         ? 'border-red-400 dark:border-red-500 bg-red-50 dark:bg-red-900/10 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-red-500/30'
-        : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500'
+        : 'border-gray-200 dark:border-white/10 bg-white/70 dark:bg-black/30 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50'
     }`;
 
   return (
     <div className="min-h-screen flex">
-      <div className="hidden lg:flex w-1/2 hero-gradient items-center justify-center p-12 relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-pattern opacity-10" />
-        <div className="relative z-10 text-center">
-          <div className="w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center mx-auto mb-6">
-            <Crown className="w-10 h-10 text-white" />
-          </div>
-          <h2 className="text-3xl font-bold text-white mb-4">Join Domicilo</h2>
-          <p className="text-blue-100/80 max-w-sm mx-auto">Create your account and start your rental journey — as an owner, an admin, or a future tenant.</p>
+      <div className="hidden lg:flex w-1/2 items-center justify-center p-12 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-royal-900 via-royal-950 to-black" />
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-royal-500/20 rounded-full blur-[100px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-gold-500/10 rounded-full blur-[100px]" />
+        <div className="relative z-10 text-center max-w-sm">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+            className="w-24 h-24 rounded-3xl bg-gradient-to-br from-royal-500 to-royal-700 border border-royal-400/20 flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-royal-500/30"
+          >
+            <Crown className="w-12 h-12 text-gold-400" />
+          </motion.div>
+          <h2 className="font-display text-4xl font-bold text-white mb-4">Claim Your Throne</h2>
+          <p className="text-white/50 max-w-sm mx-auto leading-relaxed">Ascend as an owner, an administrator, or a future noble. Your destiny awaits.</p>
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-6 bg-white dark:bg-gray-950">
+      <div className="flex-1 flex items-center justify-center p-6">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
-          <Link to="/" className="flex items-center gap-2 mb-8 justify-center lg:justify-start">
-            <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
-              <Home className="w-4 h-4 text-white" />
+          <Link to="/" className="flex items-center gap-2 mb-10 justify-center lg:justify-start group">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-royal-500 to-royal-700 flex items-center justify-center shadow-lg shadow-royal-500/20 group-hover:scale-105 transition-transform">
+              <Crown className="w-5 h-5 text-gold-400" />
             </div>
             <span className="font-bold text-xl gradient-text">Domicilo</span>
           </Link>
 
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Create an account</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Create your royal account</h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm mb-8">
-            Already have an account?{' '}
-            <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">Sign in</Link>
+            Already a noble?{' '}
+            <Link to="/login" className="text-royal-500 hover:text-royal-400 font-medium">Return to your realm</Link>
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
@@ -187,24 +194,24 @@ export default function RegisterPage() {
                   return (
                     <button key={r.value} type="button" disabled={isAdminDisabled}
                       onClick={() => setForm({ ...form, role: r.value })}
-                      className={`flex items-start gap-3 p-3.5 rounded-xl border-2 text-left transition-all ${
+                      className={`flex items-start gap-3 p-3.5 rounded-2xl border-2 text-left transition-all ${
                         selected && !isAdminDisabled
-                          ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30 shadow-sm'
+                          ? 'border-royal-500 bg-royal-500/10 shadow-sm shadow-royal-500/5'
                           : isAdminDisabled
-                          ? 'border-gray-200 dark:border-gray-700 opacity-50 cursor-not-allowed'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                          ? 'border-gray-200 dark:border-white/10 opacity-50 cursor-not-allowed'
+                          : 'border-gray-200 dark:border-white/10 hover:border-royal-500/30'
                       }`}
                     >
-                      <div className={`p-2 rounded-lg ${selected && !isAdminDisabled ? 'bg-primary-100 dark:bg-primary-900/50 text-primary-600' : 'bg-gray-100 dark:bg-gray-800 text-gray-400'}`}>
+                      <div className={`p-2 rounded-xl ${selected && !isAdminDisabled ? 'bg-royal-500/20 text-royal-400' : 'bg-gray-100 dark:bg-white/5 text-gray-400'}`}>
                         <Icon className="w-5 h-5" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className={`text-sm font-semibold ${selected && !isAdminDisabled ? 'text-primary-700 dark:text-primary-300' : 'text-gray-900 dark:text-gray-100'}`}>
+                          <span className={`text-sm font-semibold ${selected && !isAdminDisabled ? 'text-royal-500' : 'text-gray-900 dark:text-gray-100'}`}>
                             {r.label}
                           </span>
-                          {r.premium && <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-gradient-to-r from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-800/40 text-amber-700 dark:text-amber-400">PREMIUM</span>}
-                          {selected && !isAdminDisabled && <Check className="w-4 h-4 text-primary-600 ml-auto" />}
+                          {r.premium && <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-gradient-to-r from-gold-500/20 to-gold-600/20 text-gold-500">PREMIUM</span>}
+                          {selected && !isAdminDisabled && <Check className="w-4 h-4 text-royal-500 ml-auto" />}
                           {r.value === 'admin' && adminExists && <span className="text-xs text-red-500 ml-auto">Unavailable</span>}
                         </div>
                         <p className={`text-xs mt-0.5 ${isAdminDisabled ? 'text-gray-400' : 'text-gray-500 dark:text-gray-400'}`}>
@@ -222,9 +229,10 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            <button type="submit" disabled={loading || (form.role === 'admin' && adminExists)} className="btn-primary w-full flex items-center justify-center gap-2 mt-2">
+            <button type="submit" disabled={loading || (form.role === 'admin' && adminExists)}
+              className="w-full px-6 py-3 rounded-2xl font-semibold text-sm text-white transition-all duration-300 bg-gradient-to-r from-royal-600 to-royal-800 hover:shadow-2xl hover:shadow-royal-500/30 hover:-translate-y-0.5 border border-royal-400/20 flex items-center justify-center gap-2 disabled:opacity-50 mt-2">
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-              {loading ? 'Creating account...' : 'Create Account'}
+              {loading ? 'Sealing your destiny...' : 'Claim Your Throne'}
             </button>
           </form>
         </motion.div>

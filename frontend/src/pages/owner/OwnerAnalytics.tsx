@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { BarChart3, Download, TrendingUp, DollarSign, Calendar } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { ownerApi } from '../../services/endpoints';
-import { Card, Select } from '../../components/ui/Table';
+import { Select } from '../../components/ui/Table';
 import { KPISkeleton } from '../../components/ui/Skeleton';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { useThemeStore } from '../../store/themeStore';
@@ -48,10 +48,10 @@ export default function OwnerAnalytics() {
   }), { total: 0, rent: 0, electricity: 0, water: 0, maintenance: 0 });
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics</h1>
+          <h1 className="text-2xl font-bold font-display text-gray-900 dark:text-white">Analytics</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">Detailed revenue breakdown</p>
         </div>
         <div className="flex items-center gap-2">
@@ -62,7 +62,7 @@ export default function OwnerAnalytics() {
               { value: '90', label: 'Last 90 days' },
               { value: '365', label: 'Last year' },
             ]} />
-          <button onClick={handleExport} className="btn-secondary text-sm flex items-center gap-2">
+          <button onClick={handleExport} className="rounded-2xl border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 px-4 py-2 text-sm flex items-center gap-2">
             <Download className="w-4 h-4" /> CSV
           </button>
         </div>
@@ -77,7 +77,8 @@ export default function OwnerAnalytics() {
           { label: 'Water', value: totals.water, icon: BarChart3, color: 'text-cyan-500' },
           { label: 'Maintenance', value: totals.maintenance, icon: BarChart3, color: 'text-purple-500' },
         ].map((item, i) => (
-          <motion.div key={item.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="kpi-card">
+          <motion.div key={item.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+            className="rounded-2xl bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/30 dark:border-white/5 shadow-xl p-4">
             <div className="flex items-start justify-between mb-2">
               <p className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{item.label}</p>
               <item.icon className={`w-3.5 h-3.5 ${item.color}`} />
@@ -88,8 +89,8 @@ export default function OwnerAnalytics() {
       </div>
 
       {/* Chart */}
-      <Card>
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Revenue Breakdown</h3>
+      <div className="rounded-2xl bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/30 dark:border-white/5 shadow-xl p-6">
+        <h3 className="font-semibold font-display text-gray-900 dark:text-white mb-4">Revenue Breakdown</h3>
         <div className="h-80">
           {loading ? (
             <div className="skeleton h-full w-full" />
@@ -111,7 +112,7 @@ export default function OwnerAnalytics() {
             </ResponsiveContainer>
           )}
         </div>
-      </Card>
-    </div>
+      </div>
+    </motion.div>
   );
 }

@@ -103,7 +103,7 @@ export default function PropertiesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      <div className="gradient-bg relative overflow-hidden">
+      <div className="bg-gradient-to-br from-royal-500 to-royal-700 relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-10" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex items-center gap-2 text-blue-200 text-sm mb-4">
@@ -111,13 +111,13 @@ export default function PropertiesPage() {
             <span>/</span>
             <span className="text-white">Properties</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Find Your Perfect Rental</h1>
+          <h1 className="text-3xl md:text-4xl font-bold font-display text-white mb-2">Find Your Perfect Rental</h1>
           <p className="text-blue-100/80">Browse through our curated selection of premium properties.</p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20">
-        <div className="glass-card rounded-2xl p-4 mb-8">
+        <div className="rounded-2xl bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/30 dark:border-white/5 shadow-xl p-4 mb-8">
           <div className="flex flex-col lg:flex-row gap-3">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -126,31 +126,31 @@ export default function PropertiesPage() {
                 value={filters.search}
                 onChange={(e) => setFilters({ ...filters, search: e.target.value })}
                 placeholder="Search by location or property name..."
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                className="w-full rounded-2xl bg-white/70 dark:bg-black/30 backdrop-blur-sm border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50 pl-9 pr-4 py-2.5 text-sm text-gray-900 dark:text-gray-100"
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               />
             </div>
             <div className="flex flex-wrap gap-2">
               <select value={filters.roomType} onChange={(e) => setFilters({ ...filters, roomType: e.target.value })}
-                className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">
-                <option value="" className="text-gray-900 dark:text-gray-100">All Types</option>
-                {roomTypes.map((t) => <option key={t} value={t} className="text-gray-900 dark:text-gray-100">{t}</option>)}
+                className="rounded-2xl bg-white/70 dark:bg-black/30 backdrop-blur-sm border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50 px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100">
+                <option value="">All Types</option>
+                {roomTypes.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
               <select value={filters.state} onChange={(e) => { setFilters({ ...filters, state: e.target.value, city: '' }); }}
-                className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">
-                <option value="" className="text-gray-900 dark:text-gray-100">All States</option>
-                {sortedStates.map((s) => <option key={s} value={s} className="text-gray-900 dark:text-gray-100">{s}</option>)}
+                className="rounded-2xl bg-white/70 dark:bg-black/30 backdrop-blur-sm border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50 px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100">
+                <option value="">All States</option>
+                {sortedStates.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
               <select value={filters.city} onChange={(e) => setFilters({ ...filters, city: e.target.value })}
-                className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30 disabled:opacity-50"
+                className="rounded-2xl bg-white/70 dark:bg-black/30 backdrop-blur-sm border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50 px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 disabled:opacity-50"
                 disabled={!filters.state}>
-                <option value="" className="text-gray-900 dark:text-gray-100">{filters.state ? 'All Cities' : 'Select state first'}</option>
-                {availableCities.map((c) => <option key={c} value={c} className="text-gray-900 dark:text-gray-100">{c}</option>)}
+                <option value="">{filters.state ? 'All Cities' : 'Select state first'}</option>
+                {availableCities.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
-              <button onClick={() => setShowFilters(!showFilters)} className={`px-3 py-2.5 rounded-xl border text-sm transition-all ${showFilters ? 'bg-primary-50 dark:bg-primary-900/30 border-primary-300 text-primary-700 dark:text-primary-300' : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400'}`}>
+              <button onClick={() => setShowFilters(!showFilters)} className={`rounded-2xl px-3 py-2.5 border text-sm transition-all ${showFilters ? 'bg-royal-50 dark:bg-royal-900/30 border-royal-300 text-royal-700 dark:text-royal-300' : 'border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400'}`}>
                 <SlidersHorizontal className="w-4 h-4" />
               </button>
-              <button onClick={handleSearch} className="btn-primary px-6 text-sm">Search</button>
+              <button onClick={handleSearch} className="rounded-2xl bg-gradient-to-r from-royal-600 to-royal-800 text-white hover:shadow-xl hover:shadow-royal-500/20 px-6 py-2.5 text-sm">Search</button>
             </div>
           </div>
 
@@ -160,26 +160,26 @@ export default function PropertiesPage() {
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Min Rent</label>
                   <input type="number" value={filters.minRent} onChange={(e) => setFilters({ ...filters, minRent: e.target.value })} placeholder="₹0"
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500" />
+                    className="w-full rounded-2xl bg-white/70 dark:bg-black/30 backdrop-blur-sm border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500" />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Max Rent</label>
                   <input type="number" value={filters.maxRent} onChange={(e) => setFilters({ ...filters, maxRent: e.target.value })} placeholder="₹1,00,000"
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500" />
+                    className="w-full rounded-2xl bg-white/70 dark:bg-black/30 backdrop-blur-sm border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500" />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Amenities</label>
                   <div className="flex flex-wrap gap-1.5">
                     {amenities.map((a) => (
                       <button key={a} onClick={() => toggleAmenity(a)}
-                        className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all ${selectedAmenities.includes(a) ? 'bg-primary-50 dark:bg-primary-900/40 border-primary-300 dark:border-primary-700 text-primary-700 dark:text-primary-300' : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600'}`}>
+                        className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all ${selectedAmenities.includes(a) ? 'bg-royal-50 dark:bg-royal-900/40 border-royal-300 dark:border-royal-700 text-royal-700 dark:text-royal-300' : 'border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600'}`}>
                         {a}
                       </button>
                     ))}
                   </div>
                 </div>
                 <div className="flex items-end">
-                  <button onClick={resetFilters} className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">
+                  <button onClick={resetFilters} className="flex items-center gap-1.5 px-4 py-2 rounded-2xl border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
                     <RotateCcw className="w-3.5 h-3.5" /> Reset Filters
                   </button>
                 </div>
@@ -193,10 +193,10 @@ export default function PropertiesPage() {
             {loading ? 'Searching...' : `${properties.length} properties found`}
           </p>
           <div className="flex items-center gap-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-1">
-            <button onClick={() => setViewMode('grid')} className={`p-1.5 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400' : 'text-gray-400 dark:text-gray-500'}`}>
+            <button onClick={() => setViewMode('grid')} className={`p-1.5 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-royal-50 dark:bg-royal-900/30 text-royal-600 dark:text-royal-400' : 'text-gray-400 dark:text-gray-500'}`}>
               <Grid3X3 className="w-4 h-4" />
             </button>
-            <button onClick={() => setViewMode('list')} className={`p-1.5 rounded-md transition-colors ${viewMode === 'list' ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400' : 'text-gray-400 dark:text-gray-500'}`}>
+            <button onClick={() => setViewMode('list')} className={`p-1.5 rounded-md transition-colors ${viewMode === 'list' ? 'bg-royal-50 dark:bg-royal-900/30 text-royal-600 dark:text-royal-400' : 'text-gray-400 dark:text-gray-500'}`}>
               <List className="w-4 h-4" />
             </button>
           </div>
@@ -211,35 +211,35 @@ export default function PropertiesPage() {
         ) : properties.length === 0 ? (
           <div className="text-center py-20">
             <Home className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">No properties found</h3>
+            <h3 className="text-lg font-semibold font-display text-gray-900 dark:text-white mb-1">No properties found</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">Try adjusting your search filters.</p>
-            <button onClick={resetFilters} className="mt-4 btn-secondary text-sm">Reset Filters</button>
+            <button onClick={resetFilters} className="mt-4 rounded-2xl border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 px-4 py-2 text-sm">Reset Filters</button>
           </div>
         ) : viewMode === 'grid' ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {properties.map((property, i) => (
               <motion.div key={property.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                className="glass-card rounded-xl overflow-hidden group cursor-pointer hover:shadow-lg transition-all"
+                className="rounded-2xl bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/30 dark:border-white/5 shadow-xl overflow-hidden group cursor-pointer hover:shadow-lg transition-all"
                 onClick={() => navigate(`/properties/${property.id}`)}
               >
                 <div className="relative h-48 overflow-hidden">
                   <img src={property.images?.[0] || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600'} alt={property.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute top-3 left-3">
-                    <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-white/90 backdrop-blur-sm text-primary-700">
+                    <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-white/90 backdrop-blur-sm text-royal-700">
                       {property.vacant_rooms || 0} Vacant
                     </span>
                   </div>
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1 truncate">{property.name}</h3>
+                  <h3 className="font-semibold font-display text-gray-900 dark:text-white mb-1 truncate">{property.name}</h3>
                   <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-3">
                     <MapPin className="w-3.5 h-3.5" />
                     {property.city}, {property.location}
                   </div>
                   <div className="flex items-center justify-between">
                     <p className="text-lg font-bold gradient-text">₹{property.rooms?.[0]?.rent?.toLocaleString() || 'N/A'}<span className="text-xs text-gray-400 font-normal">/mo</span></p>
-                    <button className="btn-secondary text-xs px-3 py-1.5">View Details</button>
+                    <button className="rounded-2xl border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 px-3 py-1.5 text-xs">View Details</button>
                   </div>
                 </div>
               </motion.div>
@@ -248,16 +248,16 @@ export default function PropertiesPage() {
         ) : (
           <div className="space-y-4">
             {properties.map((property) => (
-              <div key={property.id} className="glass-card rounded-xl p-4 flex gap-4 cursor-pointer hover:shadow-lg transition-all"
+              <div key={property.id} className="rounded-2xl bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/30 dark:border-white/5 shadow-xl p-4 flex gap-4 cursor-pointer hover:shadow-lg transition-all"
                 onClick={() => navigate(`/properties/${property.id}`)}
               >
                 <img src={property.images?.[0] || ''} alt={property.name} className="w-32 h-24 rounded-lg object-cover flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 dark:text-white">{property.name}</h3>
+                  <h3 className="font-semibold font-display text-gray-900 dark:text-white">{property.name}</h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1"><MapPin className="w-3 h-3" /> {property.city}, {property.location}</p>
                   <div className="flex items-center gap-3 mt-2">
                     <span className="text-lg font-bold gradient-text">₹{property.rooms?.[0]?.rent?.toLocaleString()}/mo</span>
-                    <span className="text-xs text-gray-400">{property.vacant_rooms || 0} rooms vacant</span>
+                    <span className="text-xs text-gray-400 dark:text-gray-500">{property.vacant_rooms || 0} rooms vacant</span>
                   </div>
                 </div>
               </div>

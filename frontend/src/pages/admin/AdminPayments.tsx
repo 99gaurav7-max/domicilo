@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Download, CreditCard } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Papa from 'papaparse';
@@ -53,13 +54,13 @@ export default function AdminPayments() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">All Payments</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white font-display">All Payments</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">Platform-wide transaction overview — rent, water, electricity, maintenance, and other payments from all properties</p>
         </div>
-        <button onClick={handleExport} className="btn-secondary text-sm flex items-center gap-2">
+        <button onClick={handleExport} className="rounded-2xl border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 text-sm flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 transition-all">
           <Download className="w-4 h-4" /> Export CSV
         </button>
       </div>
@@ -99,7 +100,7 @@ export default function AdminPayments() {
                   <td className="text-xs font-mono text-gray-500 dark:text-gray-400">{p.invoice_number}</td>
                   <td className="font-medium text-gray-900 dark:text-white">{p.tenant_name}</td>
                   <td className="text-sm text-gray-600 dark:text-gray-400">{p.property_name}</td>
-                  <td className="font-medium text-gray-900 dark:text-gray-100">₹{p.amount.toLocaleString()}</td>
+                  <td className="font-medium gradient-text">₹{p.amount.toLocaleString()}</td>
                   <td><StatusBadge status={p.payment_type} /></td>
                   <td className="text-sm text-gray-500 dark:text-gray-400">{p.due_date ? new Date(p.due_date).toLocaleDateString() : '-'}</td>
                   <td className="text-sm text-gray-500 dark:text-gray-400">{p.paid_at ? new Date(p.paid_at).toLocaleDateString() : '-'}</td>
@@ -111,6 +112,6 @@ export default function AdminPayments() {
         )}
       </TableContainer>
       {pagination.totalPages > 1 && <Pagination {...pagination} onPageChange={setPage} />}
-    </div>
+    </motion.div>
   );
 }

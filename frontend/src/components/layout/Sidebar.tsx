@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Building2, Users, CreditCard, Home, Bell, Settings,
-  FileText, BarChart3, ClipboardList, Key, Search, PanelLeftClose, PanelLeft
+  FileText, BarChart3, ClipboardList, PanelLeftClose, PanelLeft
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../../store/authStore';
 
 interface SidebarProps {
@@ -48,15 +49,29 @@ export function Sidebar({ isOpen, onClose, onCollapsedChange }: SidebarProps) {
 
   return (
     <>
-      {isOpen && <div className="fixed inset-0 bg-black/30 z-30 lg:hidden mobile-overlay" onClick={onClose} />}
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 lg:hidden"
+          onClick={onClose}
+        />
+      )}
       <aside
-        className={`fixed top-0 left-0 h-full glass border-r border-gray-200/50 dark:border-gray-800/50 z-40 transform transition-all duration-200 ease-out lg:translate-x-0 sidebar-panel ${
+        className={`fixed top-0 left-0 h-full z-40 transform transition-all duration-300 ease-out lg:translate-x-0 sidebar-panel ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } ${collapsed ? 'w-16' : 'w-64'}`}
+        style={{
+          background: 'rgba(10, 10, 26, 0.85)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          borderRight: '1px solid rgba(255, 255, 255, 0.06)',
+        }}
       >
-        <div className={`flex items-center h-16 border-b border-gray-100 dark:border-gray-800 ${collapsed ? 'justify-center px-0' : 'gap-3 px-6'}`}>
-          <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center flex-shrink-0">
-            <Home className="w-4 h-4 text-white" />
+        <div className={`flex items-center h-16 border-b border-white/5 ${collapsed ? 'justify-center px-0' : 'gap-3 px-6'}`}>
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-royal-500 to-royal-700 flex items-center justify-center shadow-lg shadow-royal-500/20">
+            <Home className="w-5 h-5 text-white" />
           </div>
           {!collapsed && <span className="font-bold text-lg gradient-text">Domicilo</span>}
         </div>
@@ -70,24 +85,36 @@ export function Sidebar({ isOpen, onClose, onCollapsedChange }: SidebarProps) {
                 key={item.path}
                 to={item.path}
                 onClick={onClose}
-                className={`flex items-center py-2.5 rounded-xl text-sm font-medium transition-all ${collapsed ? 'justify-center px-2' : 'gap-3 px-4'} ${
+                className={`flex items-center py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  collapsed ? 'justify-center px-2' : 'gap-3 px-4'
+                } ${
                   isActive
-                    ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 shadow-sm'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                    ? 'bg-royal-500/10 text-royal-400 shadow-sm shadow-royal-500/5 border border-royal-500/10'
+                    : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'
                 }`}
                 title={collapsed ? item.label : undefined}
               >
-                <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-primary-600 dark:text-primary-400' : ''}`} />
-                {!collapsed && item.label}
+                <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-royal-400' : ''}`} />
+                {!collapsed && (
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    {item.label}
+                  </motion.span>
+                )}
               </Link>
             );
           })}
 
-          <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
+          <div className="pt-4 mt-4 border-t border-white/5">
             <Link
               to="/notifications"
               onClick={onClose}
-              className={`flex items-center py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all ${collapsed ? 'justify-center px-2' : 'gap-3 px-4'}`}
+              className={`flex items-center py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-all ${
+                collapsed ? 'justify-center px-2' : 'gap-3 px-4'
+              }`}
               title={collapsed ? 'Notifications' : undefined}
             >
               <Bell className="w-4 h-4 flex-shrink-0" />
@@ -96,7 +123,9 @@ export function Sidebar({ isOpen, onClose, onCollapsedChange }: SidebarProps) {
             <Link
               to="/settings"
               onClick={onClose}
-              className={`flex items-center py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all ${collapsed ? 'justify-center px-2' : 'gap-3 px-4'}`}
+              className={`flex items-center py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-all ${
+                collapsed ? 'justify-center px-2' : 'gap-3 px-4'
+              }`}
               title={collapsed ? 'Settings' : undefined}
             >
               <Settings className="w-4 h-4 flex-shrink-0" />
@@ -112,10 +141,12 @@ export function Sidebar({ isOpen, onClose, onCollapsedChange }: SidebarProps) {
             localStorage.setItem('sidebarCollapsed', String(next));
             onCollapsedChange?.(next);
           }}
-          className="hidden lg:flex absolute bottom-4 right-0 translate-x-1/2 w-7 h-7 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 items-center justify-center shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-all z-10"
+          className="hidden lg:flex absolute bottom-4 right-0 translate-x-1/2 w-7 h-7 rounded-full bg-black/40 border border-white/10 items-center justify-center shadow-lg hover:bg-white/10 transition-all z-10 backdrop-blur-sm"
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          {collapsed ? <PanelLeft className="w-3.5 h-3.5 text-gray-500" /> : <PanelLeftClose className="w-3.5 h-3.5 text-gray-500" />}
+          {collapsed
+            ? <PanelLeft className="w-3.5 h-3.5 text-gray-400" />
+            : <PanelLeftClose className="w-3.5 h-3.5 text-gray-400" />}
         </button>
       </aside>
     </>

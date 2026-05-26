@@ -8,7 +8,7 @@ import { useThemeStore } from '../../store/themeStore';
 import { KPISkeleton } from '../../components/ui/Skeleton';
 import { ResponsiveContainer, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell } from 'recharts';
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+const COLORS = ['#7c3aed', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
 export default function AdminAnalytics() {
   const { theme } = useThemeStore();
@@ -35,17 +35,16 @@ export default function AdminAnalytics() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Platform Analytics</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white font-display">Platform Analytics</h1>
         <p className="text-sm text-gray-500 dark:text-gray-400">User growth, revenue trends, and conversion metrics</p>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        {/* User Growth */}
         <Card>
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <Users className="w-4 h-4 text-primary-500" /> User Registrations
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2 font-display">
+            <Users className="w-4 h-4 text-royal-500" /> User Registrations
           </h3>
           <div className="h-72">
             {data.userGrowth?.length > 0 ? (
@@ -56,17 +55,16 @@ export default function AdminAnalytics() {
                     tickFormatter={(v) => new Date(v).toLocaleString('default', { month: 'short', year: '2-digit' })} />
                   <YAxis tick={{ fontSize: 11 }} />
                   <Tooltip contentStyle={tooltipStyle} />
-                  <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]} name="New Users" />
+                  <Bar dataKey="count" fill="#7c3aed" radius={[4, 4, 0, 0]} name="New Users" />
                 </BarChart>
               </ResponsiveContainer>
             ) : <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-20">No user growth data</p>}
           </div>
         </Card>
 
-        {/* Platform Revenue */}
         <Card>
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <DollarSign className="w-4 h-4 text-primary-500" /> Platform Revenue
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2 font-display">
+            <DollarSign className="w-4 h-4 text-royal-500" /> Platform Revenue
           </h3>
           <div className="h-72">
             {data.revenueByMonth?.length > 0 ? (
@@ -84,10 +82,9 @@ export default function AdminAnalytics() {
           </div>
         </Card>
 
-        {/* Property Growth */}
         <Card>
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <Building2 className="w-4 h-4 text-primary-500" /> Property Growth
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2 font-display">
+            <Building2 className="w-4 h-4 text-royal-500" /> Property Growth
           </h3>
           <div className="h-72">
             {data.propertyGrowth?.length > 0 ? (
@@ -105,10 +102,9 @@ export default function AdminAnalytics() {
           </div>
         </Card>
 
-        {/* Revenue Breakdown by Type */}
         <Card>
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <DollarSign className="w-4 h-4 text-primary-500" /> Revenue by Type
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2 font-display">
+            <DollarSign className="w-4 h-4 text-royal-500" /> Revenue by Type
           </h3>
           <div className="h-72">
             {data.revenueBreakdown?.length > 0 ? (
@@ -135,10 +131,9 @@ export default function AdminAnalytics() {
           </div>
         </Card>
 
-        {/* Conversion Rates */}
         <Card>
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-primary-500" /> Conversion Metrics
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2 font-display">
+            <TrendingUp className="w-4 h-4 text-royal-500" /> Conversion Metrics
           </h3>
           {data.conversion ? (
             <div className="grid grid-cols-3 gap-4">
@@ -158,10 +153,9 @@ export default function AdminAnalytics() {
           ) : <p className="text-sm text-gray-400 dark:text-gray-500 py-8 text-center">No conversion data</p>}
         </Card>
 
-        {/* User Distribution */}
         <Card>
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <Users className="w-4 h-4 text-primary-500" /> User Distribution by Role
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2 font-display">
+            <Users className="w-4 h-4 text-royal-500" /> User Distribution by Role
           </h3>
           <div className="h-64">
             {data.userDistribution?.length > 0 ? (
@@ -188,6 +182,6 @@ export default function AdminAnalytics() {
           </div>
         </Card>
       </div>
-    </div>
+    </motion.div>
   );
 }

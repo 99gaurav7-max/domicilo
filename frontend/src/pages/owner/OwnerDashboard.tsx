@@ -25,6 +25,16 @@ const kpiConfig = [
   { key: 'vacancyCount', label: 'Vacancies', icon: Home },
 ];
 
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { transition: { staggerChildren: 0.06 } },
+};
+
+const fadeUpChild = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' as const } },
+};
+
 export default function OwnerDashboard() {
   const navigate = useNavigate();
   const [data, setData] = useState<OwnerDashboardData | null>(null);
@@ -38,10 +48,16 @@ export default function OwnerDashboard() {
     }).catch(() => toast.error('Failed to load dashboard')).finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="space-y-6"><KPISkeleton /></div>;
+  if (loading) return (
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+      <KPISkeleton />
+    </motion.div>
+  );
   if (!data) return (
-    <EmptyState icon={<ShieldAlert className="w-8 h-8" />} title="Failed to load dashboard"
-      description="Could not fetch dashboard data. Please try again later." />
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      <EmptyState icon={<ShieldAlert className="w-8 h-8" />} title="Failed to load dashboard"
+        description="Could not fetch dashboard data. Please try again later." />
+    </motion.div>
   );
 
   const { kpis } = data;
@@ -72,44 +88,46 @@ export default function OwnerDashboard() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="space-y-6 animate-fade-in">
+      <motion.div variants={fadeUpChild} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Owner Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white font-display">Owner Dashboard</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">Overview of your rental business</p>
         </div>
-        <button onClick={handleExport} className="btn-secondary text-sm flex items-center gap-2">
+        <button onClick={handleExport}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-royal-600 to-royal-800 text-white text-sm font-medium hover:shadow-lg hover:shadow-royal-500/25 transition-all duration-300">
           <Download className="w-4 h-4" /> Export Report
         </button>
-      </div>
+      </motion.div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <motion.div variants={fadeUpChild} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {kpiConfig.map((kpi, i) => {
           const value = (kpis as any)[kpi.key];
           const Icon = kpi.icon;
           return (
-            <motion.div key={kpi.key} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-              className={`kpi-card ${kpi.danger && value > 0 ? 'ring-1 ring-red-200 dark:ring-red-900' : ''}`}>
+            <motion.div key={kpi.key} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04, duration: 0.5, ease: 'easeOut' as const }}
+              className={`kpi-card relative overflow-hidden border-royal-500/20 ${kpi.danger && value > 0 ? 'ring-1 ring-red-200 dark:ring-red-900' : ''}`}>
+              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-royal-500/40 to-gold-500/40" />
               <div className="flex items-start justify-between mb-3">
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{kpi.label}</p>
-                <Icon className={`w-4 h-4 ${kpi.danger && value > 0 ? 'text-red-400' : 'text-primary-400'}`} />
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-widest">{kpi.label}</p>
+                <Icon className={`w-4 h-4 ${kpi.danger && value > 0 ? 'text-red-400' : 'text-gold-400'}`} />
               </div>
-              <p className="text-xl font-bold text-gray-900 dark:text-white">
+              <p className="text-xl font-bold gradient-text">
                 {kpi.prefix || ''}{value != null ? (kpi.format ? value.toLocaleString() : value) : 0}{kpi.suffix || ''}
               </p>
             </motion.div>
           );
         })}
-      </div>
+      </motion.div>
 
       {/* Charts */}
-      <div className="grid lg:grid-cols-2 gap-6">
-        <Card>
+      <motion.div variants={fadeUpChild} className="grid lg:grid-cols-2 gap-6">
+        <div className="bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/30 dark:border-white/5 shadow-xl rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Revenue Over Time</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white font-display">Revenue Over Time</h3>
             <select value={timeframe} onChange={(e) => setTimeframe(e.target.value)}
-              className="text-xs border border-gray-200 dark:border-gray-700 rounded-lg px-2 py-1 bg-transparent text-gray-700 dark:text-gray-300">
+              className="text-xs border border-gray-200 dark:border-gray-700 rounded-2xl px-3 py-1.5 bg-transparent text-gray-700 dark:text-gray-300">
               <option value="12months" className="text-gray-900 dark:text-gray-100">Last 12 Months</option>
               <option value="6months" className="text-gray-900 dark:text-gray-100">Last 6 Months</option>
               <option value="3months" className="text-gray-900 dark:text-gray-100">Last 3 Months</option>
@@ -124,16 +142,16 @@ export default function OwnerDashboard() {
                     const d = new Date(v); return d.toLocaleString('default', { month: 'short' });
                   }} />
                   <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
-                  <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #e5e7eb', background: theme === 'dark' ? '#1e293b' : '#fff', color: theme === 'dark' ? '#e2e8f0' : '#1e293b' }} />
+                  <Tooltip contentStyle={{ borderRadius: '16px', border: '1px solid rgba(255,255,255,0.3)', background: theme === 'dark' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.8)', backdropFilter: 'blur(16px)', color: theme === 'dark' ? '#e2e8f0' : '#1e293b' }} />
                   <Line type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={2} dot={{ fill: '#3b82f6', r: 3 }} />
                 </LineChart>
               </ResponsiveContainer>
-            ) : <p className="text-sm text-gray-400 text-center py-20">No revenue data available</p>}
+            ) : <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-20">No revenue data available</p>}
           </div>
-        </Card>
+        </div>
 
-        <Card>
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
+        <div className="bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/30 dark:border-white/5 shadow-xl rounded-2xl p-5">
+          <h3 className="font-semibold text-gray-900 dark:text-white font-display mb-4">Quick Actions</h3>
           <div className="grid grid-cols-2 gap-3">
             {[
               { label: 'Add Property', path: '/owner/properties', icon: Building2 },
@@ -144,15 +162,15 @@ export default function OwnerDashboard() {
               const Icon = action.icon;
               return (
                 <button key={action.label} onClick={() => navigate(action.path)}
-                  className="p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:bg-primary-50/50 dark:hover:bg-primary-900/20 transition-all text-left">
-                  <Icon className="w-5 h-5 text-primary-500 mb-2" />
+                  className="p-4 rounded-2xl border border-white/30 dark:border-white/5 bg-white/40 dark:bg-black/20 backdrop-blur-xl hover:border-royal-500/40 dark:hover:border-royal-500/30 hover:bg-royal-500/5 dark:hover:bg-royal-500/10 transition-all duration-300 text-left">
+                  <Icon className="w-5 h-5 text-gold-400 mb-2" />
                   <p className="text-sm font-medium text-gray-900 dark:text-white">{action.label}</p>
                 </button>
               );
             })}
           </div>
-        </Card>
-      </div>
-    </div>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }

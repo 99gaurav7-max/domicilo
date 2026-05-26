@@ -25,14 +25,14 @@ export function Pagination({ page, totalPages, total, limit, onPageChange }: Pag
   return (
     <div className="flex items-center justify-between pt-4">
       <p className="text-sm text-gray-500 dark:text-gray-400">
-        Showing <span className="font-medium">{startItem}</span> to <span className="font-medium">{endItem}</span> of{' '}
-        <span className="font-medium">{total}</span> results
+        Showing <span className="font-medium text-gray-900 dark:text-gray-200">{startItem}</span> to <span className="font-medium text-gray-900 dark:text-gray-200">{endItem}</span> of{' '}
+        <span className="font-medium text-gray-900 dark:text-gray-200">{total}</span> results
       </p>
       <div className="flex items-center gap-1">
         <button
           onClick={() => onPageChange(page - 1)}
           disabled={page <= 1}
-          className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="p-2 rounded-xl hover:bg-royal-500/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all text-gray-500 dark:text-gray-400"
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
@@ -41,22 +41,22 @@ export function Pagination({ page, totalPages, total, limit, onPageChange }: Pag
             <button
               key={i}
               onClick={() => onPageChange(p)}
-              className={`w-8 h-8 rounded-lg text-sm font-medium transition-all ${
+              className={`w-9 h-9 rounded-xl text-sm font-medium transition-all ${
                 p === page
-                  ? 'bg-primary-600 text-white shadow-md'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  ? 'bg-gradient-to-br from-royal-500 to-royal-700 text-white shadow-lg shadow-royal-500/20'
+                  : 'text-gray-500 dark:text-gray-400 hover:bg-royal-500/10 hover:text-royal-400'
               }`}
             >
               {p}
             </button>
           ) : (
-            <span key={i} className="px-1 text-gray-400">...</span>
+            <span key={i} className="px-1 text-gray-500">...</span>
           )
         )}
         <button
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages}
-          className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="p-2 rounded-xl hover:bg-royal-500/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all text-gray-500 dark:text-gray-400"
         >
           <ChevronRight className="w-4 h-4" />
         </button>

@@ -59,30 +59,30 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white font-display">Admin Dashboard</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">Global platform overview</p>
         </div>
-        <button onClick={handleExport} className="btn-secondary text-sm flex items-center gap-2">
+        <button onClick={handleExport} className="rounded-2xl border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 text-sm flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 transition-all">
           <Download className="w-4 h-4" /> Export Data
         </button>
       </div>
 
-      {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
         {kpiConfig.map((kpi, i) => {
           const value = (kpis as any)[kpi.key];
           const Icon = kpi.icon;
           return (
             <motion.div key={kpi.key} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}
-              className={`kpi-card ${kpi.danger && value > 0 ? 'ring-1 ring-red-200 dark:ring-red-900' : ''}`}>
+              className={`kpi-card relative ${kpi.danger && value > 0 ? 'ring-1 ring-red-200 dark:ring-red-900' : ''}`}>
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-royal-500/40 to-gold-500/40 rounded-t-[16px]" />
               <div className="flex items-start justify-between mb-2">
                 <p className="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{kpi.label}</p>
-                <Icon className={`w-3.5 h-3.5 ${kpi.danger && value > 0 ? 'text-red-400' : 'text-primary-400'}`} />
+                <Icon className={`w-3.5 h-3.5 ${kpi.danger && value > 0 ? 'text-red-400' : 'text-royal-400'}`} />
               </div>
-              <p className="text-lg font-bold text-gray-900 dark:text-white">
+              <p className="text-lg font-bold gradient-text">
                 {kpi.prefix || ''}{value != null ? (kpi.format ? value.toLocaleString() : value) : 0}
               </p>
             </motion.div>
@@ -91,9 +91,8 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Revenue Chart */}
         <Card className="lg:col-span-2">
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Platform Revenue</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 font-display">Platform Revenue</h3>
           <div className="h-64">
             {data.revenueChart && data.revenueChart.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
@@ -102,27 +101,26 @@ export default function AdminDashboard() {
                   <XAxis dataKey="month" tick={{ fontSize: 11 }} tickFormatter={(v) => new Date(v).toLocaleString('default', { month: 'short' })} />
                   <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
                   <Tooltip contentStyle={{ borderRadius: '12px', background: theme === 'dark' ? '#1e293b' : '#fff', color: theme === 'dark' ? '#e2e8f0' : '#1e293b', border: '1px solid ' + (theme === 'dark' ? '#334155' : '#e5e7eb') }} />
-                  <Line type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={2} dot={{ fill: '#3b82f6', r: 3 }} />
+                  <Line type="monotone" dataKey="revenue" stroke="#7c3aed" strokeWidth={2} dot={{ fill: '#7c3aed', r: 3 }} />
                 </LineChart>
               </ResponsiveContainer>
             ) : <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-20">No revenue data available</p>}
           </div>
         </Card>
 
-        {/* Recent Payments */}
         <Card>
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Recent Payments</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 font-display">Recent Payments</h3>
           <div className="space-y-2">
             {recentPayments.length === 0 ? (
               <p className="text-sm text-gray-400 dark:text-gray-500 py-8 text-center">No recent payments</p>
             ) : recentPayments.slice(0, 5).map((p) => (
-              <div key={p.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors">
+              <div key={p.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                 <div>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">{p.tenant_name}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">{p.property_name}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">₹{p.amount.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-royal-400">₹{p.amount.toLocaleString()}</p>
                   <StatusBadge status={p.status} />
                 </div>
               </div>
@@ -130,6 +128,6 @@ export default function AdminDashboard() {
           </div>
         </Card>
       </div>
-    </div>
+    </motion.div>
   );
 }

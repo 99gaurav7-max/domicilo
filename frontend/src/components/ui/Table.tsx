@@ -12,7 +12,11 @@ interface TableProps {
 }
 
 export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <div className={`glass-card rounded-xl p-6 ${className}`}>{children}</div>;
+  return (
+    <div className={`rounded-2xl p-6 bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/20 dark:border-white/5 shadow-xl shadow-black/5 dark:shadow-black/20 transition-all duration-300 ${className}`}>
+      {children}
+    </div>
+  );
 }
 
 export function SearchInput({ value, onChange, placeholder = 'Search...' }: { value: string; onChange: (v: string) => void; placeholder?: string }) {
@@ -24,10 +28,10 @@ export function SearchInput({ value, onChange, placeholder = 'Search...' }: { va
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full pl-9 pr-8 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 transition-all"
+        className="w-full pl-9 pr-8 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50 transition-all"
       />
       {value && (
-        <button onClick={() => onChange('')} className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+        <button onClick={() => onChange('')} className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-gray-100 dark:hover:bg-white/10">
           <X className="w-3.5 h-3.5 text-gray-400" />
         </button>
       )}
@@ -44,9 +48,9 @@ export function TableContainer({ children, searchable, searchPlaceholder, onSear
   };
 
   return (
-    <div className={`glass-card rounded-xl overflow-hidden ${className}`}>
+    <div className={`rounded-2xl bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/20 dark:border-white/5 shadow-xl shadow-black/5 dark:shadow-black/20 overflow-hidden ${className}`}>
       {(searchable || filters || actions) && (
-        <div className="p-4 border-b border-gray-100 dark:border-gray-800">
+        <div className="p-4 border-b border-gray-100 dark:border-white/5">
           <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
             <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
               {searchable && (
@@ -73,7 +77,7 @@ export function Select({ value, onChange, options, placeholder }: { value: strin
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="appearance-none w-full pl-3 pr-8 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 transition-all"
+        className="appearance-none w-full pl-3 pr-8 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50 transition-all"
       >
         {placeholder && <option value="" className="text-gray-900 dark:text-gray-100">{placeholder}</option>}
         {options.map((opt) => (
@@ -118,7 +122,7 @@ export function StatusBadge({ status, className = '' }: { status: string; classN
 export function EmptyState({ icon, title, description, action }: { icon: ReactNode; title: string; description: string; action?: ReactNode }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="w-16 h-16 rounded-full bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center mb-4 text-primary-400">
+      <div className="w-16 h-16 rounded-full bg-royal-500/10 flex items-center justify-center mb-4 text-royal-400">
         {icon}
       </div>
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{title}</h3>

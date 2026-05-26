@@ -2,11 +2,13 @@ import { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
+import { AnimatePresence } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { useAuthStore } from './store/authStore';
 import { useThemeStore } from './store/themeStore';
 import { ProtectedRoute, PublicOnlyRoute } from './components/RouteGuards';
 import { PublicLayout, DashboardLayout } from './components/layout/Layout';
+import PageTransition from './components/PageTransition';
 
 // Lazy-loaded pages for code splitting
 const LandingPage = lazy(() => import('./pages/public/LandingPage'));
@@ -47,7 +49,7 @@ function PageLoader() {
 }
 
 function SuspenseWrapper({ children }: { children: React.ReactNode }) {
-  return <Suspense fallback={<PageLoader />}>{children}</Suspense>;
+  return <Suspense fallback={<PageLoader />}><PageTransition>{children}</PageTransition></Suspense>;
 }
 
 const queryClient = new QueryClient({
@@ -63,6 +65,7 @@ function ScrollToTop() {
 function AppContent() {
   const { initTheme } = useThemeStore();
   const { loadUser } = useAuthStore();
+  const location = useLocation();
 
   useEffect(() => {
     initTheme();
@@ -72,7 +75,8 @@ function AppContent() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Routes>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
         {/* Public Routes */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<SuspenseWrapper><LandingPage /></SuspenseWrapper>} />
@@ -142,6 +146,7 @@ function AppContent() {
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </AnimatePresence>
     </BrowserRouter>
   );
 }
