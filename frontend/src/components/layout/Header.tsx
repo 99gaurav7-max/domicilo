@@ -21,7 +21,7 @@ export function Header({ onMenuToggle, isSidebarOpen }: HeaderProps) {
       <div className="mx-2 mt-2 lg:mx-4 lg:mt-3 rounded-2xl bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/20 dark:border-white/5 shadow-lg shadow-black/5 dark:shadow-black/20">
         <div className="flex items-center justify-between h-16 px-4 text-gray-600 dark:text-gray-200">
           <div className="flex items-center gap-3">
-            <button onClick={onMenuToggle}
+            <button onClick={onMenuToggle} aria-label="Toggle sidebar"
               className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-royal-500/10 active:scale-95 transition-all duration-200">
               {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -34,16 +34,14 @@ export function Header({ onMenuToggle, isSidebarOpen }: HeaderProps) {
           </div>
 
           <div className="flex items-center gap-1">
-            <button onClick={toggleTheme}
-              className="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-royal-500/10 active:scale-95 transition-all duration-200"
-              title="Toggle theme">
+            <button onClick={toggleTheme} aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              className="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-royal-500/10 active:scale-95 transition-all duration-200">
               {theme === 'dark' ? <Sun className="w-4 h-4 text-gold-400" /> : <Moon className="w-4 h-4 text-royal-600" />}
             </button>
 
-            <button onClick={() => navigate('/notifications')}
+            <button onClick={() => navigate('/notifications')} aria-label="Notifications"
               className="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-royal-500/10 active:scale-95 transition-all duration-200 relative">
               <Bell className="w-4 h-4" />
-              <span className="absolute top-2 right-2.5 w-2 h-2 rounded-full bg-gold-500 animate-pulse-glow" />
             </button>
 
             {user && (

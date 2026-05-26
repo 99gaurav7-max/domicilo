@@ -50,19 +50,19 @@ export default function TermsServicePage() {
     <div className="min-h-screen bg-white dark:bg-gray-950">
       <section className="gradient-bg relative overflow-hidden py-24">
         <div className="absolute inset-0 bg-grid-pattern opacity-10" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-royal-400/20 rounded-full blur-3xl" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="flex items-center gap-2 text-blue-200 text-sm mb-4">
+          <div className="flex items-center gap-2 text-amber-200 text-sm mb-4">
             <Link to="/" className="hover:text-white">Home</Link>
             <span>/</span>
             <span className="text-white">Terms of Service</span>
           </div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex items-center gap-3 mb-4">
-              <Scale className="w-8 h-8 text-blue-300" />
+              <Scale className="w-8 h-8 text-amber-300" />
               <h1 className="text-4xl md:text-5xl font-bold text-white">Terms of Service</h1>
             </div>
-            <p className="text-blue-100/80 max-w-2xl text-lg">Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+            <p className="text-amber-100/80 max-w-2xl text-lg">Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
           </motion.div>
         </div>
       </section>
@@ -85,7 +85,7 @@ export default function TermsServicePage() {
       <section className="border-t border-gray-100 dark:border-gray-800 py-10 text-center">
         <p className="text-sm text-gray-400">
           Questions? Email{' '}
-          <a href="mailto:support@domicilo.com" className="text-primary-600 hover:text-primary-700">support@domicilo.com</a>
+          <a href="mailto:support@domicilo.com" className="text-royal-500 hover:text-royal-600">support@domicilo.com</a>
         </p>
       </section>
     </div>

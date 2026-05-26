@@ -208,6 +208,13 @@ body:not(.dark) .kpi-card:hover {
   background-clip: text;
 }
 
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
 .gradient-bg {
   background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 50%, #7c3aed 100%);
 }
@@ -289,6 +296,13 @@ body:not(.dark) .kpi-card:hover {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(139, 92, 246, 0.5);
+}
+
+/* Focus ring for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid rgba(139, 92, 246, 0.5);
+  outline-offset: 2px;
+  border-radius: 8px;
 }
 
 .btn-primary {
@@ -557,7 +571,4 @@ body:not(.dark) .toast-error {
   border: 1px solid rgba(239, 68, 68, 0.2) !important;
 }
 
-html.dark .animate-fade-in,
-html.dark .animate-slide-up {
-  animation: none;
-}
+/* Animations enabled for both themes */

@@ -174,7 +174,7 @@ export default function OwnerProperties() {
                   <td className="text-center"><StatusBadge status={p.is_active ? 'active' : 'inactive'} /></td>
                   <td className="text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <button onClick={() => navigate(`/properties/${p.id}`)} className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors flex items-center gap-1">
+                      <button onClick={() => navigate(`/properties/${p.id}`)} className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-royal-50 dark:bg-royal-900/20 text-royal-700 dark:text-royal-300 hover:bg-royal-100 dark:hover:bg-royal-900/40 transition-colors flex items-center gap-1">
                         <Eye className="w-3 h-3" /> View
                       </button>
                       <button onClick={(e) => { e.stopPropagation(); setDeleteId(p.id); }} className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors flex items-center gap-1">
@@ -238,7 +238,7 @@ export default function OwnerProperties() {
                   <button key={a} type="button" onClick={() => toggleAmenity(a)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
                       form.amenities.includes(a)
-                        ? 'bg-primary-50 dark:bg-primary-900/30 border-primary-300 text-primary-700 dark:text-primary-300'
+                        ? 'bg-royal-50 dark:bg-royal-900/30 border-royal-300 text-royal-700 dark:text-royal-300'
                         : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-gray-300'
                     }`}>
                     {a}
@@ -252,7 +252,7 @@ export default function OwnerProperties() {
           <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
             <div className="flex items-center justify-between mb-3">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Rooms</label>
-              <button type="button" onClick={addRoom} className="text-xs px-3 py-1.5 rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 font-medium hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors flex items-center gap-1">
+              <button type="button" onClick={addRoom} className="text-xs px-3 py-1.5 rounded-lg bg-royal-50 dark:bg-royal-900/20 text-royal-700 dark:text-royal-300 font-medium hover:bg-royal-100 dark:hover:bg-royal-900/40 transition-colors flex items-center gap-1">
                 <Plus className="w-3 h-3" /> Add Room
               </button>
             </div>

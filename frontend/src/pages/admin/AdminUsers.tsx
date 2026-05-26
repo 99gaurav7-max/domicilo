@@ -204,7 +204,7 @@ export default function AdminUsers() {
                   <td>
                     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
                       u.role === 'admin' ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400' :
-                      u.role === 'owner' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400' :
+                      u.role === 'owner' ? 'bg-royal-50 dark:bg-royal-900/20 text-royal-700 dark:text-royal-400' :
                       u.role === 'tenant' ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400' :
                       'bg-gray-50 dark:bg-gray-900/20 text-gray-700 dark:text-gray-400'
                     }`}>

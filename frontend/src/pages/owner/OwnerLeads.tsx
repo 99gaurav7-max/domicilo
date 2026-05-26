@@ -106,7 +106,7 @@ export default function OwnerLeads() {
                         {lead.status === 'new' && (
                           <>
                             <button onClick={() => handleStatusUpdate(lead.id, 'contacted')}
-                              className="px-2 py-1 text-xs rounded-2xl bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400">
+                              className="px-2 py-1 text-xs rounded-2xl bg-royal-50 dark:bg-royal-900/20 text-royal-700 dark:text-royal-400">
                               Contact
                             </button>
                             <button onClick={() => setConfirmAction({ id: lead.id, status: 'approved' })}

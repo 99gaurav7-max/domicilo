@@ -71,7 +71,7 @@ export default function OwnerAnalytics() {
       {/* Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
         {[
-          { label: 'Total Revenue', value: totals.total, icon: DollarSign, color: 'text-blue-500' },
+          { label: 'Total Revenue', value: totals.total, icon: DollarSign, color: 'text-royal-500' },
           { label: 'Rent', value: totals.rent, icon: TrendingUp, color: 'text-green-500' },
           { label: 'Electricity', value: totals.electricity, icon: BarChart3, color: 'text-amber-500' },
           { label: 'Water', value: totals.water, icon: BarChart3, color: 'text-cyan-500' },

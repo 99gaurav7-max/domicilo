@@ -8,17 +8,17 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="bg-gradient-to-br from-royal-500 to-royal-700 relative overflow-hidden py-24">
         <div className="absolute inset-0 bg-grid-pattern opacity-10" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-royal-400/20 rounded-full blur-3xl" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="flex items-center gap-2 text-blue-200 text-sm mb-4">
+          <div className="flex items-center gap-2 text-amber-200 text-sm mb-4">
             <Link to="/" className="hover:text-white">Home</Link>
             <span>/</span>
             <span className="text-white">About</span>
           </div>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-4xl md:text-5xl font-bold font-display text-white mb-4">
-            About <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-cyan-200">Domicilo</span>
+            About <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-gold-400">Domicilo</span>
           </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-blue-100/80 max-w-2xl text-lg">
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-amber-100/80 max-w-2xl text-lg">
             We're on a mission to simplify rental management for property owners and tenants across India.
           </motion.p>
         </div>

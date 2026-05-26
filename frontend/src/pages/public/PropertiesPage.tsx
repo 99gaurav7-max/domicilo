@@ -106,13 +106,13 @@ export default function PropertiesPage() {
       <div className="bg-gradient-to-br from-royal-500 to-royal-700 relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-10" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex items-center gap-2 text-blue-200 text-sm mb-4">
+          <div className="flex items-center gap-2 text-amber-200 text-sm mb-4">
             <Link to="/" className="hover:text-white">Home</Link>
             <span>/</span>
             <span className="text-white">Properties</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold font-display text-white mb-2">Find Your Perfect Rental</h1>
-          <p className="text-blue-100/80">Browse through our curated selection of premium properties.</p>
+          <p className="text-amber-100/80">Browse through our curated selection of premium properties.</p>
         </div>
       </div>
 

@@ -114,9 +114,9 @@ export default function LandingPage() {
   return (
     <div className="relative">
       {/* Floating Orbs */}
-      <FloatingOrb className="fixed top-1/4 left-[10%]" size={300} color="radial-gradient(circle, rgba(139,92,246,0.12), transparent)" delay={0} />
-      <FloatingOrb className="fixed bottom-1/3 right-[15%]" size={250} color="radial-gradient(circle, rgba(212,168,83,0.1), transparent)" delay={1.5} />
-      <FloatingOrb className="fixed top-2/3 left-[60%]" size={200} color="radial-gradient(circle, rgba(168,85,247,0.08), transparent)" delay={3} />
+      <FloatingOrb className="fixed top-1/4 left-[10%] pointer-events-none" size={300} color="radial-gradient(circle, rgba(139,92,246,0.12), transparent)" delay={0} />
+      <FloatingOrb className="fixed bottom-1/3 right-[15%] pointer-events-none" size={250} color="radial-gradient(circle, rgba(212,168,83,0.1), transparent)" delay={1.5} />
+      <FloatingOrb className="fixed top-2/3 left-[60%] pointer-events-none" size={200} color="radial-gradient(circle, rgba(168,85,247,0.08), transparent)" delay={3} />
 
       {/* Navbar */}
       <motion.nav

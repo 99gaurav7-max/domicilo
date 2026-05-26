@@ -91,14 +91,14 @@ export default function PropertyDetailPage() {
       <div className="bg-gradient-to-br from-royal-500 to-royal-700 relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-10" />
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-12">
-          <div className="flex items-center gap-2 text-blue-200 text-sm mb-4">
+          <div className="flex items-center gap-2 text-amber-200 text-sm mb-4">
             <Link to="/" className="hover:text-white">Home</Link>
             <span>/</span>
             <Link to="/properties" className="hover:text-white">Properties</Link>
             <span>/</span>
             <span className="text-white">{property.name}</span>
           </div>
-          <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-blue-200 hover:text-white text-sm transition-colors">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-amber-200 hover:text-white text-sm transition-colors">
             <ChevronLeft className="w-4 h-4" /> Back
           </button>
         </div>

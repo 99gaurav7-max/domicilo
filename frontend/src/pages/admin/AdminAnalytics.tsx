@@ -137,8 +137,8 @@ export default function AdminAnalytics() {
           </h3>
           {data.conversion ? (
             <div className="grid grid-cols-3 gap-4">
-              <div className="text-center p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20">
-                <p className="text-2xl font-bold text-blue-600">{data.conversion.total_enquiries}</p>
+              <div className="text-center p-4 rounded-xl bg-royal-50 dark:bg-royal-900/20">
+                <p className="text-2xl font-bold text-royal-600">{data.conversion.total_enquiries}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Enquiries</p>
               </div>
               <div className="text-center p-4 rounded-xl bg-green-50 dark:bg-green-900/20">
