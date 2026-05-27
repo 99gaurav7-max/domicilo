@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, MapPin, Building2, Users, CreditCard, Shield, TrendingUp, Home,
   ArrowRight, Star, Check, Sparkles,
-  Zap, BarChart3, Globe2, Medal, Phone, Mail, Crown, Gem,
-  Infinity as InfinityIcon, Diamond, Compass, LayoutDashboard
+  Zap, BarChart3, Globe2, Medal, Phone, Mail, Crown, Gem, X,
+  Infinity as InfinityIcon, Diamond, Compass, LayoutDashboard, ChevronUp
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 
@@ -66,6 +66,86 @@ function Counter({ value, suffix, duration = 2500 }: { value: string; suffix: st
   }, [inView, numericValue, duration]);
 
   return <div ref={ref}>{count}{suffix}<span className="text-gold-400">+</span></div>;
+}
+
+function MobileQuickAccess() {
+  const [open, setOpen] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (!open) return;
+    const handleClick = (e: MouseEvent) => {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [open]);
+
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    setOpen(false);
+  };
+
+  const items = [
+    { label: 'Browse Properties', icon: Search, action: () => { navigate('/properties'); setOpen(false); } },
+    { label: 'Features', icon: Gem, action: () => scrollTo('features') },
+    { label: 'Contact', icon: Phone, action: () => scrollTo('contact') },
+    ...(user
+      ? [{ label: 'Dashboard', icon: LayoutDashboard, action: () => { navigate(`/${user.role}/dashboard`); setOpen(false); } }]
+      : [{ label: 'Get Started', icon: Sparkles, action: () => { navigate('/register'); setOpen(false); } }]
+    ),
+  ];
+
+  return (
+    <div ref={panelRef} className="fixed bottom-6 right-5 z-50 md:hidden flex flex-col items-end gap-3">
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.9 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+            className="rounded-3xl bg-black/80 backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/50 overflow-hidden min-w-[200px]"
+          >
+            <div className="px-2 py-3 space-y-1">
+              {items.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.label}
+                    onClick={item.action}
+                    className="flex items-center gap-3 w-full text-left text-sm text-gray-300 hover:text-white py-3 px-4 rounded-2xl hover:bg-gradient-to-r hover:from-royal-500/15 hover:to-gold-500/10 transition-all font-medium group"
+                  >
+                    <span className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-gradient-to-br group-hover:from-royal-500/20 group-hover:to-gold-500/20 transition-all">
+                      <Icon className="w-4 h-4 text-gray-400 group-hover:text-gold-400 transition-colors" />
+                    </span>
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-royal-600 via-royal-700 to-royal-800 text-white shadow-xl shadow-royal-500/30 hover:shadow-royal-500/50 transition-all duration-300 active:scale-90 border border-royal-400/20 group"
+      >
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gold-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {open ? (
+          <X className="w-5 h-5 mx-auto relative z-10" />
+        ) : (
+          <Crown className="w-5 h-5 mx-auto relative z-10" />
+        )}
+      </button>
+    </div>
+  );
 }
 
 function FloatingOrb({ className, size, color, delay }: { className?: string; size: number; color: string; delay: number }) {
@@ -193,15 +273,13 @@ export default function LandingPage() {
                 transition={{ delay: 0.4, duration: 0.8 }}
                 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.0] tracking-tight mb-8"
               >
-                Elevate Your{' '}
-                <span className="gradient-text-gold">
-                  Portfolio
-                </span>
+                Your Properties.
                 <br />
-                With{' '}
-                <span className="gradient-text">
-                  Precision
+                Your Tenants.{' '}
+                <span className="gradient-text-gold">
+                  One Crown
                 </span>
+                <span className="text-gold-400">.</span>
               </motion.h1>
 
               <motion.p
@@ -210,9 +288,7 @@ export default function LandingPage() {
                 transition={{ delay: 0.5, duration: 0.6 }}
                 className="text-lg md:text-xl text-white/70 max-w-xl mb-12 leading-relaxed font-light tracking-wide"
               >
-                Experience a new standard in property management. Smart tools for 
-                landlords, seamless experiences for tenants, and real-time insights 
-                that help you make better decisions — all in one premium platform.
+                Owners manage every property and tenant from one place. Tenants find affordable homes across India, pay rent with ease, and handle it all — securely on Domicilo.
               </motion.p>
 
               <motion.div
@@ -563,6 +639,8 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      <MobileQuickAccess />
     </div>
   );
 }
