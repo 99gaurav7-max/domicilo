@@ -5,39 +5,39 @@ import {
   Search, MapPin, Building2, Users, CreditCard, Shield, TrendingUp, Home,
   ArrowRight, Menu, X, Sun, Moon, Star, Check, ChevronRight, Quote, Sparkles,
   Zap, BarChart3, Globe2, Medal, Phone, Mail, ChevronLeft, Crown, Gem,
-  Infinity as InfinityIcon, Feather, Heart, Diamond, Compass
+  Infinity as InfinityIcon, Feather, Heart, Diamond, Compass, LayoutDashboard
 } from 'lucide-react';
 import { useThemeStore } from '../../store/themeStore';
 import { useAuthStore } from '../../store/authStore';
 
 const features = [
-  { icon: Crown, title: 'Royal Portfolio Management', description: 'Command your properties like a monarch. Centralized dashboard with real-time intelligence, occupancy foresight, and portfolio-wide analytics at a glance.' },
-  { icon: Gem, title: 'Concierge Tenant Relations', description: 'White-glove tenant onboarding, digital lease management, and VIP communication channels that elevate every interaction.' },
-  { icon: Diamond, title: 'Treasury & Payments', description: 'Automated rent collection via Razorpay with instant reconciliation, royal invoice generation, and smart payment reminders.' },
-  { icon: Shield, title: 'Fortress Security', description: 'Bank-grade encryption, role-based citadel access, and JWT authentication — your kingdom, securely guarded.' },
-  { icon: Compass, title: 'Oracle Analytics', description: 'Crystal-ball insights with revenue prophecies, occupancy trends, vacancy forecasts, and portfolio growth maps.' },
-  { icon: InfinityIcon, title: 'Endless Discovery', description: 'Public property gallery with celestial filters — location, price, room type, amenities. Find your perfect realm.' },
+  { icon: Crown, title: 'Premium Portfolio Management', description: 'Take control of your properties with a powerful dashboard. Real-time insights, occupancy tracking, and portfolio-wide analytics at your fingertips.' },
+  { icon: Gem, title: 'Smart Tenant Relations', description: 'Streamlined tenant onboarding, digital lease management, and seamless communication channels that elevate every interaction.' },
+  { icon: Diamond, title: 'Payments & Reconciliation', description: 'Automated rent collection via Razorpay with instant reconciliation, professional invoice generation, and smart payment reminders.' },
+  { icon: Shield, title: 'Enterprise Security', description: 'Bank-grade encryption, role-based access control, and JWT authentication — your data, protected at all times.' },
+  { icon: Compass, title: 'Advanced Analytics', description: 'Deep insights with revenue trends, occupancy patterns, vacancy forecasts, and portfolio growth tracking.' },
+  { icon: InfinityIcon, title: 'Property Discovery', description: 'Public property gallery with smart filters — location, price, room type, amenities. Find your perfect match.' },
 ];
 
 const stats = [
-  { label: 'Properties Enthroned', value: '500+', suffix: '' },
-  { label: 'Happy Subjects', value: '2,000+', suffix: '' },
-  { label: 'Kingdoms Covered', value: '25+', suffix: '' },
-  { label: 'Monthly Treasury', value: '2', suffix: 'Cr+' },
+  { label: 'Properties Listed', value: '500+', suffix: '' },
+  { label: 'Active Users', value: '2,000+', suffix: '' },
+  { label: 'Cities Covered', value: '25+', suffix: '' },
+  { label: 'Monthly Volume', value: '2', suffix: 'Cr+' },
 ];
 
 const steps = [
-  { number: 'I', title: 'Claim Your Throne', description: 'Ascend as an owner or tenant in moments. A royal welcome awaits.', ornament: '👑' },
-  { number: 'II', title: 'Reveal Your Realm', description: 'Owners decree their estates. Tenants discover their dream domain.', ornament: '🏰' },
-  { number: 'III', title: 'Forge the Pact', description: 'Tenants send their decree, owners bestow approval. The covenant is sealed.', ornament: '📜' },
-  { number: 'IV', title: 'Reign Supreme', description: 'Automated tributes, celestial maintenance tracking, and oracular growth tools.', ornament: '✨' },
+  { number: 'I', title: 'Create Your Account', description: 'Sign up as an owner or tenant in minutes. Simple, fast, and free.', ornament: '👑' },
+  { number: 'II', title: 'List or Discover', description: 'Owners list their properties. Tenants find their dream home.', ornament: '🏰' },
+  { number: 'III', title: 'Connect & Approve', description: 'Tenants submit enquiries, owners review and approve. The process is seamless.', ornament: '📜' },
+  { number: 'IV', title: 'Manage & Grow', description: 'Automated payments, smart maintenance tracking, and powerful growth tools.', ornament: '✨' },
 ];
 
 const testimonials = [
-  { name: 'Rajesh Mehta', role: 'Property Magnate, Mumbai', quote: 'Domicilo transformed my 12-property empire. Rent collection was once a peasant\'s chore — now it flows like a royal treasury. The analytics alone saved me a kingdom\'s ransom in hours.', rating: 5, initials: 'RM' },
-  { name: 'Priya Sharma', role: 'Tenant, Bangalore', quote: 'Finding my perfect castle was pure enchantment. The filters, the swift royal decree from the owner — every moment felt like a fairy tale. I bow to this platform.', rating: 5, initials: 'PS' },
-  { name: 'Amit Verma', role: 'Property Baron, Delhi', quote: 'The lead management is nothing short of wizardry. Every enquiry is an audience, every conversion a coronation. My vacancy collapsed from 30% to 5%. Long live Domicilo!', rating: 5, initials: 'AV' },
-  { name: 'Sneha Patel', role: 'Tenant, Pune', quote: 'Paying rent is now a ceremony. Automatic courtly reminders, multiple tribute options, and a history etched in gold. The maintenance request feature? Absolutely divine.', rating: 5, initials: 'SP' },
+  { name: 'Rajesh Mehta', role: 'Property Owner, Mumbai', quote: 'Domicilo transformed how I manage my 12 properties. Rent collection went from a headache to fully automated. The analytics alone saved me countless hours.', rating: 5, initials: 'RM' },
+  { name: 'Priya Sharma', role: 'Tenant, Bangalore', quote: 'Found my perfect apartment within days. The filters made searching effortless, and the communication with the owner was smooth from start to finish.', rating: 5, initials: 'PS' },
+  { name: 'Amit Verma', role: 'Property Owner, Delhi', quote: 'The lead management system is exceptional. Every enquiry is tracked, every follow-up automated. My vacancy rate dropped from 30% to 5%.', rating: 5, initials: 'AV' },
+  { name: 'Sneha Patel', role: 'Tenant, Pune', quote: 'Paying rent is finally hassle-free. Automatic reminders, multiple payment options, and a clear history of everything. The maintenance request feature is a game-changer.', rating: 5, initials: 'SP' },
 ];
 
 const fadeUp = {
@@ -137,10 +137,10 @@ export default function LandingPage() {
 
               <div className="hidden md:flex items-center gap-10">
                 {[
-                  { label: 'Browse Estates', href: '/properties' },
-                  { label: 'Royal Features', href: '#features' },
-                  { label: 'The Path', href: '#how-it-works' },
-                  { label: 'Royal Court', href: '#contact' },
+                  { label: 'Browse Properties', href: '/properties' },
+                  { label: 'Features', href: '#features' },
+                  { label: 'How It Works', href: '#how-it-works' },
+                  { label: 'Contact', href: '#contact' },
                 ].map((item) => (
                   <Link
                     key={item.label}
@@ -157,14 +157,14 @@ export default function LandingPage() {
                 {user ? (
                   <button onClick={() => navigate(`/${user.role}/dashboard`)}
                     className="relative px-7 py-2.5 rounded-2xl bg-gradient-to-r from-royal-600 to-royal-800 text-white text-sm font-semibold hover:shadow-2xl hover:shadow-royal-500/30 transition-all duration-300 hover:-translate-y-0.5 overflow-hidden group border border-royal-400/20">
-                    <span className="relative z-10 flex items-center gap-2"><Crown className="w-3.5 h-3.5 text-gold-400" /> My Kingdom</span>
+                    <span className="relative z-10 flex items-center gap-2"><LayoutDashboard className="w-3.5 h-3.5 text-gold-400" /> Dashboard</span>
                   </button>
                 ) : (
                   <div className="flex items-center gap-3">
                     <button onClick={() => navigate('/login')} className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-all">Sign In</button>
                     <button onClick={() => navigate('/register')}
                       className="relative px-7 py-2.5 rounded-2xl bg-gradient-to-r from-royal-600 to-royal-800 text-white text-sm font-semibold hover:shadow-2xl hover:shadow-royal-500/30 transition-all duration-300 hover:-translate-y-0.5 overflow-hidden group border border-royal-400/20">
-                      <span className="relative z-10 flex items-center gap-2">Ascend <Sparkles className="w-3.5 h-3.5 text-gold-400" /></span>
+                      <span className="relative z-10 flex items-center gap-2">Get Started <Sparkles className="w-3.5 h-3.5 text-gold-400" /></span>
                     </button>
                   </div>
                 )}
@@ -200,10 +200,10 @@ export default function LandingPage() {
             >
               <div className="px-6 py-8 space-y-3">
                 {[
-                  { label: 'Browse Estates', href: '/properties' },
-                  { label: 'Royal Features', href: '#features' },
-                  { label: 'The Path', href: '#how-it-works' },
-                  { label: 'Royal Court', href: '#contact' },
+                  { label: 'Browse Properties', href: '/properties' },
+                  { label: 'Features', href: '#features' },
+                  { label: 'How It Works', href: '#how-it-works' },
+                  { label: 'Contact', href: '#contact' },
                 ].map((item) => (
                   <Link key={item.label} to={item.href} onClick={() => setMobileMenuOpen(false)}
                     className="block text-base text-gray-700 dark:text-gray-300 py-3 px-4 rounded-xl hover:bg-royal-500/5 transition-colors font-medium">
@@ -220,14 +220,14 @@ export default function LandingPage() {
                   {user ? (
                     <button onClick={() => { navigate(`/${user.role}/dashboard`); setMobileMenuOpen(false); }}
                       className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-royal-600 to-royal-800 text-white text-sm font-semibold border border-royal-400/20">
-                      My Kingdom
+                      Dashboard
                     </button>
                   ) : (
                     <>
                       <button onClick={() => { navigate('/login'); setMobileMenuOpen(false); }}
                         className="flex-1 py-3.5 rounded-2xl border border-white/20 text-gray-700 dark:text-gray-300 text-sm font-semibold">Sign In</button>
                       <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }}
-                        className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-royal-600 to-royal-800 text-white text-sm font-semibold border border-royal-400/20">Ascend</button>
+                        className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-royal-600 to-royal-800 text-white text-sm font-semibold border border-royal-400/20">                      Sign Up</button>
                     </>
                   )}
                 </div>
@@ -257,7 +257,7 @@ export default function LandingPage() {
                 className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 text-white/80 text-xs mb-10"
               >
                 <Crown className="w-4 h-4 text-gold-400" />
-                <span className="tracking-widest uppercase font-medium">The Pinnacle of Property Management</span>
+                <span className="tracking-widest uppercase font-medium">Premium Property Management</span>
                 <span className="w-2 h-2 rounded-full bg-gold-500 animate-pulse-glow" />
               </motion.div>
 
@@ -267,14 +267,14 @@ export default function LandingPage() {
                 transition={{ delay: 0.4, duration: 0.8 }}
                 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.0] tracking-tight mb-8"
               >
-                Where{' '}
+                Elevate Your{' '}
                 <span className="gradient-text-gold">
-                  Royalty
+                  Portfolio
                 </span>
                 <br />
-                Meets{' '}
+                With{' '}
                 <span className="gradient-text">
-                  Real Estate
+                  Precision
                 </span>
               </motion.h1>
 
@@ -284,9 +284,9 @@ export default function LandingPage() {
                 transition={{ delay: 0.5, duration: 0.6 }}
                 className="text-lg md:text-xl text-white/70 max-w-xl mb-12 leading-relaxed font-light tracking-wide"
               >
-                Ascend to a realm where property management becomes an art of kings. 
-                Command your estates with celestial intelligence, collect tributes with grace, 
-                and build an empire that echoes through eternity.
+                Experience a new standard in property management. Smart tools for 
+                landlords, seamless experiences for tenants, and real-time insights 
+                that help you make better decisions — all in one premium platform.
               </motion.p>
 
               <motion.div
@@ -298,13 +298,13 @@ export default function LandingPage() {
                 <button onClick={() => navigate('/register')}
                   className="group relative px-10 py-5 rounded-2xl bg-gradient-to-r from-royal-600 via-royal-700 to-royal-800 text-white font-semibold text-base hover:shadow-2xl hover:shadow-royal-500/40 transition-all duration-500 hover:-translate-y-1 overflow-hidden border border-royal-400/20">
                   <span className="relative z-10 flex items-center gap-3">
-                    Claim Your Kingdom <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                    Get Started Free <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-royal-700 to-royal-900 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </button>
                 <button onClick={() => navigate('/properties')}
                   className="px-10 py-5 rounded-2xl border border-white/15 text-white/90 font-medium hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm flex items-center gap-3 group">
-                  Explore Estates <Search className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                  Browse Properties <Search className="w-4 h-4 group-hover:scale-110 transition-transform" />
                 </button>
               </motion.div>
 
@@ -360,7 +360,7 @@ export default function LandingPage() {
                   <div className="p-8 space-y-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-white/40 text-xs uppercase tracking-[0.2em] font-medium">Royal Treasury</p>
+                        <p className="text-white/40 text-xs uppercase tracking-[0.2em] font-medium">Monthly Revenue</p>
                         <p className="text-3xl font-bold text-white mt-2 tracking-tight">
                           <span className="text-white/30 text-sm font-normal">₹</span>12,84,500
                         </p>
@@ -385,9 +385,9 @@ export default function LandingPage() {
                     </div>
                     <div className="grid grid-cols-3 gap-4">
                       {[
-                        { label: 'Estates', value: '12', color: 'from-royal-500/20 to-royal-400/10' },
+                        { label: 'Properties', value: '12', color: 'from-royal-500/20 to-royal-400/10' },
                         { label: 'Occupied', value: '89%', color: 'from-emerald-500/20 to-emerald-400/10' },
-                        { label: 'Tribute', value: '₹2.4L', color: 'from-gold-500/20 to-gold-400/10' },
+                        { label: 'Revenue', value: '₹2.4L', color: 'from-gold-500/20 to-gold-400/10' },
                       ].map((item) => (
                         <div key={item.label} className={`rounded-2xl bg-gradient-to-br ${item.color} border border-white/5 p-4 text-center`}>
                           <p className="text-white/40 text-[10px] uppercase tracking-widest">{item.label}</p>
@@ -408,8 +408,8 @@ export default function LandingPage() {
                       <Check className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-gray-900 dark:text-white">Tribute Received</p>
-                      <p className="text-xs text-gray-500">Rent collected with grace</p>
+                      <p className="text-sm font-bold text-gray-900 dark:text-white">Payment Received</p>
+                      <p className="text-xs text-gray-500">Rent collected automatically</p>
                     </div>
                   </div>
                 </motion.div>
@@ -421,7 +421,7 @@ export default function LandingPage() {
                 >
                   <div className="text-white text-center">
                     <p className="text-xl font-bold tracking-tight">99.9%</p>
-                    <p className="text-[10px] text-white/70 uppercase tracking-wider">Celestial Uptime</p>
+                    <p className="text-[10px] text-white/70 uppercase tracking-wider">Platform Uptime</p>
                   </div>
                 </motion.div>
               </div>
@@ -472,14 +472,14 @@ export default function LandingPage() {
         >
           <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-royal-500/10 border border-royal-500/15 text-royal-400 text-xs font-semibold mb-6 uppercase tracking-widest">
             <Gem className="w-3.5 h-3.5" />
-            Royal Prerogatives
+            Premium Features
           </div>
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-5 leading-tight tracking-tight">
-            Sovereign Tools for{' '}
-            <span className="gradient-text-gold">Noble Estates</span>
+            Everything You Need to{' '}
+            <span className="gradient-text-gold">Manage Properties</span>
           </h2>
           <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed tracking-wide">
-            Every instrument a monarch needs to govern their realm with wisdom, grace, and absolute command.
+            Powerful tools designed to help you manage, grow, and streamline your property portfolio with confidence.
           </p>
         </motion.div>
 
@@ -523,14 +523,15 @@ export default function LandingPage() {
           >
             <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-royal-500/10 border border-royal-500/15 text-royal-400 text-xs font-semibold mb-6 uppercase tracking-widest">
               <Feather className="w-3.5 h-3.5" />
-              The Sacred Path
+              How It Works
             </div>
             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-5 leading-tight tracking-tight">
-              Your Coronation{' '}
-              <span className="gradient-text">Journey</span>
+              Your{' '}
+              <span className="gradient-text">Journey</span>{' '}
+              in Four Simple Steps
             </h2>
             <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed tracking-wide">
-              Four sacred steps to claim your throne in the realm of Domicilo.
+              Getting started with Domicilo is quick and effortless.
             </p>
           </motion.div>
 
@@ -576,14 +577,14 @@ export default function LandingPage() {
         >
           <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-royal-500/10 border border-royal-500/15 text-royal-400 text-xs font-semibold mb-6 uppercase tracking-widest">
             <Heart className="w-3.5 h-3.5" />
-            Words of the Court
+            What Our Users Say
           </div>
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-5 leading-tight tracking-tight">
-            What the{' '}
-            <span className="gradient-text-gold">Nobility</span> Says
+            Trusted by{' '}
+            <span className="gradient-text-gold">Property Owners</span> and Tenants
           </h2>
           <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed tracking-wide">
-            Testimonies from the esteemed members of our royal community.
+            Hear from the people who use Domicilo every day.
           </p>
         </motion.div>
 
@@ -659,35 +660,35 @@ export default function LandingPage() {
                 Your Coronation Awaits
               </div>
               <h2 className="font-display text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-8 leading-tight tracking-tight">
-                Ready to Claim Your{' '}
-                <span className="gradient-text-gold">Throne</span>?
+                Ready to{' '}
+                <span className="gradient-text-gold">Get Started</span>?
               </h2>
               <p className="text-white/60 mb-12 max-w-2xl mx-auto text-lg leading-relaxed tracking-wide">
-                Join the royal court of property visionaries who have already ascended. 
-                No tribute required. No bond required. Your kingdom awaits.
+                Join thousands of property owners and tenants already using Domicilo. 
+                No hidden fees. No commitments. Your journey starts here.
               </p>
               <div className="flex flex-wrap justify-center gap-5">
                 <button onClick={() => navigate('/register')}
                   className="group relative px-12 py-5 rounded-2xl bg-gradient-to-r from-gold-500 to-gold-700 text-royal-950 font-bold text-base hover:shadow-2xl hover:shadow-gold-500/40 transition-all duration-500 hover:-translate-y-1 overflow-hidden">
                   <span className="relative z-10 flex items-center gap-3">
-                    Ascend Now <Crown className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                    Get Started Now <Crown className="w-4 h-4 group-hover:scale-110 transition-transform" />
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-gold-400 to-gold-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </button>
                 <a href="tel:+919999999999"
                   className="px-12 py-5 rounded-2xl border border-white/15 text-white font-medium hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm flex items-center gap-3 group">
-                  <Phone className="w-5 h-5" /> Speak to the Court
+                  <Phone className="w-5 h-5" /> Contact Us
                 </a>
               </div>
               <div className="flex items-center justify-center gap-8 mt-12 text-white/50 text-sm">
                 <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-400" /> No tribute required
+                  <Check className="w-4 h-4 text-emerald-400" /> No hidden fees
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-400" /> Free enthronement
+                  <Check className="w-4 h-4 text-emerald-400" /> Free to get started
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-400" /> Abdicate anytime
+                  <Check className="w-4 h-4 text-emerald-400" /> Cancel anytime
                 </div>
               </div>
             </div>
@@ -707,7 +708,7 @@ export default function LandingPage() {
                 <span className="font-bold text-xl text-white">Domicilo</span>
               </div>
               <p className="text-sm text-gray-400 leading-relaxed mb-6 max-w-xs">
-                The pinnacle of property rental management. Where royalty meets real estate.
+                The premium platform for property rental management. Built for modern landlords and tenants.
               </p>
               <div className="flex items-center gap-3">
                 <a href="mailto:support@domicilo.com" className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-gray-400 hover:text-gold-400 hover:border-gold-500/30 transition-all hover:bg-gold-500/5">
@@ -720,16 +721,16 @@ export default function LandingPage() {
             </div>
 
             {[
-              { title: 'The Realm', links: [
-                { label: 'Browse Estates', to: '/properties' },
-                { label: 'List Your Kingdom', to: '/register' },
+              { title: 'Platform', links: [
+                { label: 'Browse Properties', to: '/properties' },
+                { label: 'List Your Property', to: '/register' },
               ]},
-              { title: 'The Crown', links: [
+              { title: 'Company', links: [
                 { label: 'About Us', to: '/about' },
-                { label: 'Royal Court', to: '#contact' },
-                { label: 'Sacred Decree', to: '/privacy' },
+                { label: 'Contact', to: '#contact' },
+                { label: 'Privacy Policy', to: '/privacy' },
               ]},
-              { title: 'Royal Dispatch', links: [
+              { title: 'Support', links: [
                 { label: 'support@domicilo.com', to: 'mailto:support@domicilo.com', icon: Mail },
                 { label: '+91 99999 99999', to: 'tel:+919999999999', icon: Phone },
               ]},
@@ -757,10 +758,10 @@ export default function LandingPage() {
           </div>
 
           <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} Domicilo. All rights reserved. By royal decree.</p>
+            <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} Domicilo. All rights reserved.</p>
             <div className="flex items-center gap-8 text-xs text-gray-500">
-              <Link to="/privacy" className="hover:text-gold-400 transition-colors">Sacred Decree</Link>
-              <Link to="/terms" className="hover:text-gold-400 transition-colors">Royal Edicts</Link>
+              <Link to="/privacy" className="hover:text-gold-400 transition-colors">Privacy Policy</Link>
+              <Link to="/terms" className="hover:text-gold-400 transition-colors">Terms of Service</Link>
             </div>
           </div>
         </div>

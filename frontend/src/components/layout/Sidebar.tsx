@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Building2, Users, CreditCard, Home, Bell, Settings,
   FileText, BarChart3, ClipboardList, PanelLeftClose, PanelLeft
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../../store/authStore';
 
 interface SidebarProps {
@@ -38,10 +37,15 @@ const navItems: Record<string, { label: string; path: string; icon: any }[]> = {
 export function Sidebar({ isOpen, onClose, onCollapsedChange }: SidebarProps) {
   const { user } = useAuthStore();
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(() => {
-    const saved = localStorage.getItem('sidebarCollapsed');
-    return saved === 'true';
-  });
+  const [collapsed, setCollapsed] = useState(false);
+  const initRef = useRef(false);
+
+  useEffect(() => {
+    if (!initRef.current) {
+      try { setCollapsed(localStorage.getItem('sidebarCollapsed') === 'true'); } catch {}
+      initRef.current = true;
+    }
+  }, []);
 
   if (!user) return null;
 
@@ -50,23 +54,22 @@ export function Sidebar({ isOpen, onClose, onCollapsedChange }: SidebarProps) {
   return (
     <>
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 lg:hidden"
+        <div
+          className="fixed inset-0 bg-black/40 z-30 lg:hidden transition-opacity duration-200"
+          style={{ opacity: isOpen ? 1 : 0 }}
           onClick={onClose}
         />
       )}
       <aside
-        className={`fixed top-0 left-0 h-full z-40 transform transition-all duration-300 ease-out lg:translate-x-0 sidebar-panel ${
+        className={`fixed top-0 left-0 h-full z-40 transition-transform duration-200 ease-out lg:translate-x-0 sidebar-panel ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } ${collapsed ? 'w-16' : 'w-64'}`}
         style={{
           background: 'rgba(10, 10, 26, 0.85)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
           borderRight: '1px solid rgba(255, 255, 255, 0.06)',
+          willChange: 'transform',
         }}
       >
         <div className={`flex items-center h-16 border-b border-white/5 ${collapsed ? 'justify-center px-0' : 'gap-3 px-6'}`}>
@@ -85,7 +88,7 @@ export function Sidebar({ isOpen, onClose, onCollapsedChange }: SidebarProps) {
                 key={item.path}
                 to={item.path}
                 onClick={onClose}
-                className={`flex items-center py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                className={`flex items-center py-2.5 rounded-xl text-sm font-medium transition-colors duration-150 ${
                   collapsed ? 'justify-center px-2' : 'gap-3 px-4'
                 } ${
                   isActive
@@ -95,15 +98,7 @@ export function Sidebar({ isOpen, onClose, onCollapsedChange }: SidebarProps) {
                 title={collapsed ? item.label : undefined}
               >
                 <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-royal-400' : ''}`} />
-                {!collapsed && (
-                  <motion.span
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  >
-                    {item.label}
-                  </motion.span>
-                )}
+                {!collapsed && <span>{item.label}</span>}
               </Link>
             );
           })}
@@ -112,7 +107,7 @@ export function Sidebar({ isOpen, onClose, onCollapsedChange }: SidebarProps) {
             <Link
               to="/notifications"
               onClick={onClose}
-              className={`flex items-center py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-all ${
+              className={`flex items-center py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-colors ${
                 collapsed ? 'justify-center px-2' : 'gap-3 px-4'
               }`}
               title={collapsed ? 'Notifications' : undefined}
@@ -123,7 +118,7 @@ export function Sidebar({ isOpen, onClose, onCollapsedChange }: SidebarProps) {
             <Link
               to="/settings"
               onClick={onClose}
-              className={`flex items-center py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-all ${
+              className={`flex items-center py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-colors ${
                 collapsed ? 'justify-center px-2' : 'gap-3 px-4'
               }`}
               title={collapsed ? 'Settings' : undefined}
@@ -138,10 +133,10 @@ export function Sidebar({ isOpen, onClose, onCollapsedChange }: SidebarProps) {
           onClick={() => {
             const next = !collapsed;
             setCollapsed(next);
-            localStorage.setItem('sidebarCollapsed', String(next));
+            try { localStorage.setItem('sidebarCollapsed', String(next)); } catch {}
             onCollapsedChange?.(next);
           }}
-          className="hidden lg:flex absolute bottom-4 right-0 translate-x-1/2 w-7 h-7 rounded-full bg-black/40 border border-white/10 items-center justify-center shadow-lg hover:bg-white/10 transition-all z-10 backdrop-blur-sm"
+          className="hidden lg:flex absolute bottom-4 right-0 translate-x-1/2 w-7 h-7 rounded-full bg-black/40 border border-white/10 items-center justify-center shadow-lg hover:bg-white/10 transition-colors z-10 backdrop-blur-sm"
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {collapsed
