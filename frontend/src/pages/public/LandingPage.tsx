@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Search, MapPin, Building2, Users, CreditCard, Shield, TrendingUp, Home,
-  ArrowRight, Menu, X, Star, Check, ChevronRight, Sparkles,
+  ArrowRight, Star, Check, Sparkles,
   Zap, BarChart3, Globe2, Medal, Phone, Mail, Crown, Gem,
   Infinity as InfinityIcon, Diamond, Compass, LayoutDashboard
 } from 'lucide-react';
@@ -86,7 +86,6 @@ function FloatingOrb({ className, size, color, delay }: { className?: string; si
 export default function LandingPage() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const scrollToSection = (id: string) => {
@@ -158,98 +157,10 @@ export default function LandingPage() {
                   </div>
                 )}
               </div>
-
-              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-300 active:scale-95 transition-all">
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
             </div>
           </div>
         </div>
 
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMobileMenuOpen(false)}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
-            />
-          )}
-        </AnimatePresence>
-
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed top-0 left-0 bottom-0 z-50 w-72 md:hidden"
-            >
-              <div className="h-full bg-black/90 backdrop-blur-2xl border-r border-white/5 shadow-2xl shadow-black/50 flex flex-col">
-                {/* sidebar header */}
-                <div className="flex items-center justify-between px-6 py-6 border-b border-white/5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-royal-500 to-royal-700 flex items-center justify-center shadow-lg shadow-royal-500/20">
-                      <Crown className="w-5 h-5 text-gold-400" />
-                    </div>
-                    <span className="font-display font-bold text-xl text-white tracking-tight">Domicilo</span>
-                  </div>
-                  <button onClick={() => setMobileMenuOpen(false)}
-                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all active:scale-90">
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-
-                {/* nav links */}
-                <div className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                  <Link to="/properties" onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 text-base text-gray-400 hover:text-white py-3 px-4 rounded-xl hover:bg-royal-500/10 transition-all font-medium">
-                    <Search className="w-4 h-4" />
-                    Browse Properties
-                  </Link>
-                  <button onClick={() => { scrollToSection('features'); setMobileMenuOpen(false); }}
-                    className="flex items-center gap-3 w-full text-left text-base text-gray-400 hover:text-white py-3 px-4 rounded-xl hover:bg-royal-500/10 transition-all font-medium">
-                    <Gem className="w-4 h-4" />
-                    Features
-                  </button>
-                  <button onClick={() => { scrollToSection('contact'); setMobileMenuOpen(false); }}
-                    className="flex items-center gap-3 w-full text-left text-base text-gray-400 hover:text-white py-3 px-4 rounded-xl hover:bg-royal-500/10 transition-all font-medium">
-                    <Phone className="w-4 h-4" />
-                    Contact
-                  </button>
-                </div>
-
-                {/* bottom actions */}
-                <div className="px-4 py-6 border-t border-white/5 space-y-3">
-                  {user ? (
-                    <button onClick={() => { navigate(`/${user.role}/dashboard`); setMobileMenuOpen(false); }}
-                      className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-royal-600 to-royal-800 text-white text-sm font-semibold border border-royal-400/20 hover:shadow-lg hover:shadow-royal-500/20 transition-all active:scale-[0.98]">
-                      <div className="flex items-center justify-center gap-2">
-                        <LayoutDashboard className="w-4 h-4 text-gold-400" />
-                        Dashboard
-                      </div>
-                    </button>
-                  ) : (
-                    <>
-                      <button onClick={() => { navigate('/login'); setMobileMenuOpen(false); }}
-                        className="w-full py-3.5 rounded-2xl border border-white/10 text-gray-300 text-sm font-semibold hover:bg-white/5 transition-all active:scale-[0.98]">
-                        Sign In
-                      </button>
-                      <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }}
-                        className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-royal-600 to-royal-800 text-white text-sm font-semibold border border-royal-400/20 hover:shadow-lg hover:shadow-royal-500/20 transition-all active:scale-[0.98]">
-                        <div className="flex items-center justify-center gap-2">
-                          Get Started <Sparkles className="w-3.5 h-3.5 text-gold-400" />
-                        </div>
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </motion.nav>
 
       {/* Hero Section */}
