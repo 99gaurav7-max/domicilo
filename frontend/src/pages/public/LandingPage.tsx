@@ -3,19 +3,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, MapPin, Building2, Users, CreditCard, Shield, TrendingUp, Home,
-  ArrowRight, Menu, X, Star, Check, ChevronRight, Quote, Sparkles,
+  ArrowRight, Menu, X, Star, Check, ChevronRight, Sparkles,
   Zap, BarChart3, Globe2, Medal, Phone, Mail, ChevronLeft, Crown, Gem,
-  Infinity as InfinityIcon, Feather, Heart, Diamond, Compass, LayoutDashboard
+  Infinity as InfinityIcon, Feather, Diamond, Compass, LayoutDashboard
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 
 const features = [
-  { icon: Crown, title: 'Premium Portfolio Management', description: 'Take control of your properties with a powerful dashboard. Real-time insights, occupancy tracking, and portfolio-wide analytics at your fingertips.' },
-  { icon: Gem, title: 'Smart Tenant Relations', description: 'Streamlined tenant onboarding, digital lease management, and seamless communication channels that elevate every interaction.' },
-  { icon: Diamond, title: 'Payments & Reconciliation', description: 'Automated rent collection via Razorpay with instant reconciliation, professional invoice generation, and smart payment reminders.' },
-  { icon: Shield, title: 'Enterprise Security', description: 'Bank-grade encryption, role-based access control, and JWT authentication — your data, protected at all times.' },
-  { icon: Compass, title: 'Advanced Analytics', description: 'Deep insights with revenue trends, occupancy patterns, vacancy forecasts, and portfolio growth tracking.' },
-  { icon: InfinityIcon, title: 'Property Discovery', description: 'Public property gallery with smart filters — location, price, room type, amenities. Find your perfect match.' },
+  { icon: Crown, title: 'Premium Portfolio Management', description: 'See all your properties in one place. Check who paid rent, who hasn\'t, and how much money you made.' },
+  { icon: Gem, title: 'Smart Tenant Relations', description: 'Talk to your tenants easily. Send messages, manage papers, and keep everything organized.' },
+  { icon: Diamond, title: 'Payments & Reconciliation', description: 'Collect rent automatically. No more chasing tenants. Get paid on time, every time.' },
+  { icon: Shield, title: 'Enterprise Security', description: 'Your data is safe with us. Only you and your tenants can see what matters.' },
+  { icon: Compass, title: 'Advanced Analytics', description: 'See charts showing your earnings, empty rooms, and future trends at a glance.' },
+  { icon: InfinityIcon, title: 'Property Discovery', description: 'Search for homes by city, price, and room type. Find the perfect match fast.' },
 ];
 
 const stats = [
@@ -30,13 +30,6 @@ const steps = [
   { number: 'II', title: 'List or Discover', description: 'Owners list their properties. Tenants find their dream home.', ornament: '🏰' },
   { number: 'III', title: 'Connect & Approve', description: 'Tenants submit enquiries, owners review and approve. The process is seamless.', ornament: '📜' },
   { number: 'IV', title: 'Manage & Grow', description: 'Automated payments, smart maintenance tracking, and powerful growth tools.', ornament: '✨' },
-];
-
-const testimonials = [
-  { name: 'Rajesh Mehta', role: 'Property Owner, Mumbai', quote: 'Domicilo transformed how I manage my 12 properties. Rent collection went from a headache to fully automated. The analytics alone saved me countless hours.', rating: 5, initials: 'RM' },
-  { name: 'Priya Sharma', role: 'Tenant, Bangalore', quote: 'Found my perfect apartment within days. The filters made searching effortless, and the communication with the owner was smooth from start to finish.', rating: 5, initials: 'PS' },
-  { name: 'Amit Verma', role: 'Property Owner, Delhi', quote: 'The lead management system is exceptional. Every enquiry is tracked, every follow-up automated. My vacancy rate dropped from 30% to 5%.', rating: 5, initials: 'AV' },
-  { name: 'Sneha Patel', role: 'Tenant, Pune', quote: 'Paying rent is finally hassle-free. Automatic reminders, multiple payment options, and a clear history of everything. The maintenance request feature is a game-changer.', rating: 5, initials: 'SP' },
 ];
 
 const fadeUp = {
@@ -101,8 +94,12 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -134,20 +131,25 @@ export default function LandingPage() {
               </Link>
 
               <div className="hidden md:flex items-center gap-10">
+                <Link to="/properties"
+                  className="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors relative group tracking-wide"
+                >
+                  Browse Properties
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-royal-500 to-gold-500 group-hover:w-full transition-all duration-500" />
+                </Link>
                 {[
-                  { label: 'Browse Properties', href: '/properties' },
-                  { label: 'Features', href: '#features' },
-                  { label: 'How It Works', href: '#how-it-works' },
-                  { label: 'Contact', href: '#contact' },
+                  { label: 'Features', id: 'features' },
+                  { label: 'How It Works', id: 'how-it-works' },
+                  { label: 'Contact', id: 'contact' },
                 ].map((item) => (
-                  <Link
+                  <button
                     key={item.label}
-                    to={item.href}
+                    onClick={() => scrollToSection(item.id)}
                     className="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors relative group tracking-wide"
                   >
                     {item.label}
                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-royal-500 to-gold-500 group-hover:w-full transition-all duration-500" />
-                  </Link>
+                  </button>
                 ))}
                 {user ? (
                   <button onClick={() => navigate(`/${user.role}/dashboard`)}
@@ -194,16 +196,19 @@ export default function LandingPage() {
               className="fixed top-24 left-4 right-4 z-50 md:hidden rounded-3xl bg-white/90 dark:bg-black/80 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-2xl shadow-black/20 overflow-hidden"
             >
               <div className="px-6 py-8 space-y-3">
+                <Link to="/properties" onClick={() => setMobileMenuOpen(false)}
+                  className="block text-base text-gray-700 dark:text-gray-300 py-3 px-4 rounded-xl hover:bg-royal-500/5 transition-colors font-medium">
+                  Browse Properties
+                </Link>
                 {[
-                  { label: 'Browse Properties', href: '/properties' },
-                  { label: 'Features', href: '#features' },
-                  { label: 'How It Works', href: '#how-it-works' },
-                  { label: 'Contact', href: '#contact' },
+                  { label: 'Features', id: 'features' },
+                  { label: 'How It Works', id: 'how-it-works' },
+                  { label: 'Contact', id: 'contact' },
                 ].map((item) => (
-                  <Link key={item.label} to={item.href} onClick={() => setMobileMenuOpen(false)}
-                    className="block text-base text-gray-700 dark:text-gray-300 py-3 px-4 rounded-xl hover:bg-royal-500/5 transition-colors font-medium">
+                  <button key={item.label} onClick={() => { scrollToSection(item.id); setMobileMenuOpen(false); }}
+                    className="block w-full text-left text-base text-gray-700 dark:text-gray-300 py-3 px-4 rounded-xl hover:bg-royal-500/5 transition-colors font-medium">
                     {item.label}
-                  </Link>
+                  </button>
                 ))}
                 <div className="flex gap-3 pt-2 px-4">
                   {user ? (
@@ -552,80 +557,6 @@ export default function LandingPage() {
                 )}
               </motion.div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-28 md:py-40 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-24"
-        >
-          <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-royal-500/10 border border-royal-500/15 text-royal-400 text-xs font-semibold mb-6 uppercase tracking-widest">
-            <Heart className="w-3.5 h-3.5" />
-            What Our Users Say
-          </div>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-5 leading-tight tracking-tight">
-            Trusted by{' '}
-            <span className="gradient-text-gold">Property Owners</span> and Tenants
-          </h2>
-          <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed tracking-wide">
-            Hear from the people who use Domicilo every day.
-          </p>
-        </motion.div>
-
-        <div className="relative max-w-4xl mx-auto">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTestimonial}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -30 }}
-              transition={{ duration: 0.5 }}
-              className="relative group"
-            >
-              <div className="absolute -inset-2 bg-gradient-to-r from-royal-500/20 via-gold-500/20 to-royal-500/20 rounded-[40px] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <div className="relative rounded-3xl bg-white/70 dark:bg-black/40 backdrop-blur-2xl border border-white/30 dark:border-white/5 shadow-2xl p-10 md:p-14">
-                <Quote className="w-10 h-10 text-royal-400/30 mb-6" />
-                <div className="flex items-center gap-1.5 mb-6">
-                  {[...Array(testimonials[activeTestimonial].rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-gold-400" fill="currentColor" />
-                  ))}
-                </div>
-                <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-200 leading-relaxed mb-10 font-light italic tracking-wide font-display">
-                  &ldquo;{testimonials[activeTestimonial].quote}&rdquo;
-                </p>
-                <div className="flex items-center gap-5">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-royal-500 to-royal-700 flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                    {testimonials[activeTestimonial].initials}
-                  </div>
-                  <div>
-                    <p className="font-display font-bold text-lg text-gray-900 dark:text-white tracking-tight">{testimonials[activeTestimonial].name}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{testimonials[activeTestimonial].role}</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          <div className="flex items-center justify-center gap-6 mt-10">
-            <button onClick={() => setActiveTestimonial((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))}
-              className="p-3.5 rounded-2xl bg-white/60 dark:bg-black/30 backdrop-blur-xl border border-white/30 dark:border-white/5 hover:border-royal-500/30 transition-all text-gray-600 dark:text-gray-300">
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <div className="flex items-center gap-3">
-              {testimonials.map((_, i) => (
-                <button key={i} onClick={() => setActiveTestimonial(i)}
-                  className={`rounded-full transition-all duration-500 ${i === activeTestimonial ? 'w-8 h-2.5 bg-gradient-to-r from-royal-500 to-gold-500' : 'w-2.5 h-2.5 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400'}`} />
-              ))}
-            </div>
-            <button onClick={() => setActiveTestimonial((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))}
-              className="p-3.5 rounded-2xl bg-white/60 dark:bg-black/30 backdrop-blur-xl border border-white/30 dark:border-white/5 hover:border-royal-500/30 transition-all text-gray-600 dark:text-gray-300">
-              <ChevronRight className="w-5 h-5" />
-            </button>
           </div>
         </div>
       </section>
