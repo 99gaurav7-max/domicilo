@@ -101,7 +101,7 @@ export default function AdminDashboard() {
                   <XAxis dataKey="month" tick={{ fontSize: 11 }} tickFormatter={(v) => new Date(v).toLocaleString('default', { month: 'short' })} />
                   <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
                   <Tooltip contentStyle={{ borderRadius: '12px', background: theme === 'dark' ? '#1e293b' : '#fff', color: theme === 'dark' ? '#e2e8f0' : '#1e293b', border: '1px solid ' + (theme === 'dark' ? '#334155' : '#e5e7eb') }} />
-                  <Line type="monotone" dataKey="revenue" stroke="#7c3aed" strokeWidth={2} dot={{ fill: '#7c3aed', r: 3 }} />
+                  <Line type="monotone" dataKey="revenue" stroke="#3366ff" strokeWidth={2} dot={{ fill: '#3366ff', r: 3 }} />
                 </LineChart>
               </ResponsiveContainer>
             ) : <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-20">No revenue data available</p>}
@@ -120,7 +120,7 @@ export default function AdminDashboard() {
                   <p className="text-xs text-gray-500 dark:text-gray-400">{p.property_name}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-royal-400">₹{p.amount.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-royal-600 dark:text-royal-400">₹{p.amount.toLocaleString()}</p>
                   <StatusBadge status={p.status} />
                 </div>
               </div>

@@ -75,7 +75,7 @@ export default function OwnerAnalytics() {
           { label: 'Rent', value: totals.rent, icon: TrendingUp, color: 'text-green-500' },
           { label: 'Electricity', value: totals.electricity, icon: BarChart3, color: 'text-amber-500' },
           { label: 'Water', value: totals.water, icon: BarChart3, color: 'text-cyan-500' },
-          { label: 'Maintenance', value: totals.maintenance, icon: BarChart3, color: 'text-purple-500' },
+          { label: 'Maintenance', value: totals.maintenance, icon: BarChart3, color: 'text-royal-500' },
         ].map((item, i) => (
           <motion.div key={item.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
             className="rounded-2xl bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/30 dark:border-white/5 shadow-xl p-4">
@@ -107,7 +107,7 @@ export default function OwnerAnalytics() {
                 <Bar dataKey="rent" name="Rent" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="electricity" name="Electricity" fill="#f59e0b" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="water" name="Water" fill="#06b6d4" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="maintenance" name="Maintenance" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="maintenance" name="Maintenance" fill="#2547b3" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           )}

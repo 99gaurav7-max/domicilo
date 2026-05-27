@@ -152,7 +152,7 @@ export default function OwnerTenants() {
                     </td>
                     <td className="text-sm text-gray-500 dark:text-gray-400">{t.property_name}</td>
                     <td><span className="text-sm text-gray-700 dark:text-gray-300">{t.room_number} ({t.room_type})</span></td>
-                    <td className="font-medium text-royal-400">₹{(t.rent_amount || t.room_rent || 0).toLocaleString()}</td>
+                    <td className="font-medium text-royal-600 dark:text-royal-400">₹{(t.rent_amount || t.room_rent || 0).toLocaleString()}</td>
                     <td>
                       {(t.due_amount || 0) > 0 ? (
                         <span className="text-amber-600 dark:text-amber-400 font-medium">₹{(t.due_amount || 0).toLocaleString()}</span>

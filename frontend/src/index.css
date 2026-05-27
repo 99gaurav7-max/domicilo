@@ -571,7 +571,7 @@ body:not(.dark) .table-container tr:hover td {
 }
 
 .toast-default, .toast-success, .toast-error {
-  background: rgba(30, 27, 75, 0.95) !important;
+  background: rgba(10, 22, 40, 0.95) !important;
   color: #f1f5f9 !important;
   border: 1px solid rgba(51, 102, 255, 0.2) !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;

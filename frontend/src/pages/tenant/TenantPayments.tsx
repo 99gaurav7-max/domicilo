@@ -60,12 +60,12 @@ export default function TenantPayments() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           className="rounded-2xl bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/30 dark:border-white/5 shadow-xl p-4">
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Total Paid</p>
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Total Paid</p>
           <p className="text-xl font-bold gradient-text">₹{stats.totalPaid.toLocaleString()}</p>
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
           className={`rounded-2xl bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/30 dark:border-white/5 shadow-xl p-4 ${stats.totalDue > 0 ? 'ring-1 ring-amber-200' : ''}`}>
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Total Due</p>
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Total Due</p>
           <p className="text-xl font-bold text-amber-600 dark:text-amber-400">₹{stats.totalDue.toLocaleString()}</p>
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
@@ -100,7 +100,7 @@ export default function TenantPayments() {
                 {payments.map((p) => (
                   <tr key={p.id} className="border-b border-gray-50 dark:border-gray-900 hover:bg-gray-50 dark:hover:bg-gray-900/30">
                     <td className="px-4 py-3 text-xs font-mono text-gray-500 dark:text-gray-400">{p.invoice_number}</td>
-                    <td className="px-4 py-3 font-medium text-royal-400">₹{p.amount.toLocaleString()}</td>
+                    <td className="px-4 py-3 font-medium text-royal-600 dark:text-royal-400">₹{p.amount.toLocaleString()}</td>
                     <td className="px-4 py-3"><StatusBadge status={p.payment_type} /></td>
                     <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{new Date(p.due_date).toLocaleDateString()}</td>
                     <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{p.paid_at ? new Date(p.paid_at).toLocaleDateString() : '-'}</td>

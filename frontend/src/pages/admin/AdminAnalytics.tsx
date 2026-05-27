@@ -8,7 +8,7 @@ import { useThemeStore } from '../../store/themeStore';
 import { KPISkeleton } from '../../components/ui/Skeleton';
 import { ResponsiveContainer, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell } from 'recharts';
 
-const COLORS = ['#7c3aed', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+const COLORS = ['#3366ff', '#10b981', '#f59e0b', '#ef4444', '#d4a853'];
 
 export default function AdminAnalytics() {
   const { theme } = useThemeStore();
@@ -55,7 +55,7 @@ export default function AdminAnalytics() {
                     tickFormatter={(v) => new Date(v).toLocaleString('default', { month: 'short', year: '2-digit' })} />
                   <YAxis tick={{ fontSize: 11 }} />
                   <Tooltip contentStyle={tooltipStyle} />
-                  <Bar dataKey="count" fill="#7c3aed" radius={[4, 4, 0, 0]} name="New Users" />
+                  <Bar dataKey="count" fill="#3366ff" radius={[4, 4, 0, 0]} name="New Users" />
                 </BarChart>
               </ResponsiveContainer>
             ) : <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-20">No user growth data</p>}
@@ -95,7 +95,7 @@ export default function AdminAnalytics() {
                     tickFormatter={(v) => new Date(v).toLocaleString('default', { month: 'short', year: '2-digit' })} />
                   <YAxis tick={{ fontSize: 11 }} />
                   <Tooltip contentStyle={tooltipStyle} />
-                  <Bar dataKey="count" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="New Properties" />
+                  <Bar dataKey="count" fill="#2547b3" radius={[4, 4, 0, 0]} name="New Properties" />
                 </BarChart>
               </ResponsiveContainer>
             ) : <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-20">No property growth data</p>}
@@ -145,8 +145,8 @@ export default function AdminAnalytics() {
                 <p className="text-2xl font-bold text-green-600">{data.conversion.converted_enquiries}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Converted</p>
               </div>
-              <div className="text-center p-4 rounded-xl bg-purple-50 dark:bg-purple-900/20">
-                <p className="text-2xl font-bold text-purple-600">{data.conversion.total_tenants}</p>
+              <div className="text-center p-4 rounded-xl bg-royal-50 dark:bg-royal-900/20">
+                <p className="text-2xl font-bold text-royal-600 dark:text-royal-400">{data.conversion.total_tenants}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Tenants</p>
               </div>
             </div>
