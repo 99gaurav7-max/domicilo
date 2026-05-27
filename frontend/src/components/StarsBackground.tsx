@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { useThemeStore } from '../store/themeStore';
 
 interface Star {
   x: number; y: number; z: number;
@@ -13,7 +12,6 @@ interface ShootingStar {
 
 export default function StarsBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { theme } = useThemeStore();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -85,55 +83,38 @@ export default function StarsBackground() {
       time++;
       const w = cvs.width;
       const h = cvs.height;
-      const isDark = theme === 'dark';
 
       cxt.clearRect(0, 0, w, h);
 
-      if (!isDark) {
-        const gradient = cxt.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.max(w, h) * 0.8);
-        gradient.addColorStop(0, '#f8f9ff');
-        gradient.addColorStop(0.5, '#f0f2ff');
-        gradient.addColorStop(1, '#e8ecff');
-        cxt.fillStyle = gradient;
-        cxt.fillRect(0, 0, w, h);
-        const gridGradient = cxt.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.max(w, h) * 0.7);
-        gridGradient.addColorStop(0, 'rgba(180, 160, 255, 0.04)');
-        gridGradient.addColorStop(1, 'transparent');
-        cxt.fillStyle = gridGradient;
-        cxt.fillRect(0, 0, w, h);
-      } else {
-        const bgGrad = cxt.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.max(w, h) * 0.8);
-        bgGrad.addColorStop(0, '#0a0a1a');
-        bgGrad.addColorStop(0.4, '#0d0d24');
-        bgGrad.addColorStop(0.7, '#0f0d2e');
-        bgGrad.addColorStop(1, '#0a0818');
-        cxt.fillStyle = bgGrad;
-        cxt.fillRect(0, 0, w, h);
+      const bgGrad = cxt.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.max(w, h) * 0.8);
+      bgGrad.addColorStop(0, '#0a0a1a');
+      bgGrad.addColorStop(0.4, '#0d0d24');
+      bgGrad.addColorStop(0.7, '#0f0d2e');
+      bgGrad.addColorStop(1, '#0a0818');
+      cxt.fillStyle = bgGrad;
+      cxt.fillRect(0, 0, w, h);
 
-        drawNebula(w * 0.2, h * 0.3, 300, 'rgba(100, 60, 180, 0.04)');
-        drawNebula(w * 0.8, h * 0.6, 350, 'rgba(50, 100, 200, 0.03)');
-        drawNebula(w * 0.5, h * 0.8, 250, 'rgba(180, 100, 200, 0.02)');
-      }
+      drawNebula(w * 0.2, h * 0.3, 300, 'rgba(100, 60, 180, 0.04)');
+      drawNebula(w * 0.8, h * 0.6, 350, 'rgba(50, 100, 200, 0.03)');
+      drawNebula(w * 0.5, h * 0.8, 250, 'rgba(180, 100, 200, 0.02)');
 
-      const px = (mouseX / w - 0.5) * (isDark ? 6 : 2);
-      const py = (mouseY / h - 0.5) * (isDark ? 6 : 2);
+      const px = (mouseX / w - 0.5) * 6;
+      const py = (mouseY / h - 0.5) * 6;
 
       for (const star of stars) {
         const twinkle = Math.sin(time * star.twinkleSpeed + star.twinklePhase) * 0.3 + 0.7;
         const opacity = star.opacity * twinkle;
         const parallaxFactor = 1 + (star.z - 1) * 0.5;
-        const sx = star.x + px * parallaxFactor * (isDark ? 1 : 0.2);
-        const sy = star.y + py * parallaxFactor * (isDark ? 1 : 0.2);
-        const size = star.size * (isDark ? 1 : 0.5);
+        const sx = star.x + px * parallaxFactor;
+        const sy = star.y + py * parallaxFactor;
+        const size = star.size;
 
         cxt.beginPath();
         cxt.arc(sx, sy, Math.max(size * twinkle, 0.2), 0, Math.PI * 2);
-        cxt.fillStyle = isDark
-          ? `rgba(${hexToRgb(star.color)}, ${opacity})`
-          : `rgba(100, 90, 140, ${opacity * 0.4})`;
+        cxt.fillStyle = `rgba(${hexToRgb(star.color)}, ${opacity})`;
         cxt.fill();
 
-        if (size > 1.2 && isDark) {
+        if (size > 1.2) {
           cxt.beginPath();
           cxt.arc(sx, sy, size * 3, 0, Math.PI * 2);
           cxt.fillStyle = `rgba(${hexToRgb(star.color)}, ${opacity * 0.08})`;
@@ -141,41 +122,39 @@ export default function StarsBackground() {
         }
       }
 
-      if (isDark) {
-        if (time - lastShootingStar > 120 + Math.random() * 200) {
-          spawnShootingStar();
-          lastShootingStar = time;
-        }
+      if (time - lastShootingStar > 120 + Math.random() * 200) {
+        spawnShootingStar();
+        lastShootingStar = time;
+      }
 
-        for (let i = shootingStars.length - 1; i >= 0; i--) {
-          const s = shootingStars[i];
-          s.x += s.vx;
-          s.y += s.vy;
-          s.life++;
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const s = shootingStars[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.life++;
 
-          const progress = s.life / s.maxLife;
-          const alpha = Math.sin(progress * Math.PI) * 0.9;
+        const progress = s.life / s.maxLife;
+        const alpha = Math.sin(progress * Math.PI) * 0.9;
 
-          cxt.beginPath();
-          cxt.moveTo(s.x, s.y);
-          cxt.lineTo(s.x - s.vx * 2, s.y - s.vy * 2);
-          cxt.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-          cxt.lineWidth = 1.5;
-          cxt.stroke();
+        cxt.beginPath();
+        cxt.moveTo(s.x, s.y);
+        cxt.lineTo(s.x - s.vx * 2, s.y - s.vy * 2);
+        cxt.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+        cxt.lineWidth = 1.5;
+        cxt.stroke();
 
-          cxt.beginPath();
-          cxt.moveTo(s.x, s.y);
-          cxt.lineTo(s.x - s.vx * s.trail, s.y - s.vy * s.trail);
-          const trailGrad = cxt.createLinearGradient(s.x, s.y, s.x - s.vx * s.trail, s.y - s.vy * s.trail);
-          trailGrad.addColorStop(0, `rgba(255, 255, 255, ${alpha * 0.8})`);
-          trailGrad.addColorStop(1, 'transparent');
-          cxt.strokeStyle = trailGrad;
-          cxt.lineWidth = 0.5;
-          cxt.stroke();
+        cxt.beginPath();
+        cxt.moveTo(s.x, s.y);
+        cxt.lineTo(s.x - s.vx * s.trail, s.y - s.vy * s.trail);
+        const trailGrad = cxt.createLinearGradient(s.x, s.y, s.x - s.vx * s.trail, s.y - s.vy * s.trail);
+        trailGrad.addColorStop(0, `rgba(255, 255, 255, ${alpha * 0.8})`);
+        trailGrad.addColorStop(1, 'transparent');
+        cxt.strokeStyle = trailGrad;
+        cxt.lineWidth = 0.5;
+        cxt.stroke();
 
-          if (s.life >= s.maxLife) {
-            shootingStars.splice(i, 1);
-          }
+        if (s.life >= s.maxLife) {
+          shootingStars.splice(i, 1);
         }
       }
 
@@ -211,7 +190,7 @@ export default function StarsBackground() {
       window.removeEventListener('resize', onResize);
       window.removeEventListener('mousemove', onMouseMove);
     };
-  }, [theme]);
+  }, []);
 
   return (
     <canvas

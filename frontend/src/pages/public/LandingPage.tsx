@@ -3,11 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, MapPin, Building2, Users, CreditCard, Shield, TrendingUp, Home,
-  ArrowRight, Menu, X, Sun, Moon, Star, Check, ChevronRight, Quote, Sparkles,
+  ArrowRight, Menu, X, Star, Check, ChevronRight, Quote, Sparkles,
   Zap, BarChart3, Globe2, Medal, Phone, Mail, ChevronLeft, Crown, Gem,
   Infinity as InfinityIcon, Feather, Heart, Diamond, Compass, LayoutDashboard
 } from 'lucide-react';
-import { useThemeStore } from '../../store/themeStore';
 import { useAuthStore } from '../../store/authStore';
 
 const features = [
@@ -101,7 +100,6 @@ function FloatingOrb({ className, size, color, delay }: { className?: string; si
 export default function LandingPage() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { theme, toggleTheme } = useThemeStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
@@ -151,9 +149,6 @@ export default function LandingPage() {
                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-royal-500 to-gold-500 group-hover:w-full transition-all duration-500" />
                   </Link>
                 ))}
-                <button onClick={toggleTheme} className="p-2.5 rounded-xl bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 transition-all text-gray-500 dark:text-gray-400">
-                  {theme === 'dark' ? <Sun className="w-4 h-4 text-gold-400" /> : <Moon className="w-4 h-4" />}
-                </button>
                 {user ? (
                   <button onClick={() => navigate(`/${user.role}/dashboard`)}
                     className="relative px-7 py-2.5 rounded-2xl bg-gradient-to-r from-royal-600 to-royal-800 text-white text-sm font-semibold hover:shadow-2xl hover:shadow-royal-500/30 transition-all duration-300 hover:-translate-y-0.5 overflow-hidden group border border-royal-400/20">
@@ -210,12 +205,6 @@ export default function LandingPage() {
                     {item.label}
                   </Link>
                 ))}
-                <div className="flex items-center gap-3 px-4 pt-2">
-                  <button onClick={toggleTheme} className="p-2.5 rounded-lg bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-300">
-                    {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                  </button>
-                  <span className="text-xs text-gray-400">{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
-                </div>
                 <div className="flex gap-3 pt-2 px-4">
                   {user ? (
                     <button onClick={() => { navigate(`/${user.role}/dashboard`); setMobileMenuOpen(false); }}

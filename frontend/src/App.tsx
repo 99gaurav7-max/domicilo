@@ -5,7 +5,6 @@ import { Toaster } from 'react-hot-toast';
 import { AnimatePresence } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { useAuthStore } from './store/authStore';
-import { useThemeStore } from './store/themeStore';
 import { ProtectedRoute, PublicOnlyRoute } from './components/RouteGuards';
 import { PublicLayout, DashboardLayout } from './components/layout/Layout';
 import PageTransition from './components/PageTransition';
@@ -64,12 +63,10 @@ function ScrollToTop() {
 }
 
 function AppContent() {
-  const { initTheme } = useThemeStore();
   const { loadUser } = useAuthStore();
   const location = useLocation();
 
   useEffect(() => {
-    initTheme();
     loadUser();
   }, []);
 

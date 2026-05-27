@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, Bell, Moon, Sun, LogOut, User, Settings, ChevronDown, Building2 } from 'lucide-react';
+import { Menu, X, Bell, LogOut, User, Settings, ChevronDown, Building2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../../store/authStore';
-import { useThemeStore } from '../../store/themeStore';
 
 interface HeaderProps {
   onMenuToggle: () => void;
@@ -12,7 +11,6 @@ interface HeaderProps {
 
 export function Header({ onMenuToggle, isSidebarOpen }: HeaderProps) {
   const { user, logout } = useAuthStore();
-  const { theme, toggleTheme } = useThemeStore();
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
 
@@ -34,11 +32,6 @@ export function Header({ onMenuToggle, isSidebarOpen }: HeaderProps) {
           </div>
 
           <div className="flex items-center gap-1">
-            <button onClick={toggleTheme} aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              className="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-royal-500/10 active:scale-95 transition-all duration-200">
-              {theme === 'dark' ? <Sun className="w-4 h-4 text-gold-400" /> : <Moon className="w-4 h-4 text-royal-600" />}
-            </button>
-
             <button onClick={() => navigate('/notifications')} aria-label="Notifications"
               className="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-royal-500/10 active:scale-95 transition-all duration-200 relative">
               <Bell className="w-4 h-4" />
