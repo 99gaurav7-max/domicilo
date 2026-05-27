@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, MapPin, Building2, Users, CreditCard, Shield, TrendingUp, Home,
   ArrowRight, Menu, X, Star, Check, ChevronRight, Sparkles,
-  Zap, BarChart3, Globe2, Medal, Phone, Mail, ChevronLeft, Crown, Gem,
-  Infinity as InfinityIcon, Feather, Diamond, Compass, LayoutDashboard
+  Zap, BarChart3, Globe2, Medal, Phone, Mail, Crown, Gem,
+  Infinity as InfinityIcon, Diamond, Compass, LayoutDashboard
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 
@@ -23,13 +23,6 @@ const stats = [
   { label: 'Active Users', value: '2,000+', suffix: '' },
   { label: 'Cities Covered', value: '25+', suffix: '' },
   { label: 'Monthly Volume', value: '2', suffix: 'Cr+' },
-];
-
-const steps = [
-  { number: 'I', title: 'Create Your Account', description: 'Sign up as an owner or tenant in minutes. Simple, fast, and free.', ornament: '👑' },
-  { number: 'II', title: 'List or Discover', description: 'Owners list their properties. Tenants find their dream home.', ornament: '🏰' },
-  { number: 'III', title: 'Connect & Approve', description: 'Tenants submit enquiries, owners review and approve. The process is seamless.', ornament: '📜' },
-  { number: 'IV', title: 'Manage & Grow', description: 'Automated payments, smart maintenance tracking, and powerful growth tools.', ornament: '✨' },
 ];
 
 const fadeUp = {
@@ -139,7 +132,6 @@ export default function LandingPage() {
                 </Link>
                 {[
                   { label: 'Features', id: 'features' },
-                  { label: 'How It Works', id: 'how-it-works' },
                   { label: 'Contact', id: 'contact' },
                 ].map((item) => (
                   <button
@@ -202,7 +194,6 @@ export default function LandingPage() {
                 </Link>
                 {[
                   { label: 'Features', id: 'features' },
-                  { label: 'How It Works', id: 'how-it-works' },
                   { label: 'Contact', id: 'contact' },
                 ].map((item) => (
                   <button key={item.label} onClick={() => { scrollToSection(item.id); setMobileMenuOpen(false); }}
@@ -504,61 +495,6 @@ export default function LandingPage() {
             );
           })}
         </motion.div>
-      </section>
-
-      {/* How It Works */}
-      <section id="how-it-works" className="py-28 md:py-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-24"
-          >
-            <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-royal-500/10 border border-royal-500/15 text-royal-400 text-xs font-semibold mb-6 uppercase tracking-widest">
-              <Feather className="w-3.5 h-3.5" />
-              How It Works
-            </div>
-            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-5 leading-tight tracking-tight">
-              Your{' '}
-              <span className="gradient-text">Journey</span>{' '}
-              in Four Simple Steps
-            </h2>
-            <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed tracking-wide">
-              Getting started with Domicilo is quick and effortless.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-4 gap-6 lg:gap-8">
-            {steps.map((step, i) => (
-              <motion.div
-                key={step.number}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15, duration: 0.6 }}
-                className="relative group"
-              >
-                <div className="absolute -inset-0.5 bg-gradient-to-br from-royal-500/20 via-gold-500/10 to-transparent rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <div className="relative rounded-3xl bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/30 dark:border-white/5 p-8 text-center hover:border-royal-500/20 transition-all duration-500 h-full">
-                  <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-royal-500 to-royal-700 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-royal-500/20 group-hover:scale-110 transition-transform duration-500">
-                    <span className="text-3xl">{step.ornament}</span>
-                  </div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-royal-500/10 text-royal-400 text-[10px] font-semibold mb-4 uppercase tracking-widest">
-                    Step {step.number}
-                  </div>
-                  <h3 className="font-display text-xl font-bold text-gray-900 dark:text-white mb-3 tracking-tight">{step.title}</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{step.description}</p>
-                </div>
-                {i < 3 && (
-                  <div className="hidden md:block absolute top-1/2 -right-4 text-royal-400/30">
-                    <ChevronRight className="w-6 h-6" />
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </div>
-        </div>
       </section>
 
       {/* CTA Section */}
