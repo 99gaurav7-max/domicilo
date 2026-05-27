@@ -14,8 +14,15 @@ function getAutoTheme(): Theme {
   return hour >= 6 && hour < 18 ? 'light' : 'dark';
 }
 
+function safeGet(key: string): string | null {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
+function safeSet(key: string, value: string) {
+  try { localStorage.setItem(key, value); } catch {}
+}
+
 function getStoredTheme(): Theme {
-  const stored = localStorage.getItem('domicilo_theme');
+  const stored = safeGet('domicilo_theme');
   if (stored === 'auto' || !stored) {
     const hour = new Date().getHours();
     return hour >= 6 && hour < 18 ? 'light' : 'dark';
@@ -34,20 +41,20 @@ export const useThemeStore = create<ThemeState>((set) => ({
   toggleTheme: () => {
     set((state) => {
       const newTheme = state.theme === 'light' ? 'dark' : 'light';
-      localStorage.setItem('domicilo_theme', newTheme);
+      safeSet('domicilo_theme', newTheme);
       document.documentElement.classList.toggle('dark', newTheme === 'dark');
       return { theme: newTheme };
     });
   },
 
   setTheme: (theme: Theme) => {
-    localStorage.setItem('domicilo_theme', theme);
+    safeSet('domicilo_theme', theme);
     document.documentElement.classList.toggle('dark', theme === 'dark');
     set({ theme });
   },
 
   initTheme: () => {
-    const stored = localStorage.getItem('domicilo_theme');
+    const stored = safeGet('domicilo_theme');
     let theme: Theme;
     if (stored === 'auto' || !stored) {
       theme = getAutoTheme();

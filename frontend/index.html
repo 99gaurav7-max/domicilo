@@ -11,7 +11,8 @@
     <title>Domicilo — Royal Living, Reimagined</title>
     <script>
       (function() {
-        var t = localStorage.getItem('domicilo_theme');
+        var t;
+        try { t = localStorage.getItem('domicilo_theme'); } catch(e) {}
         if (t === 'dark' || (!t && new Date().getHours() >= 18)) {
           document.documentElement.classList.add('dark');
         }

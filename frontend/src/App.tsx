@@ -1,4 +1,4 @@
-import { useEffect, lazy, Suspense } from 'react';
+import { useEffect, lazy, Suspense, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
@@ -9,6 +9,7 @@ import { useThemeStore } from './store/themeStore';
 import { ProtectedRoute, PublicOnlyRoute } from './components/RouteGuards';
 import { PublicLayout, DashboardLayout } from './components/layout/Layout';
 import PageTransition from './components/PageTransition';
+import NavigationProgress from './components/NavigationProgress';
 
 // Lazy-loaded pages for code splitting
 const LandingPage = lazy(() => import('./pages/public/LandingPage'));
@@ -74,6 +75,7 @@ function AppContent() {
 
   return (
     <>
+      <NavigationProgress />
       <ScrollToTop />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
