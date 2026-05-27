@@ -173,7 +173,7 @@ export default function LandingPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileMenuOpen(false)}
-              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
             />
           )}
         </AnimatePresence>
@@ -181,38 +181,68 @@ export default function LandingPage() {
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              transition={{ duration: 0.2, ease: 'easeOut' as const }}
-              className="fixed top-24 left-4 right-4 z-50 md:hidden rounded-3xl bg-white/90 dark:bg-black/80 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-2xl shadow-black/20 overflow-hidden"
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="fixed top-0 left-0 bottom-0 z-50 w-72 md:hidden"
             >
-              <div className="px-6 py-8 space-y-3">
-                <Link to="/properties" onClick={() => setMobileMenuOpen(false)}
-                  className="block text-base text-gray-700 dark:text-gray-300 py-3 px-4 rounded-xl hover:bg-royal-500/5 transition-colors font-medium">
-                  Browse Properties
-                </Link>
-                {[
-                  { label: 'Features', id: 'features' },
-                  { label: 'Contact', id: 'contact' },
-                ].map((item) => (
-                  <button key={item.label} onClick={() => { scrollToSection(item.id); setMobileMenuOpen(false); }}
-                    className="block w-full text-left text-base text-gray-700 dark:text-gray-300 py-3 px-4 rounded-xl hover:bg-royal-500/5 transition-colors font-medium">
-                    {item.label}
+              <div className="h-full bg-black/90 backdrop-blur-2xl border-r border-white/5 shadow-2xl shadow-black/50 flex flex-col">
+                {/* sidebar header */}
+                <div className="flex items-center justify-between px-6 py-6 border-b border-white/5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-royal-500 to-royal-700 flex items-center justify-center shadow-lg shadow-royal-500/20">
+                      <Crown className="w-5 h-5 text-gold-400" />
+                    </div>
+                    <span className="font-display font-bold text-xl text-white tracking-tight">Domicilo</span>
+                  </div>
+                  <button onClick={() => setMobileMenuOpen(false)}
+                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all active:scale-90">
+                    <X className="w-5 h-5" />
                   </button>
-                ))}
-                <div className="flex gap-3 pt-2 px-4">
+                </div>
+
+                {/* nav links */}
+                <div className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+                  <Link to="/properties" onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 text-base text-gray-400 hover:text-white py-3 px-4 rounded-xl hover:bg-royal-500/10 transition-all font-medium">
+                    <Search className="w-4 h-4" />
+                    Browse Properties
+                  </Link>
+                  <button onClick={() => { scrollToSection('features'); setMobileMenuOpen(false); }}
+                    className="flex items-center gap-3 w-full text-left text-base text-gray-400 hover:text-white py-3 px-4 rounded-xl hover:bg-royal-500/10 transition-all font-medium">
+                    <Gem className="w-4 h-4" />
+                    Features
+                  </button>
+                  <button onClick={() => { scrollToSection('contact'); setMobileMenuOpen(false); }}
+                    className="flex items-center gap-3 w-full text-left text-base text-gray-400 hover:text-white py-3 px-4 rounded-xl hover:bg-royal-500/10 transition-all font-medium">
+                    <Phone className="w-4 h-4" />
+                    Contact
+                  </button>
+                </div>
+
+                {/* bottom actions */}
+                <div className="px-4 py-6 border-t border-white/5 space-y-3">
                   {user ? (
                     <button onClick={() => { navigate(`/${user.role}/dashboard`); setMobileMenuOpen(false); }}
-                      className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-royal-600 to-royal-800 text-white text-sm font-semibold border border-royal-400/20">
-                      Dashboard
+                      className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-royal-600 to-royal-800 text-white text-sm font-semibold border border-royal-400/20 hover:shadow-lg hover:shadow-royal-500/20 transition-all active:scale-[0.98]">
+                      <div className="flex items-center justify-center gap-2">
+                        <LayoutDashboard className="w-4 h-4 text-gold-400" />
+                        Dashboard
+                      </div>
                     </button>
                   ) : (
                     <>
                       <button onClick={() => { navigate('/login'); setMobileMenuOpen(false); }}
-                        className="flex-1 py-3.5 rounded-2xl border border-white/20 text-gray-700 dark:text-gray-300 text-sm font-semibold">Sign In</button>
+                        className="w-full py-3.5 rounded-2xl border border-white/10 text-gray-300 text-sm font-semibold hover:bg-white/5 transition-all active:scale-[0.98]">
+                        Sign In
+                      </button>
                       <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }}
-                        className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-royal-600 to-royal-800 text-white text-sm font-semibold border border-royal-400/20">                      Sign Up</button>
+                        className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-royal-600 to-royal-800 text-white text-sm font-semibold border border-royal-400/20 hover:shadow-lg hover:shadow-royal-500/20 transition-all active:scale-[0.98]">
+                        <div className="flex items-center justify-center gap-2">
+                          Get Started <Sparkles className="w-3.5 h-3.5 text-gold-400" />
+                        </div>
+                      </button>
                     </>
                   )}
                 </div>
