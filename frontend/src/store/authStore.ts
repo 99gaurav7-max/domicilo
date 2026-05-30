@@ -22,9 +22,19 @@ export const useAuthStore = create<AuthState>((set) => ({
   isLoading: true,
 
   login: async (email: string, password: string) => {
+    try {
+      localStorage.removeItem('domicilo_token');
+      localStorage.removeItem('domicilo_refresh');
+      localStorage.removeItem('domicilo_user');
+    } catch {}
+    set({ user: null, isAuthenticated: false });
     const res = await authApi.login(email, password);
     const { user, accessToken, refreshToken } = res.data.data!;
-    try { localStorage.setItem('domicilo_token', accessToken); localStorage.setItem('domicilo_refresh', refreshToken); localStorage.setItem('domicilo_user', JSON.stringify(user)); } catch {}
+    try {
+      localStorage.setItem('domicilo_token', accessToken);
+      localStorage.setItem('domicilo_refresh', refreshToken);
+      localStorage.setItem('domicilo_user', JSON.stringify(user));
+    } catch {}
     set({ user, isAuthenticated: true });
   },
 

@@ -311,32 +311,37 @@ export default function LandingPage() {
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.6 }}
-                className="flex items-center gap-6 mt-14"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.9, duration: 0.6 }}
+                className="flex flex-wrap items-center gap-x-8 gap-y-3 mt-14"
               >
-                <div className="flex -space-x-3">
-                  {['RK', 'PS', 'AV', 'SP'].map((initials, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.9 + i * 0.1 }}
-                      className="w-10 h-10 rounded-full bg-gradient-to-br from-royal-600 to-royal-800 border-2 border-white/20 flex items-center justify-center text-[10px] font-bold text-white shadow-lg"
-                    >
-                      {initials}
-                    </motion.div>
-                  ))}
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-gold-500 to-gold-600 border-2 border-white/20 flex items-center justify-center text-[10px] font-bold text-royal-950 shadow-lg">2k+</div>
-                </div>
-                <div>
-                  <div className="flex items-center gap-0.5">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <Star key={s} className="w-4 h-4 text-gold-400" fill="currentColor" />
-                    ))}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-gold-500/20 to-gold-600/10 border border-gold-500/20 flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-gold-400" />
                   </div>
-                  <p className="text-xs text-white/60 mt-0.5">Beloved by 2,000+ nobles</p>
+                  <div>
+                    <p className="text-sm font-bold text-white tracking-tight">25+ Cities</p>
+                    <p className="text-[10px] text-white/50 tracking-wide">Across India</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-gold-500/20 to-gold-600/10 border border-gold-500/20 flex items-center justify-center">
+                    <Building2 className="w-5 h-5 text-gold-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white tracking-tight">500+ Properties</p>
+                    <p className="text-[10px] text-white/50 tracking-wide">Listed & Managed</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-gold-500/20 to-gold-600/10 border border-gold-500/20 flex items-center justify-center">
+                    <Shield className="w-5 h-5 text-gold-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white tracking-tight">End-to-End</p>
+                    <p className="text-[10px] text-white/50 tracking-wide">Secure Platform</p>
+                  </div>
                 </div>
               </motion.div>
             </motion.div>
