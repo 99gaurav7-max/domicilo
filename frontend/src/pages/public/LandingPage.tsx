@@ -18,13 +18,6 @@ const features = [
   { icon: InfinityIcon, title: 'Property Discovery', description: 'Search for homes by city, price, and room type. Find the perfect match fast.' },
 ];
 
-const stats = [
-  { label: 'Properties Listed', value: '500+', suffix: '' },
-  { label: 'Active Users', value: '2,000+', suffix: '' },
-  { label: 'Cities Covered', value: '25+', suffix: '' },
-  { label: 'Monthly Volume', value: '2', suffix: 'Cr+' },
-];
-
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0 },
@@ -34,39 +27,6 @@ const stagger = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
 };
-
-function Counter({ value, suffix, duration = 2500 }: { value: string; suffix: string; duration?: number }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) { setInView(true); observer.disconnect(); }
-    }, { threshold: 0.3 });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  const numericValue = parseInt(value.replace(/[^0-9]/g, ''));
-
-  useEffect(() => {
-    if (!inView) return;
-    let startTime: number;
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(eased * numericValue));
-      if (progress < 1) requestAnimationFrame(animate);
-    };
-    requestAnimationFrame(animate);
-  }, [inView, numericValue, duration]);
-
-  return <div ref={ref}>{count}{suffix}<span className="text-gold-400">+</span></div>;
-}
 
 function MobileQuickAccess() {
   const [open, setOpen] = useState(false);
@@ -314,35 +274,11 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.9, duration: 0.6 }}
-                className="flex flex-wrap items-center gap-x-8 gap-y-3 mt-14"
+                className="mt-14"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-gold-500/20 to-gold-600/10 border border-gold-500/20 flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-gold-400" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-white tracking-tight">25+ Cities</p>
-                    <p className="text-[10px] text-white/50 tracking-wide">Across India</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-gold-500/20 to-gold-600/10 border border-gold-500/20 flex items-center justify-center">
-                    <Building2 className="w-5 h-5 text-gold-400" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-white tracking-tight">500+ Properties</p>
-                    <p className="text-[10px] text-white/50 tracking-wide">Listed & Managed</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-gold-500/20 to-gold-600/10 border border-gold-500/20 flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-gold-400" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-white tracking-tight">End-to-End</p>
-                    <p className="text-[10px] text-white/50 tracking-wide">Secure Platform</p>
-                  </div>
-                </div>
+                <p className="text-sm text-white/50 tracking-wide">
+                  Built for Indian property owners and tenants — manage, rent, and grow with confidence.
+                </p>
               </motion.div>
             </motion.div>
 
@@ -435,38 +371,6 @@ export default function LandingPage() {
             </motion.div>
           </div>
         </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="relative z-10 -mt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="relative group"
-        >
-          <div className="absolute -inset-3 bg-gradient-to-r from-royal-500/20 via-gold-500/20 to-royal-500/20 rounded-[32px] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-          <div className="relative rounded-3xl bg-white/70 dark:bg-black/40 backdrop-blur-2xl border border-white/30 dark:border-white/5 shadow-2xl p-8 md:p-12">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-              {stats.map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.15, duration: 0.6 }}
-                  className="text-center"
-                >
-                  <p className="text-4xl md:text-5xl font-bold gradient-text-gold">
-                    <Counter value={stat.value} suffix={stat.suffix} />
-                  </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 font-medium tracking-wide">{stat.label}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
       </section>
 
       {/* Features Section */}
