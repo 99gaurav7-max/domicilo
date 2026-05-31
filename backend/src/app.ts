@@ -32,7 +32,7 @@ app.get('/health', (_, res) => {
 
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Unhandled error:', err);
-  res.status(500).json({ success: false, error: 'Internal server error.' });
+  res.status(500).json({ success: false, error: 'Internal server error. Try again.' });
 });
 
 export default app;

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Edit3, Trash2, Shield, Download, CheckSquare, Square, UserCheck, UserX } from 'lucide-react';
+import { Edit3, Trash2, Shield, Download, CheckSquare, Square, UserCheck, UserX, Crown, Filter, Search } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Papa from 'papaparse';
 import { adminApi } from '../../services/endpoints';
 import { User } from '../../types';
-import { TableContainer, StatusBadge, SearchInput, Select, EmptyState } from '../../components/ui/Table';
+import { TableContainer, StatusBadge, Select, EmptyState } from '../../components/ui/Table';
 import { Pagination } from '../../components/ui/Pagination';
 import { Modal, ConfirmDialog } from '../../components/ui/Modal';
 import { TableSkeleton } from '../../components/ui/Skeleton';
@@ -15,6 +15,11 @@ const roleOptions = [
   { value: 'owner', label: 'Owner' },
   { value: 'tenant', label: 'Tenant' },
   { value: 'other', label: 'Other' },
+];
+
+const statusOptions = [
+  { value: 'true', label: 'Active' },
+  { value: 'false', label: 'Inactive' },
 ];
 
 export default function AdminUsers() {
@@ -126,112 +131,196 @@ export default function AdminUsers() {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white font-display">User Management</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Manage all platform users</p>
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-royal-600 to-royal-800 flex items-center justify-center shadow-xl shadow-royal-500/20 border border-royal-400/10">
+            <Crown className="w-7 h-7 text-gold-400" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white font-display tracking-tight">User Management</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Manage all platform users</p>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {selectedIds.size > 0 && (
-            <>
-              <button onClick={() => bulkActivate(true)} className="rounded-2xl border border-gray-200 dark:border-white/10 text-xs flex items-center gap-1.5 px-3 py-1.5 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
-                <UserCheck className="w-3.5 h-3.5" /> Activate ({selectedIds.size})
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-gradient-to-r from-royal-500/10 to-gold-500/5 border border-royal-400/10">
+              <span className="text-xs text-royal-400 font-medium mr-1">{selectedIds.size} selected</span>
+              <button onClick={() => bulkActivate(true)}
+                className="rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 text-white text-xs font-semibold flex items-center gap-1.5 px-3.5 py-2 hover:shadow-lg hover:shadow-emerald-500/20 transition-all active:scale-95">
+                <UserCheck className="w-3.5 h-3.5" /> Activate
               </button>
-              <button onClick={() => bulkActivate(false)} className="rounded-2xl border border-gray-200 dark:border-white/10 text-xs flex items-center gap-1.5 px-3 py-1.5 text-red-600 border-red-200 hover:bg-red-50 transition-all">
-                <UserX className="w-3.5 h-3.5" /> Deactivate ({selectedIds.size})
+              <button onClick={() => bulkActivate(false)}
+                className="rounded-xl bg-gradient-to-r from-red-600 to-red-700 text-white text-xs font-semibold flex items-center gap-1.5 px-3.5 py-2 hover:shadow-lg hover:shadow-red-500/20 transition-all active:scale-95">
+                <UserX className="w-3.5 h-3.5" /> Suspend
               </button>
-            </>
+            </div>
           )}
-          <button onClick={handleExport} className="rounded-2xl border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 text-sm flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 transition-all">
+          <button onClick={handleExport}
+            className="rounded-2xl border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 text-sm flex items-center gap-2 px-4 py-2.5 text-gray-700 dark:text-gray-300 transition-all active:scale-95">
             <Download className="w-4 h-4" /> Export CSV
           </button>
         </div>
       </div>
 
-      <TableContainer
-        searchable searchPlaceholder="Search users..."
-        onSearch={(q) => { setSearch(q); setPage(1); }}
-        filters={
-          <div className="flex flex-wrap items-center gap-3">
+      {/* Filters */}
+      <div className="rounded-2xl bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/20 dark:border-white/5 shadow-xl shadow-black/5 dark:shadow-black/20 p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <Filter className="w-4 h-4 text-royal-400" />
+          <span className="text-xs font-semibold text-royal-400 uppercase tracking-widest">Filters</span>
+        </div>
+        <div className="flex flex-wrap items-end gap-4">
+          <div className="min-w-[200px] flex-1">
+            <label className="block text-[10px] font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-widest mb-1.5">Search</label>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+              <input type="text" value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                placeholder="Search users..."
+                className="w-full pl-9 pr-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50 transition-all" />
+            </div>
+          </div>
+          <div className="min-w-[140px]">
+            <label className="block text-[10px] font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-widest mb-1.5">Role</label>
             <Select value={role} onChange={(v) => { setRole(v); setPage(1); }}
               options={roleOptions} placeholder="All Roles" />
-            <Select value={isActive} onChange={(v) => { setIsActive(v); setPage(1); }}
-              options={[
-                { value: 'true', label: 'Active' },
-                { value: 'false', label: 'Inactive' },
-              ]}
-              placeholder="All Status" />
-            <input type="date" value={dateFrom} onChange={(e) => { setDateFrom(e.target.value); setPage(1); }}
-              className="px-3 py-2 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-black/30 backdrop-blur-sm text-sm text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50" title="From date" />
-            <input type="date" value={dateTo} onChange={(e) => { setDateTo(e.target.value); setPage(1); }}
-              className="px-3 py-2 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-black/30 backdrop-blur-sm text-sm text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50" title="To date" />
           </div>
-        }
-      >
-        {loading ? (
-          <TableSkeleton rows={5} cols={6} />
-        ) : users.length === 0 ? (
-          <EmptyState icon={<Shield className="w-8 h-8" />} title="No users found" description="No users match your current filters." />
-        ) : (
-          <>
-            <thead>
-              <tr className="sticky-table-header">
-                <th className="w-10">
-                  <button onClick={toggleSelectAll} className="p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
-                    {selectedIds.size === users.length ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4" />}
-                  </button>
-                </th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Joined</th>
-                <th className="text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((u) => (
-                <tr key={u.id} className={selectedIds.has(u.id) ? 'bg-royal-50/50 dark:bg-royal-900/10' : ''}>
-                  <td>
-                    <button onClick={() => toggleSelect(u.id)} className="p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
-                      {selectedIds.has(u.id) ? <CheckSquare className="w-4 h-4 text-royal-500" /> : <Square className="w-4 h-4 text-gray-400" />}
-                    </button>
-                  </td>
-                  <td className="font-medium text-gray-900 dark:text-white">{u.fullName}</td>
-                  <td className="text-sm text-gray-500 dark:text-gray-400">{u.email}</td>
-                  <td className="text-sm text-gray-500 dark:text-gray-400">{u.phone}</td>
-                  <td>
-                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
-                      u.role === 'admin' ? 'bg-royal-50 dark:bg-royal-900/20 text-royal-700 dark:text-royal-400' :
-                      u.role === 'owner' ? 'bg-royal-50 dark:bg-royal-900/20 text-royal-700 dark:text-royal-400' :
-                      u.role === 'tenant' ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400' :
-                      'bg-gray-50 dark:bg-gray-900/20 text-gray-700 dark:text-gray-400'
-                    }`}>
-                      <Shield className="w-3 h-3" /> {u.role}
-                    </span>
-                  </td>
-                  <td><StatusBadge status={u.isActive ? 'active' : 'inactive'} /></td>
-                  <td className="text-sm text-gray-500 dark:text-gray-400">{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-'}</td>
-                  <td className="text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      <button onClick={() => setEditUser(u)} aria-label="Edit user" className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400 transition-colors">
-                        <Edit3 className="w-4 h-4" />
-                      </button>
-                      {u.role !== 'admin' && (
-                        <button onClick={() => setDeleteId(u.id)} aria-label="Delete user" className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-400 transition-colors">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      )}
-                    </div>
+          <div className="min-w-[140px]">
+            <label className="block text-[10px] font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-widest mb-1.5">Status</label>
+            <Select value={isActive} onChange={(v) => { setIsActive(v); setPage(1); }}
+              options={statusOptions} placeholder="All Status" />
+          </div>
+          <div className="min-w-[140px]">
+            <label className="block text-[10px] font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-widest mb-1.5">From Date</label>
+            <input type="date" value={dateFrom} onChange={(e) => { setDateFrom(e.target.value); setPage(1); }}
+              className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50 transition-all" />
+          </div>
+          <div className="min-w-[140px]">
+            <label className="block text-[10px] font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-widest mb-1.5">To Date</label>
+            <input type="date" value={dateTo} onChange={(e) => { setDateTo(e.target.value); setPage(1); }}
+              className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-royal-500/30 focus:border-royal-500/50 transition-all" />
+          </div>
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="rounded-2xl bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-white/20 dark:border-white/5 shadow-xl shadow-black/5 dark:shadow-black/20 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            {loading ? (
+              <TableSkeleton rows={5} cols={6} />
+            ) : users.length === 0 ? (
+              <tbody>
+                <tr>
+                  <td colSpan={8}>
+                    <EmptyState icon={<Shield className="w-8 h-8" />} title="No users found" description="No users match your current filters." />
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </>
-        )}
-      </TableContainer>
-      {pagination.totalPages > 1 && <Pagination {...pagination} onPageChange={setPage} />}
+              </tbody>
+            ) : (
+              <>
+                <thead>
+                  <tr className="border-b border-gray-100 dark:border-white/5">
+                    <th className="w-12 px-4 py-4">
+                      <button onClick={toggleSelectAll}
+                        className={`w-5 h-5 rounded flex items-center justify-center transition-all ${
+                          selectedIds.size === users.length
+                            ? 'bg-gradient-to-br from-royal-500 to-royal-700 text-white shadow-sm shadow-royal-500/30'
+                            : 'border border-gray-300 dark:border-gray-600 hover:border-royal-400'
+                        }`}>
+                        {selectedIds.size === users.length ? (
+                          <CheckSquare className="w-4 h-4" />
+                        ) : selectedIds.size > 0 ? (
+                          <Square className="w-3.5 h-3.5 text-royal-400" />
+                        ) : null}
+                      </button>
+                    </th>
+                    <th className="px-4 py-4 text-left text-[10px] font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-widest">Name</th>
+                    <th className="px-4 py-4 text-left text-[10px] font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-widest">Email</th>
+                    <th className="px-4 py-4 text-left text-[10px] font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-widest">Phone</th>
+                    <th className="px-4 py-4 text-left text-[10px] font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-widest">Role</th>
+                    <th className="px-4 py-4 text-left text-[10px] font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-widest">Status</th>
+                    <th className="px-4 py-4 text-left text-[10px] font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-widest">Joined</th>
+                    <th className="px-4 py-4 text-right text-[10px] font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-widest">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50 dark:divide-white/5">
+                  {users.map((u) => (
+                    <tr key={u.id}
+                      className={`transition-all duration-200 ${
+                        selectedIds.has(u.id)
+                          ? 'bg-gradient-to-r from-royal-500/5 via-royal-500/3 to-transparent'
+                          : 'hover:bg-gray-50/50 dark:hover:bg-white/3'
+                      }`}>
+                      <td className="w-12 px-4 py-4">
+                        <button onClick={() => toggleSelect(u.id)}
+                          className={`w-5 h-5 rounded flex items-center justify-center transition-all ${
+                            selectedIds.has(u.id)
+                              ? 'bg-gradient-to-br from-royal-500 to-royal-700 text-white shadow-sm shadow-royal-500/30'
+                              : 'border border-gray-300 dark:border-gray-600 hover:border-royal-400'
+                          }`}>
+                          {selectedIds.has(u.id) && <CheckSquare className="w-3.5 h-3.5" />}
+                        </button>
+                      </td>
+                      <td className="px-4 py-4">
+                        <span className="text-sm font-semibold text-gray-900 dark:text-white">{u.fullName}</span>
+                      </td>
+                      <td className="px-4 py-4">
+                        <span className="text-sm text-gray-500 dark:text-gray-400">{u.email}</span>
+                      </td>
+                      <td className="px-4 py-4">
+                        <span className="text-sm text-gray-500 dark:text-gray-400 font-mono tracking-tight">{u.phone}</span>
+                      </td>
+                      <td className="px-4 py-4">
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider ${
+                          u.role === 'admin' ? 'bg-gradient-to-r from-royal-500/15 to-royal-600/10 text-royal-600 dark:text-royal-400 border border-royal-500/15' :
+                          u.role === 'owner' ? 'bg-gradient-to-r from-gold-500/15 to-gold-600/10 text-amber-700 dark:text-gold-400 border border-gold-500/15' :
+                          u.role === 'tenant' ? 'bg-gradient-to-r from-emerald-500/15 to-emerald-600/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/15' :
+                          'bg-gradient-to-r from-gray-500/10 to-gray-600/5 text-gray-600 dark:text-gray-400 border border-gray-500/10'
+                        }`}>
+                          <Shield className="w-3 h-3" /> {u.role}
+                        </span>
+                      </td>
+                      <td className="px-4 py-4">
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold ${
+                          u.isActive
+                            ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/15'
+                            : 'bg-red-500/10 text-red-700 dark:text-red-400 border border-red-500/15'
+                        }`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${u.isActive ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                          {u.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-4">
+                        <span className="text-sm text-gray-500 dark:text-gray-400">{u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'}</span>
+                      </td>
+                      <td className="px-4 py-4 text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <button onClick={() => setEditUser(u)} aria-label="Edit user"
+                            className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-royal-500/10 text-gray-400 hover:text-royal-500 transition-all active:scale-90">
+                            <Edit3 className="w-4 h-4" />
+                          </button>
+                          {u.role !== 'admin' && (
+                            <button onClick={() => setDeleteId(u.id)} aria-label="Delete user"
+                              className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-red-500/10 text-gray-400 hover:text-red-500 transition-all active:scale-90">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </>
+            )}
+          </table>
+        </div>
+      </div>
+
+      {pagination.totalPages > 1 && (
+        <div className="flex justify-center">
+          <Pagination {...pagination} onPageChange={setPage} />
+        </div>
+      )}
 
       <Modal isOpen={!!editUser} onClose={() => setEditUser(null)} title="Edit User">
         {editUser && (
